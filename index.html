@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Emmelli Hub</title>
-<meta name="emmelli-build" content="2026-09-29-CANONICAL-LIVE-FIX">
-
+<meta name="emmelli-build" content="2026-09-29-ERRAND-RETRY-v7">
 <style>
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;overflow-x:hidden}body{padding-bottom:calc(108px + env(safe-area-inset-bottom));text-transform:none;font-size:17px;letter-spacing:.01em}
@@ -112,70 +111,54 @@ body,button,input,textarea,select{letter-spacing:.025em}
 .budget-commentary:before{content:'BUDGET COMMENTARY'!important}
 
 </style>
-
-
-
-
-
-<style id="emmelli-canonical-live-fixes">
-/* ONE canonical implementation — Today, Routine, and global mobile navigation */
+<style id="emmelli-single-final-fix">
 html,body{min-height:100%!important;overflow-x:hidden!important}
-body{padding-bottom:calc(88px + env(safe-area-inset-bottom))!important}
-.app{padding-bottom:calc(104px + env(safe-area-inset-bottom))!important}
+body{margin:0!important;padding-bottom:0!important}
+#app{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
 
-/* Global nav: viewport-owned, never part of page flow */
-body>.nav{
- position:fixed!important;
- left:0!important;right:0!important;bottom:0!important;top:auto!important;
- width:100vw!important;max-width:none!important;margin:0!important;
- z-index:2147483646!important;
- transform:none!important;-webkit-transform:none!important;
- contain:none!important;
- background:#fffaf7!important;
- border-top:1px solid var(--cuteLine)!important;
- padding:6px 8px calc(6px + env(safe-area-inset-bottom))!important;
- box-shadow:0 -8px 24px rgba(95,65,74,.08)!important;
-}
-body>.nav .navin{width:100%!important;max-width:980px!important;margin:0 auto!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:3px!important}
-body>.nav button{min-width:0!important;min-height:56px!important;padding:5px 1px!important}
+/* No decorative emoji/unicode pseudo-icons. Existing SVG nav icons remain. */
+.hero:before,.hero:after,.card h2:before,.tile:after,.nav button:after{content:""!important}
 
-/* Today: destination grid first, then only useful daily information */
-.today-goals{margin-top:10px!important}
-.today-goals .row.between{justify-content:flex-start!important}
-.thaw-note{
- margin:8px 2px 0!important;padding:9px 11px!important;
- border:1px dashed var(--line)!important;border-radius:13px!important;
- background:#fff8fa!important;box-shadow:none!important;
- display:block!important;position:static!important;
-}
-.thaw-note h3{margin:0 0 3px!important;font-size:11px!important;letter-spacing:.04em!important}
-.thaw-note p{margin:0!important;font-size:12px!important;line-height:1.35!important;color:var(--inkSoft)!important}
+/* Today */
+.today-destinations{margin-bottom:10px!important}
+.today-goals h2{margin:0 0 8px!important;font-size:19px!important}
+.today-goals .watertrack{margin-top:10px!important}
+.thaw-strip{display:flex!important;gap:7px!important;align-items:flex-start!important;margin:7px 3px 0!important;padding:8px 10px!important;border:1px dashed var(--line)!important;border-radius:12px!important;background:#fff9fb!important;box-shadow:none!important;font-size:11px!important;line-height:1.35!important}
+.thaw-strip b{flex:0 0 auto;font-size:9px!important;color:#a05c71!important}
+.thaw-strip span{font-size:11px!important;color:#7f626b!important}
+.waterbottle .bottleicon:after{background:linear-gradient(180deg,#d7f4ff,#8fdaf2,#69c2e3)!important}
+.waterbottle:has(input:checked) .bottleicon:after{height:76%!important}
 
-/* Routine: routine itself is dominant; maintenance controls are secondary */
-.taskcard{scroll-margin-top:16px!important;scroll-margin-bottom:104px!important;padding:14px!important}
-.taskhead>div{min-width:0!important}
-.taskhead>div>b{font-size:18px!important;line-height:1.3!important}
-.tasktime{font-size:13px!important;line-height:1.35!important;margin-top:3px!important}
-.taskcard .tinybtn{
- min-height:23px!important;height:auto!important;padding:2px 6px!important;
- font-size:9px!important;line-height:1.1!important;border-radius:8px!important;
- opacity:.58!important;box-shadow:none!important;font-weight:700!important;
-}
-.taskcard .tinybtn:active,.taskcard .tinybtn:focus{opacity:1!important}
-.taskcard>.row{gap:5px!important;margin-top:5px!important}
-.subrow{padding:5px 7px!important;gap:6px!important}
-.subrow>span{font-size:14px!important;line-height:1.3!important}
-.routine-jump{cursor:pointer!important;-webkit-tap-highlight-color:rgba(217,155,173,.2)}
-.routine-target{outline:3px solid var(--pink2)!important;outline-offset:3px!important;background:#fff3f7!important}
+/* Routine: task is primary; edit utilities are deliberately quiet. */
+.taskcard{scroll-margin-top:16px!important;scroll-margin-bottom:100px!important;padding:14px!important}
+.taskhead>div>b{font-size:18px!important;line-height:1.28!important}
+.tasktime{font-size:13px!important}
+.taskcard .tinybtn{min-height:22px!important;padding:2px 5px!important;font-size:8px!important;line-height:1!important;border-radius:7px!important;opacity:.46!important;box-shadow:none!important}
+.routine-maintenance{display:flex!important;gap:4px!important;align-items:center!important;margin-top:4px!important;flex-wrap:wrap!important}
+.subrow .tinybtn{min-height:20px!important;padding:2px 4px!important;font-size:8px!important}
+.routine-jump{cursor:pointer!important}
+.routine-target{outline:3px solid var(--pink2)!important;outline-offset:3px!important;background:#fff1f5!important}
+
+/* Global bottom bar: viewport fixed, six equal destinations, safe-area aware. */
+body > nav.nav{position:fixed!important;top:auto!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;margin:0!important;padding:6px 8px calc(6px + env(safe-area-inset-bottom))!important;z-index:2147483647!important;transform:none!important;-webkit-transform:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fffaf7!important;border-top:1px solid var(--line)!important;box-shadow:0 -7px 22px rgba(95,65,74,.09)!important}
+body > nav.nav .navin{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:2px!important;width:100%!important;max-width:980px!important;margin:0 auto!important}
+body > nav.nav button{min-width:0!important;min-height:55px!important;padding:4px 1px!important;font-size:9px!important}
+
 @media(max-width:420px){
- .waterbottle span:last-child{font-size:9px!important;white-space:nowrap!important}
+ .thaw-strip{display:block!important}.thaw-strip b{display:block!important;margin-bottom:2px!important}
+ .waterbottle span:last-child{white-space:nowrap!important;font-size:9px!important}
  .taskhead>div>b{font-size:17px!important}
- body>.nav button{font-size:8px!important}
 }
 </style>
 
+
+<style id="emmelli-render-verified-microfix">
+.routine-commentary:before{content:"ROUTINE COMMENTARY"!important}
+@media(max-width:420px){.waterbottle span:last-child{font-size:8px!important;white-space:nowrap!important}}
+</style>
+
 </head>
-<body data-build="clarity-pass-2026-09-29">
+<body data-build="2026-09-29-ERRAND-RETRY-v7">
 <div id="app" class="app"></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
@@ -406,10 +389,10 @@ function pageComment(page,day){
  return `<section class="comment-widget"><p>${esc(msg)}</p></section>`
 }
 function checkbox(id,label,checked=null){let on=checked===null?!!state.checks[id]:!!checked;return `<label class="checkrow"><input type="checkbox" data-check="${esc(id)}" ${on?"checked":""}><span>${esc(label)}</span></label>`}
-function waterTracker(k){return `<div class="watertrack" aria-label="Five water bottles">${[1,2,3,4,5].map(i=>`<label class="waterbottle"><input type="checkbox" data-check="water|${esc(k)}|${i}" ${state.water[k+"|"+i]?"checked":""}><span class="bottleicon" aria-hidden="true"></span><span>Water ${i}</span></label>`).join("")}</div>`}
+function waterTracker(k){return `<div class="watertrack" aria-label="Five water bottles">${[1,2,3,4,5].map(i=>`<label class="waterbottle"><input type="checkbox" data-check="water|${esc(k)}|${i}" ${state.water[k+"|"+i]?"checked":""}><span class="bottleicon" aria-hidden="true"></span><span>Btl ${i}</span></label>`).join("")}</div>`}
 function today(){
  let d=DAYS[state.day], k=selectedKey(), rtl=timeline(d), done=rtl.filter(x=>x.t.done).length, total=rtl.length;
- let gd=state.goalHistory[k]||{},dayGoals=goalsForDate(k),openWeekGoals=openGoalsThroughSelectedDay(k),important=openWeekGoals.filter(g=>g.important).map(g=>g.text);
+ let openWeekGoals=openGoalsThroughSelectedDay(k);
  let signals=[],waterDone=[1,2,3,4,5].filter(i=>state.water[k+"|"+i]).length;
  if(done===0)signals.push("Start with the first routine block and keep the day simple.");
  else if(done<total)signals.push(`Routine: ${done}/${total} complete. Keep the next unfinished block in focus.`);
@@ -420,18 +403,34 @@ function today(){
  if(state.weight[k]!==""&&state.weight[k]!=null)signals.push(`Weigh-in saved: ${state.weight[k]} lb.`);
  if(state.studyNotes[k])signals.push(`${STUDY[d]} study notes saved.`);
  if(state.run[k]?.duration)signals.push(`Run saved: ${state.run[k].duration} min.`);
- let resetDone=Object.keys(state.checks||{}).filter(x=>x.startsWith("reset|"+k+"|")&&state.checks[x]).length;
- if(state.day===6&&resetDone)signals.push(`Sunday Reset: ${resetDone}/5 complete.`);
- if(openWeekGoals.length)signals.push("Open goals this week: "+openWeekGoals.map(g=>(g.origin!=="Today"?g.origin+": ":"")+g.text).join(" • ")+". These stay here until checked off.");
- let contextual= state.day===0?`<button class="tile" data-route="gym"><b>Gym</b><span>Glutes & Quads</span></button><button class="tile" data-sub="measure"><b>Monday Measurements</b><span>Weight • glutes • waist • arms</span></button><button class="tile" data-route="food" data-sub="grocery"><b>Grocery List</b><span>Open the canonical Food grocery list</span></button>`:
- state.day===1||state.day===3?`<button class="tile" data-route="gym" data-sub="run"><b>Run</b><span>Incline • speed • duration</span></button>`:
- [2,4].includes(state.day)?`<button class="tile" data-route="gym"><b>Gym</b><span>${state.day===2?'Upper Body':'Glutes & Hamstrings'}</span></button>`:
- state.day===6?`<button class="tile" data-sub="reset"><b>Sunday Reset</b><span>Home + week reset</span></button>`:"";
+ if(openWeekGoals.length)signals.push("Open goals: "+openWeekGoals.map(g=>g.text).join(" • ")+".");
+ let contextual=state.day===0
+   ?`<button class="tile" data-route="gym"><b>Gym</b><span>Glutes & Quads</span></button>
+      <button class="tile" data-sub="measure"><b>Monday Measurements</b><span>Weight • glutes • waist • arms</span></button>
+      <button class="tile" data-route="food" data-sub="grocery"><b>Grocery List</b><span>Open grocery list</span></button>`
+   :state.day===1||state.day===3
+   ?`<button class="tile" data-route="gym" data-sub="run"><b>Run</b><span>Incline • speed • duration</span></button>`
+   :[2,4].includes(state.day)
+   ?`<button class="tile" data-route="gym"><b>Gym</b><span>${state.day===2?"Upper Body":"Glutes & Hamstrings"}</span></button>`
+   :state.day===6
+   ?`<button class="tile" data-sub="reset"><b>Sunday Reset</b><span>Home + week reset</span></button>`:"";
  return hero("Today",d)+`
  <section class="comment-widget"><p>${esc(signals.join(" "))}</p></section>
- <div class="grid"><button class="tile" data-sub="routine"><b>Routine</b><span>${done}/${total} complete</span></button><button class="tile" data-sub="faith"><b>Bible + Faith</b><span>Reading • prayer • devotional • reflection</span></button><button class="tile" data-sub="goals"><b>Goals</b><span>Daily goals + 5 water bottles</span></button><button class="tile" data-sub="school"><b>Study Today</b><span>${esc(STUDY[d])} • 30 min</span></button><button class="tile" data-sub="weigh"><b>Daily Weigh-In</b><span>Feeds Body Progress + History</span></button>${contextual}</div>
- <section class="card today-goals"><div class="row between"><h2 style="margin:0">Open Goals</h2></div>${openWeekGoals.map(g=>`<label class="checkrow"><input type="checkbox" data-goal-done="${g.index}" data-goal-date="${esc(g.date)}"><span><b>${esc(g.text)}</b>${g.origin!=="Today"?` <small>• from ${esc(g.origin)}</small>`:""}${g.important?" <small>• reminder</small>":""}</span></label>`).join("")||'<p class="muted">No open goals through this day. Anything you add stays here until you check it off.</p>'}<div class="row wrap">${waterTracker(k)}</div>${checkbox(`daily|${k}|vitamins`,"Vitamins",!!state.checks[`daily|${k}|vitamins`])}${checkbox(`daily|${k}|creatine`,"Creatine",!!state.checks[`daily|${k}|creatine`])}</section>
- <aside class="thaw-note" aria-label="Tonight freezer to fridge note"><h3>Tonight • Freezer → Fridge</h3><p>${esc(todayMeal()?.thaw||"Nothing needs to move from freezer to fridge tonight.")}</p></aside>`;
+ <div class="grid today-destinations">
+   <button class="tile" data-sub="routine"><b>Routine</b><span>${done}/${total} complete</span></button>
+   <button class="tile" data-sub="faith"><b>Bible + Faith</b><span>Reading • prayer • devotional • reflection</span></button>
+   <button class="tile" data-sub="school"><b>Study Today</b><span>${esc(STUDY[d])} • 30 min</span></button>
+   <button class="tile" data-sub="weigh"><b>Daily Weigh-In</b><span>Feeds Body Progress + History</span></button>
+   ${contextual}
+ </div>
+ <section class="card today-goals">
+   <h2>Open Goals</h2>
+   ${openWeekGoals.map(g=>`<label class="checkrow"><input type="checkbox" data-goal-done="${g.index}" data-goal-date="${esc(g.date)}"><span><b>${esc(g.text)}</b>${g.origin!=="Today"?` <small>• from ${esc(g.origin)}</small>`:""}${g.important?" <small>• reminder</small>":""}</span></label>`).join("")||'<p class="muted">No open goals through this day.</p>'}
+   <div class="watertrack">${waterTracker(k)}</div>
+   ${checkbox(`daily|${k}|vitamins`,"Vitamins",!!state.checks[`daily|${k}|vitamins`])}
+   ${checkbox(`daily|${k}|creatine`,"Creatine",!!state.checks[`daily|${k}|creatine`])}
+ </section>
+ <aside class="thaw-strip"><b>TONIGHT — FREEZER → FRIDGE</b><span>${esc(todayMeal()?.thaw||"Nothing needs to move tonight.")}</span></aside>`;
 }
 function parseDuration(label){
  let h=(label.match(/(\d+)\s*(?:hr|hour)/i)||[])[1],m=(label.match(/(\d+)\s*min/i)||[])[1],explicit=(+h||0)*60+(+m||0);if(explicit)return explicit;
@@ -505,7 +504,7 @@ function sheetMarkup(){
   let editing=Number.isInteger(uiSheet.index),x=editing?a[uiSheet.index]:null,meta=x?.errandMeta||{};
   let defaultAfter=editing?Math.max(0,uiSheet.index-1):Math.max(0,a.findIndex(t=>!t.done)-1);
   let opts=a.map((t,i)=>i===uiSheet.index?"":`<option value="${i}" ${i===defaultAfter?"selected":""}>${i+1}. ${esc(t.name)}</option>`).join("");
-  let body=`<div class="sheet-grid"><label class="wide">Last task you completed<select id="errAfter">${opts}</select></label><label class="wide">Errand name<input id="errName" value="${esc(x?.name||"")}" placeholder="Target, pharmacy, appointment…"></label><label>Start time<input id="errStart" value="${meta.enteredStart!=null?fmt(meta.enteredStart):""}" placeholder="1:30 PM"></label><label>End time<input id="errEnd" value="${meta.enteredEnd!=null?fmt(meta.enteredEnd):""}" placeholder="2:10 PM"></label></div><div class="sheet-note"><b>How this works</b><br>The start/end calculate the errand duration. It is inserted immediately after the task you choose, and every later flexible block moves by that duration. Fixed commitments stay fixed and collisions are flagged.</div>`;
+  let body=`<div class="sheet-grid"><label class="wide">Last task you completed<select id="errAfter">${opts}</select></label><label class="wide">Errand name<input id="errName" value="${esc(x?.name||"")}" placeholder="Target, pharmacy, appointment…"></label><label>Start time<input id="errStart" value="${meta.enteredStart!=null?fmt(meta.enteredStart):""}" placeholder="1:30 PM"></label><label>End time<input id="errEnd" value="${meta.enteredEnd!=null?fmt(meta.enteredEnd):""}" placeholder="2:10 PM"></label></div><div class="sheet-note errand-recent"><span class="muted">MOST RECENT</span><br><b>${esc(mostRecentRoutineName())}</b></div><div class="sheet-note"><b>How this works</b><br>The start/end calculate the errand duration. It is inserted immediately after the task you choose, and every later flexible block moves by that duration. Fixed commitments stay fixed and collisions are flagged.</div>`;
   return shell(editing?"Edit Errand":"Add an Errand","This change belongs only to this selected date.",body,`<button class="btn primary" data-sheet-save-errand="${d}" ${editing?`data-sheet-edit-index="${uiSheet.index}"`:""}>${editing?"Save Changes":"Add to Routine"}</button>`)
  }
  if(uiSheet.type==="task"){
@@ -529,6 +528,12 @@ function sheetMarkup(){
  if(uiSheet.type==="confirm"){let body=`<div class="sheet-note"><b>${esc(uiSheet.title||"Confirm")}</b><br>${esc(uiSheet.message||"")}</div>`;return shell(uiSheet.title||"Confirm","This action updates the same saved Hub data.",body,`<button class="btn primary" data-sheet-confirm>${esc(uiSheet.confirmText||"Confirm")}</button>`)}
  return ""
 }
+
+function mostRecentRoutineName(){
+ let d=DAYS[state.day], tl=timeline(d);
+ let recent=[...tl].reverse().find(x=>x.t.done);
+ return recent?recent.t.name:"Nothing completed yet";
+}
 function routine(){
  let d=DAYS[state.day],rd=rday(d),tl=timeline(d),isToday=selectedKey()===localDateKey(),mins=isToday?new Date().getHours()*60+new Date().getMinutes():-1;
  let next=isToday?(tl.find(x=>!x.t.done&&x.en>=mins)||tl.find(x=>!x.t.done)):tl.find(x=>!x.t.done), now=isToday?(tl.find(x=>!x.t.done&&mins>=x.st&&mins<x.en)||next):next;
@@ -537,9 +542,9 @@ function routine(){
  let sections=[...new Set(tl.map(x=>x.t.section))],open=sections.includes(rd.open)?rd.open:sections[0];
  let shown=tl.filter(x=>x.t.section===open);
  let tabs=sections.map(x=>`<button class="sectionTab ${x===open?"on":""}" data-rsection="${esc(x)}">${esc(x)}</button>`).join("");
- let cards=shown.map(x=>`<div class="taskcard" id="routine-block-${x.i}"><div class="taskhead"><input class="taskcheck" type="checkbox" aria-label="${esc(x.t.name)} complete" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}><div><b>${esc(x.t.name)}</b><div class="tasktime">${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration} min${x.anchor?" • FIXED TIME":""}${x.conflict?" • ⚠ CONFLICT":""}</div>${x.t.errandMeta?`<div class="muted" style="margin-top:3px">Entered ${fmt(x.t.errandMeta.enteredStart)}–${fmt(x.t.errandMeta.enteredEnd)} • shifts later flexible blocks ${x.t.duration} min</div>`:""}</div>${x.t.id==="careM"||x.t.id==="careN"?`<span class="muted">Daily</span>`:`<button class="tinybtn" data-rtask-edit="${d}|${x.i}">Edit</button>`}</div>${(x.t.subtasks||[]).length?`<div class="subtasks">${x.t.subtasks.map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${d}|${x.i}|${j}" ${q.done?"checked":""}><span style="flex:1">${esc(q.name)}</span><button class="tinybtn" data-rsub-edit="${d}|${x.i}|${j}">Edit</button><button class="tinybtn" data-rsub-del="${d}|${x.i}|${j}" aria-label="Remove subtask">×</button></div>`).join("")}</div>`:""}<div class="row" style="margin-top:8px">${x.t.id==="careM"||x.t.id==="careN"?`<button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Care Item</button><span class="muted">20-minute daily anchor</span>`:`<button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Subtask</button><button class="tinybtn" data-rtask-del="${d}|${x.i}">Remove</button>`}</div></div>`).join("");
+ let cards=shown.map(x=>`<div class="taskcard" id="routine-block-${x.i}"><div class="taskhead"><input class="taskcheck" type="checkbox" aria-label="${esc(x.t.name)} complete" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}><div><b>${esc(x.t.name)}</b><div class="tasktime">${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration} min${x.anchor?" • FIXED TIME":""}${x.conflict?" • ⚠ CONFLICT":""}</div>${x.t.errandMeta?`<div class="muted" style="margin-top:3px">Entered ${fmt(x.t.errandMeta.enteredStart)}–${fmt(x.t.errandMeta.enteredEnd)} • shifts later flexible blocks ${x.t.duration} min</div>`:""}</div>${x.t.id==="careM"||x.t.id==="careN"?`<span class="muted">Daily</span>`:`<button class="tinybtn" data-rtask-edit="${d}|${x.i}">Edit</button>`}</div>${(x.t.subtasks||[]).length?`<div class="subtasks">${x.t.subtasks.map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${d}|${x.i}|${j}" ${q.done?"checked":""}><span style="flex:1">${esc(q.name)}</span><button class="tinybtn" data-rsub-edit="${d}|${x.i}|${j}">Edit</button><button class="tinybtn" data-rsub-del="${d}|${x.i}|${j}" aria-label="Remove subtask">×</button></div>`).join("")}</div>`:""}<div class="routine-maintenance">${x.t.id==="careM"||x.t.id==="careN"?`<button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Care Item</button><span class="muted">20-minute daily anchor</span>`:`<button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Subtask</button><button class="tinybtn" data-rtask-del="${d}|${x.i}">Remove</button>`}</div></div>`).join("");
  return hero("Routine",d)+back("Today")+`
- <section class="card soft"><div class="nowgrid"><div class="nowbox routine-jump" role="button" tabindex="0" ${now?`data-rjump="${now.i}"`:""}><span class="muted">NOW</span><b>${esc(now?(now.t.subtasks?.find(q=>!q.done)?now.t.name+" • "+now.t.subtasks.find(q=>!q.done).name:now.t.name):"Routine complete")}</b>${now?`<span class="tasktime">${fmt(now.st)}–${fmt(now.en)}</span>`:""}</div><div class="nowbox routine-jump" role="button" tabindex="0" ${nextItem?`data-rjump="${nextItem.i}"`:""}><span class="muted">NEXT</span><b>${esc(nextItem?.t.name||"Nothing next")}</b>${nextItem?`<span class="tasktime">${fmt(nextItem.st)}–${fmt(nextItem.en)}</span>`:""}</div></div><div class="card" style="margin:10px 0 0;padding:11px 13px"><span class="muted">MOST RECENT</span><b style="display:block;margin-top:3px">${esc(recent?recent.t.name:"Nothing completed yet")}</b></div><div class="comment-widget" style="margin-top:12px"><p>${esc(routineComment(d,tl))}</p></div><div class="app-actions"><button class="btn" data-woke-late="${d}">I WOKE UP LATE</button><button class="btn" data-add-errand="${d}">ADD AN ERRAND</button></div></section>
+ <section class="card soft"><div class="nowgrid"><div class="nowbox routine-jump" ${now?`data-rjump="${now.i}"`:""}><span class="muted">NOW</span><b>${esc(now?(now.t.subtasks?.find(q=>!q.done)?now.t.name+" • "+now.t.subtasks.find(q=>!q.done).name:now.t.name):"Routine complete")}</b>${now?`<span class="tasktime">${fmt(now.st)}–${fmt(now.en)}</span>`:""}</div><div class="nowbox routine-jump" ${nextItem?`data-rjump="${nextItem.i}"`:""}><span class="muted">NEXT</span><b>${esc(nextItem?.t.name||"Nothing next")}</b>${nextItem?`<span class="tasktime">${fmt(nextItem.st)}–${fmt(nextItem.en)}</span>`:""}</div></div><div class="comment-widget routine-commentary" style="margin-top:12px"><p>${esc(routineComment(d,tl))}</p></div><div class="app-actions"><button class="btn" data-woke-late="${d}">I WOKE UP LATE</button><button class="btn" data-add-errand="${d}">ADD AN ERRAND</button></div></section>
  <section class="card"><div class="row between"><h2 style="margin:0">Routine Sections</h2><div class="row"><button class="btn" data-rstart="${d}">Actual Wake / Start: ${fmt(state.routineStarts[selectedKey()]??rd.start)}</button><button class="btn" data-copy-routine>Copy Routine</button></div></div><div class="sectionTabs">${tabs}</div>${cards||'<p class="muted">No blocks in this section.</p>'}</section>
  `;
 }
