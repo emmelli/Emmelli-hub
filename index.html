@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Emmelli Hub</title>
-<meta name="emmelli-build" content="2026-09-29-FULL-VISUAL-AUDIT-v58">
+<meta name="emmelli-build" content="2026-09-30-DEPLOY-STABLE-v74">
 <style>
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;overflow-x:hidden}body{padding-bottom:calc(108px + env(safe-area-inset-bottom));text-transform:none;font-size:17px;letter-spacing:.01em}
@@ -472,9 +472,48 @@ body>nav.nav .navin>button{
   overflow:hidden!important;
   white-space:normal!important;
 }
-</style>
-\n<style id="v57-today-visual-contract">\n/* Final Today-page visual contract. Explicitly neutralize iOS native button rendering\n   and old generic grid rules so destination cards can never merge into a dark block. */\n.today-destinations{display:grid!important;width:100%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important;background:transparent!important}\n.today-destinations>.tile{\n  -webkit-appearance:none!important;appearance:none!important;\n  display:flex!important;position:relative!important;isolation:isolate!important;\n  width:100%!important;height:auto!important;min-height:92px!important;\n  margin:0!important;padding:12px!important;overflow:hidden!important;\n  border:1px solid #e8cbd4!important;border-radius:20px!important;\n  background:linear-gradient(145deg,#fffefd 0%,#fbe9ef 100%)!important;\n  color:#684651!important;box-shadow:0 5px 14px rgba(126,73,91,.08)!important;\n  opacity:1!important;filter:none!important;mix-blend-mode:normal!important;\n  flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;text-align:left!important;\n}\n.today-destinations>.tile b,.today-destinations>.tile span{position:relative!important;z-index:2!important;color:#684651!important}\n.today-destinations>.tile span{color:#8d6b76!important}\n.today-destinations>.tile::before,.today-destinations>.tile::after{content:none!important;display:none!important}\n\n/* Water is one clean five-column control. Number sits under each real bottle; no text can collide. */\n.today-goals>.watertrack,.watertrack{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:none!important;margin:12px 0!important}\n.waterbottle{\n  -webkit-appearance:none!important;appearance:none!important;display:flex!important;\n  min-width:0!important;width:100%!important;min-height:78px!important;height:auto!important;\n  padding:8px 2px!important;margin:0!important;overflow:visible!important;\n  flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;\n  border:1px solid #e8cbd4!important;border-radius:16px!important;background:#fffafd!important;\n}\n.waterbottle .bottleicon{flex:0 0 auto!important;width:26px!important;height:42px!important;margin:0 auto!important}\n.waterbottle .waternum{display:block!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important;white-space:nowrap!important;font:800 10px/1 Arial,sans-serif!important;color:#8b6872!important;text-align:center!important}\n@media(max-width:420px){\n .today-destinations{gap:9px!important}\n .today-destinations>.tile{min-height:88px!important;padding:11px 10px!important}\n .today-goals>.watertrack,.watertrack{gap:6px!important}\n .waterbottle{min-height:72px!important;padding:7px 1px!important}\n .waterbottle .bottleicon{width:24px!important;height:39px!important}\n}\n@media(min-width:700px) and (max-width:1180px){\n .today-destinations{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}\n .today-destinations>.tile{min-height:96px!important}\n}\n</style>\n
-<style id="v58-today-density-contract">
+</style><style id="v57-today-visual-contract">
+/* Final Today-page visual contract. Explicitly neutralize iOS native button rendering
+   and old generic grid rules so destination cards can never merge into a dark block. */
+.today-destinations{display:grid!important;width:100%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important;background:transparent!important}
+.today-destinations>.tile{
+  -webkit-appearance:none!important;appearance:none!important;
+  display:flex!important;position:relative!important;isolation:isolate!important;
+  width:100%!important;height:auto!important;min-height:92px!important;
+  margin:0!important;padding:12px!important;overflow:hidden!important;
+  border:1px solid #e8cbd4!important;border-radius:20px!important;
+  background:linear-gradient(145deg,#fffefd 0%,#fbe9ef 100%)!important;
+  color:#684651!important;box-shadow:0 5px 14px rgba(126,73,91,.08)!important;
+  opacity:1!important;filter:none!important;mix-blend-mode:normal!important;
+  flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;text-align:left!important;
+}
+.today-destinations>.tile b,.today-destinations>.tile span{position:relative!important;z-index:2!important;color:#684651!important}
+.today-destinations>.tile span{color:#8d6b76!important}
+.today-destinations>.tile::before,.today-destinations>.tile::after{content:none!important;display:none!important}
+
+/* Water is one clean five-column control. Number sits under each real bottle; no text can collide. */
+.today-goals>.watertrack,.watertrack{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;width:100%!important;max-width:none!important;margin:12px 0!important}
+.waterbottle{
+  -webkit-appearance:none!important;appearance:none!important;display:flex!important;
+  min-width:0!important;width:100%!important;min-height:78px!important;height:auto!important;
+  padding:8px 2px!important;margin:0!important;overflow:visible!important;
+  flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;
+  border:1px solid #e8cbd4!important;border-radius:16px!important;background:#fffafd!important;
+}
+.waterbottle .bottleicon{flex:0 0 auto!important;width:26px!important;height:42px!important;margin:0 auto!important}
+.waterbottle .waternum{display:block!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important;white-space:nowrap!important;font:800 10px/1 Arial,sans-serif!important;color:#8b6872!important;text-align:center!important}
+@media(max-width:420px){
+ .today-destinations{gap:9px!important}
+ .today-destinations>.tile{min-height:88px!important;padding:11px 10px!important}
+ .today-goals>.watertrack,.watertrack{gap:6px!important}
+ .waterbottle{min-height:72px!important;padding:7px 1px!important}
+ .waterbottle .bottleicon{width:24px!important;height:39px!important}
+}
+@media(min-width:700px) and (max-width:1180px){
+ .today-destinations{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+ .today-destinations>.tile{min-height:96px!important}
+}
+</style><style id="v58-today-density-contract">
 /* Full-render audit: Today goals must size to its content.
    Older iPad rules forced this card to absorb spare viewport height. */
 #app:has(.today-destinations) .today-goals{
@@ -492,8 +531,62 @@ body>nav.nav .navin>button{
   .today-goals .watertrack,.today-goals .checkrow{align-self:start!important}
 }
 </style>
+
+<style id="v59-ios-today-contract">
+.today-destinations{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:10px!important;width:100%!important;margin:0 0 10px!important;
+}
+.today-destinations>button.tile{
+ -webkit-appearance:none!important;appearance:none!important;
+ display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+ width:100%!important;min-width:0!important;min-height:88px!important;height:auto!important;
+ padding:11px 10px!important;margin:0!important;border:1px solid #e8cbd4!important;border-radius:20px!important;
+ background:#fff8fa!important;background-image:linear-gradient(145deg,#fffefd,#fbe9ef)!important;
+ color:#684651!important;box-shadow:0 5px 14px rgba(126,73,91,.08)!important;
+ opacity:1!important;overflow:hidden!important;text-align:left!important;
+}
+.today-destinations>button.tile b{color:#684651!important;font-size:15px!important;line-height:1.1!important}
+.today-destinations>button.tile span{color:#8d6b76!important;font-size:10px!important;line-height:1.25!important}
+.today-goals{min-height:0!important;height:auto!important}
+.today-goals .watertrack{
+ display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+ gap:6px!important;width:100%!important;margin:12px 0!important;
+}
+.today-goals .waterbottle{
+ -webkit-appearance:none!important;appearance:none!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ min-width:0!important;width:100%!important;min-height:72px!important;height:auto!important;
+ padding:7px 1px!important;margin:0!important;overflow:hidden!important;
+ border:1px solid #e8cbd4!important;border-radius:16px!important;background:#fffafd!important;
+}
+.today-goals .waterbottle .bottleicon{display:block!important;width:24px!important;height:39px!important;flex:0 0 auto!important;margin:0 auto!important}
+.today-goals .waterbottle .waternum{
+ display:block!important;position:static!important;width:100%!important;height:auto!important;
+ margin:5px 0 0!important;padding:0!important;white-space:nowrap!important;
+ font-family:Arial,sans-serif!important;font-size:10px!important;font-weight:800!important;line-height:1!important;
+ letter-spacing:0!important;text-align:center!important;color:#8b6872!important;
+}
+@media(min-width:700px) and (max-width:1180px){
+ .today-destinations{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+ .today-destinations>button.tile{min-height:96px!important;padding:14px!important}
+ .today-goals{min-height:0!important;height:auto!important;padding-top:18px!important;padding-bottom:18px!important}
+}
+</style>
+
+<style id="v63-bottom-nav-clearance">
+/* Keep the last Today/content card fully scrollable above the fixed bottom navigation. */
+#app.app{
+  padding-bottom:calc(150px + env(safe-area-inset-bottom))!important;
+}
+@media(min-width:700px){
+  #app.app{
+    padding-bottom:calc(130px + env(safe-area-inset-bottom))!important;
+  }
+}
+</style>
 </head>
-<body data-build="2026-09-29-FULL-RESPONSIVE-THURSDAY-v46">
+<body data-build="2026-09-29-NAV-CLEARANCE-v63">
 <div id="app" class="app"></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
@@ -889,7 +982,8 @@ function today(){
    ?`<button class="tile" data-route="gym"><b>Gym</b><span>${state.day===2?"Upper Body":"Glutes & Hamstrings"}</span></button>`
    :state.day===6
    ?`<button class="tile" data-sub="reset"><b>Sunday Reset</b><span>Home + week reset</span></button>`:"";
- return hero("Today",d)+`
+ let fullTodayDate=new Date(k+"T12:00:00").toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+  return `<section class="hero"><div class="eyebrow">TODAY</div><h1>${esc(fullTodayDate)}</h1>${week()}</section>`+`
  <section class="comment-widget"><p>${esc(signals.join(" "))}</p></section>
  <div class="grid today-destinations">
    <button class="tile" data-sub="routine"><b>Routine</b><span>${done}/${total} complete</span></button>
