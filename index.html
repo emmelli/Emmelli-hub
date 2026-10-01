@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Emmelli Hub</title>
-<meta name="emmelli-build" content="2026-10-01-COMPONENT-WEIGH-CONTAINER-FIX">
+<meta name="emmelli-build" content="2026-10-01-FINAL-COMPONENT-CONVERGENCE">
 <style>
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;overflow-x:hidden}body{padding-bottom:calc(108px + env(safe-area-inset-bottom));text-transform:none;font-size:17px;letter-spacing:.01em}
@@ -2613,6 +2613,52 @@ document.addEventListener("change",e=>{
   state.cookComponents=state.cookComponents||{};state.cookComponents[key]=state.cookComponents[key]||{};state.cookComponents[key][cid]=state.cookComponents[key][cid]||{};state.cookComponents[key][cid].usedPlanned=!!t.checked;save();
   let card=t.closest(".component-card"),badge=card?.querySelector(".category-count");if(badge)badge.textContent=t.checked?"ALL PLANNED INGREDIENTS ✓":"OPEN + CONFIRM";
 });
+
+
+// ===== FINAL COOK CONVERGENCE — AUTHORITATIVE COMPONENT FLOW =====
+// Same strategy as the Routine fix that finally held live: the LAST renderer owns Steps 3, 5 and 6.
+// No regex patching of those steps. We parse the rendered Cooking sheet and replace the exact step bodies.
+const _cookBeforeFinalConvergence = cook;
+cook = function(){
+  const original = _cookBeforeFinalConvergence();
+  const scheduled = todayMeal()?.cook || [];
+  if(!scheduled.length) return original;
+  const names = scheduled.map(cookRecipeName);
+  const shell = document.createElement('div');
+  shell.innerHTML = original;
+  const steps = Array.from(shell.querySelectorAll('details.cook-step'));
+  const bodyFor = prefix => {
+    const d=steps.find(x=>(x.querySelector(':scope > summary')?.textContent||'').trim().startsWith(prefix));
+    return d?.querySelector(':scope > .cook-step-body') || null;
+  };
+
+  const prep = bodyFor('3.');
+  if(prep){
+    prep.querySelectorAll('.final-component-flow').forEach(x=>x.remove());
+    const wrap=document.createElement('div'); wrap.className='final-component-flow';
+    wrap.innerHTML=names.map((rn,ri)=>{
+      const r=MEAL.recipes?.[rn], adj=state.cookAdjustments?.[selectedKey()+'|'+rn]||{};
+      return `<div class="card soft"><h3>${esc(rn)} — COMPONENTS + INGREDIENTS USED</h3>${cookComponentPanelV115(rn,ri,r,adj)}</div>`;
+    }).join('');
+    prep.appendChild(wrap);
+  }
+
+  const measure = bodyFor('5.');
+  if(measure){
+    measure.innerHTML=names.map((rn,ri)=>{
+      const r=MEAL.recipes?.[rn], key=selectedKey()+'|'+rn, cs=state.cookComponents?.[key]||{};
+      const defs=recipeComponentDefs(rn,r), count=Math.max(1,(cookAssignments(rn)||[]).length);
+      return `<div class="card soft"><div class="portion-count-banner"><b>${count} CONTAINERS TOTAL</b><span>${esc(rn)} • Each finished component is weighed once below.</span></div><h3>${esc(rn)} — TOTAL COOKED WEIGHTS</h3><p class="muted">Weigh every physically separate finished component. The Hub does the split for you: TOTAL COOKED WEIGHT ÷ ${count} CONTAINERS.</p>${defs.map(c=>{const total=Number(cs[c.id]?.total)||0;return `<label>${esc(c.label)} — TOTAL COOKED WEIGHT (G)<input type="number" min="0" step=".1" data-cook-component-total="${ri}|${esc(c.id)}" value="${esc(cs[c.id]?.total??'')}" placeholder="WEIGH THE WHOLE ${esc(c.label).toUpperCase()}"></label><div class="suggested-portions"><b>SUGGESTED PER CONTAINER</b><br>${esc(c.label)}: ${total>0?'~'+(total/count).toFixed(1)+' g':'enter total cooked weight first'}</div>`}).join('')}</div>`;
+    }).join('');
+  }
+
+  const portion = bodyFor('6.');
+  if(portion){
+    portion.innerHTML = cookingPortionLabelsV92();
+  }
+  return shell.innerHTML;
+};
+window.__EMMELLI_COOK_BUILD='FINAL-COMPONENT-CONVERGENCE-2026-10-01';
 </script>
 
 
