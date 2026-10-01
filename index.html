@@ -2267,35 +2267,43 @@ rday=function(d){
 };
 function careIsHeadingV84(name){return /^(ORAL CARE|SKINCARE|HAIR|HAND \/ NAIL CARE)$/i.test(String(name||"").trim())}
 
-/* V12 FINAL ROUTINE CONVERGENCE — canonical ROUTINE order wins after every legacy rday wrapper.
-   This fixes the runtime bug where V75/V84 moved Morning Care directly after PET TIME,
-   overriding the visible Wednesday/Thursday schedule even though the correct data existed. */
-const _rdayRuntimeLegacyV12=rday;
-function routineCanonicalNameV12(raw){
+/* V13 AUTHORITATIVE ROUTINE ENGINE — one canonical order, independent of legacy wrapper order. */
+const _legacyRdayBeforeV13=rday;
+function routineRawNameV13(raw){
   return String(raw||"").replace(/\s*[—-]\s*(?:\d+\s*(?:hr|hour)s?(?:\s*\d+\s*min)?|\d+\s*min).*$/i,"").trim();
 }
-function routineKeyV12(v){return String(v||"").toUpperCase().replace(/[^A-Z0-9]+/g," ").replace(/\s+/g," ").trim()}
+function routineKeyV13(v){return String(v||"").toUpperCase().replace(/[^A-Z0-9]+/g," ").replace(/\s+/g," ").trim()}
+function routineIdV13(d,i,name){return `canon|${d}|${i}|${routineKeyV13(name).slice(0,24)}`}
 rday=function(d){
-  let rd=_rdayRuntimeLegacyV12(d), current=rd.tasks||[], used=new Set(), ordered=[];
-  const take=(pred)=>{let x=current.find((t,i)=>!used.has(i)&&pred(t));if(!x)return null;let i=current.indexOf(x);used.add(i);return x};
-  (ROUTINE[d]||[]).forEach(raw=>{
-    let rawName=routineCanonicalNameV12(raw), key=routineKeyV12(rawName), t=null;
-    // The canonical shower/care position is represented by the single Morning Care parent block.
+  // Read legacy state only to preserve completion, care subtasks, and user-added errands.
+  let legacy=_legacyRdayBeforeV13(d), old=Array.isArray(legacy?.tasks)?legacy.tasks:[], k=selectedKey();
+  let status=state.routineStatus?.[k]||{}, used=new Set(), tasks=[];
+  const take=(pred)=>{for(let i=0;i<old.length;i++){if(!used.has(i)&&pred(old[i])){used.add(i);return old[i]}}return null};
+  const match=(name)=>{let key=routineKeyV13(name);return take(x=>{let q=routineKeyV13(x.name);return q===key||q.startsWith(key+" ")||key.startsWith(q+" ")})};
+  (ROUTINE[d]||[]).forEach((raw,i)=>{
+    let name=routineRawNameV13(raw), key=routineKeyV13(name), t;
     if(/SHOWER GET READY|MORNING CARE SHOWER GET READY/.test(key)){
-      t=take(x=>x.id==="careM");
-      if(t){t.name=/MORNING CARE/i.test(rawName)?"Morning Care / Shower & Get Ready":"Morning Care / Shower & Get Ready";t.duration=50;t.section=sectionFor(d,t.name)}
+      t=take(x=>x.id==="careM")||{id:"careM",subtasks:careItems(d,"morning").map((name,j)=>({id:"m"+j,name,done:false}))};
+      t.name="Morning Care / Shower & Get Ready"; t.duration=50;
     }else{
-      t=take(x=>routineKeyV12(x.name)===key || routineKeyV12(x.name).startsWith(key+" ") || key.startsWith(routineKeyV12(x.name)+" "));
+      t=match(name)||{id:routineIdV13(d,i,name),name,subtasks:[]};
+      t.name=name;
+      let dur=parseDuration(raw); t.duration=dur>0?dur:30;
     }
-    if(t){
-      let dur=parseDuration(raw); if(dur>0)t.duration=dur;
-      t.section=sectionFor(d,t.name); ordered.push(t);
-    }
+    t.section=sectionFor(d,t.name);
+    t.done=!!status[t.id];
+    (t.subtasks||[]).forEach(q=>q.done=!!status[t.id+"|"+q.id]);
+    tasks.push(t);
   });
-  // Preserve user-added errands/custom blocks without allowing old duplicate template blocks to reorder the day.
-  current.forEach((t,i)=>{if(!used.has(i)&&(String(t.id||"").startsWith("errand")||t.customFixed||t.errandMeta)){used.add(i);ordered.push(t)}});
-  let night=take(x=>x.id==="careN"); if(night){night.duration=30;night.section="Night Routine";ordered.push(night)}
-  rd.tasks=ordered; rd.start=routineStart(d);
+  // Keep only genuine user-created custom blocks; obsolete template duplicates cannot re-enter the schedule.
+  old.forEach((t,i)=>{if(!used.has(i)&&(String(t.id||"").startsWith("errand")||t.errandMeta||t.customFixed)){t.done=!!status[t.id];tasks.push(t)}});
+  let night=take(x=>x.id==="careN")||{id:"careN",name:"Night Care",duration:30,section:"Night Routine",subtasks:careItems(d,"night").map((name,j)=>({id:"n"+j,name,done:false}))};
+  night.name="Night Care"; night.duration=30; night.section="Night Routine"; night.done=!!status[night.id];
+  (night.subtasks||[]).forEach(q=>q.done=!!status[night.id+"|"+q.id]); tasks.push(night);
+  let rd={...legacy,start:routineStart(d),tasks};
+  // Authoritative wake times cannot be overridden by stale saved state on Wed/Thu.
+  if(d==="Wednesday"||d==="Thursday")delete state.routineStarts[k];
+  state.routineDates=state.routineDates||{}; state.routineDates[k]={day:d,...cloneRoutineDay(rd)};
   return rd;
 };
 
