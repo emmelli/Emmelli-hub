@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Emmelli Hub</title>
-<meta name="emmelli-build" content="2026-10-01-FINAL-COMPONENT-CONVERGENCE">
+<meta name="emmelli-build" content="2026-10-01-SINGLE-ACTIVE-COOKING-V5">
 <style>
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;overflow-x:hidden}body{padding-bottom:calc(108px + env(safe-area-inset-bottom));text-transform:none;font-size:17px;letter-spacing:.01em}
@@ -1639,7 +1639,7 @@ function finishCooking(dayIndex,recipeIndex){
  save();render();
  if(unresolved.length)showToast("Cooking saved. Verify unchanged ingredients in Inventory: "+unresolved.join(" • "),"Cooking saved")
 }
-function cook(){
+function cookShellLegacy(){
  let day=todayMeal(),names=day?.cook||[],recipeNames=names.map(cookRecipeName);
  if(!names.length)return hero("Cook",DAYS[state.day])+back("Food")+`<section class="card"><p>NO COOKING SCHEDULED TODAY.</p></section>`;
  let grouped={Freezer:[],Fridge:[],Pantry:[],Seasonings:[]};recipeNames.forEach(rn=>(MEAL.recipes?.[rn]?.ingredients||[]).forEach(x=>{let g=cookSourceGroup(x),n=ingredientNameOnly(x);if(!grouped[g].includes(n))grouped[g].push(n)}));
@@ -1669,6 +1669,9 @@ function cook(){
  ];
  return hero("Cook",DAYS[state.day])+back("Food")+`<section class="card">${steps.map((x,i)=>`<details class="cook-step" ${i===0?'open':''}><summary>${x[0]}</summary><div class="cook-step-body">${x[1]}</div></details>`).join("")}</section>`;
 }
+
+// Single immutable Cooking shell. All current Cooking UI renders from this base only.
+function cook(){ return cookCanonicalV5(); }
 
 const GYM_PLAN={
 Monday:{title:"GLUTES & QUADS",steps:[
@@ -2221,11 +2224,8 @@ function snapshotFinishedComponents(rn){let r=MEAL.recipes?.[rn],n=componentNutr
 function containerMacrosV82(rn,ci,weights){let r=MEAL.recipes?.[rn],m=emptyMacros(),missing=[];recipeComponentDefs(rn,r).forEach(c=>{let g=Number(weights[c.id])||0,rec=state.finishedComponents[componentStateKey(rn,c.id)];if(g>0&&rec?.macrosPerGram)m=addMacros(m,rec.macrosPerGram,g);if(g>0&&(!rec||rec.nutritionComplete===false))missing.push(c.label)});let ca=state.cookAdjustments?.[selectedKey()+"|"+rn]?.containers?.[ci]||{};let delta={};for(let k of ["calories","protein","carbs","fat","fiber"])delta[k]=Number(ca[k])||0;return {macros:roundMacros(addMacros(m,delta)),missing}}
 const _finishCookingV82=finishCooking;
 finishCooking=function(dayIndex,recipeIndex){let rn=cookRecipeName(todayMeal()?.cook?.[recipeIndex]||"");snapshotFinishedComponents(rn);return _finishCookingV82(dayIndex,recipeIndex)};
-const _cookV82=cook;
-cook=function(){let html=_cookV82();if(!(todayMeal()?.cook||[]).length)return html;let names=(todayMeal().cook||[]).map(cookRecipeName);names.forEach((rn,ri)=>{let oldRe=new RegExp(`<div class="portion-count-banner"><b>MAKE \\d+ ${rn.replace(/[.*+?^${}()|[\\]\\]/g,'\\$&').toUpperCase()} CONTAINER[\\s\\S]*?<\\/div>`);});
- // Add a compact authoritative component portion guide immediately before the portioning instructions.
- let guides=names.map(rn=>`<div class="card soft"><h3>${esc(rn)} — COMPONENT PORTION GUIDE</h3>${v82PortionSummary(rn)}<p class="muted">Each component target = that component’s ACTUAL cooked weight ÷ its planned container count. This target never becomes the saved actual portion automatically.</p></div>`).join("");
- html=html.replace('<p class="muted">SUGGESTED WEIGHTS CHANGE LIVE FROM MEASUREMENTS.',guides+'<p class="muted">SUGGESTED WEIGHTS CHANGE LIVE FROM MEASUREMENTS.');return html};
+// Obsolete Cooking renderer wrapper removed during canonical cleanup.
+
 
 
 
@@ -2430,14 +2430,8 @@ function cookingPortionLabelsV92(){
     </div>`;
   }).join("");
 }
-const _cookV92=cook;
-cook=function(){
-  let html=_cookV92();
-  if(!(todayMeal()?.cook||[]).length)return html;
-  let step6=cookingPortionLabelsV92();
-  return html.replace(/(<details class="cook-step"[^>]*><summary>6\. PORTION \+ LABEL \+ STORE<\/summary><div class="cook-step-body">)[\s\S]*?(<\/div><\/details>\s*<details class="cook-step"[^>]*><summary>7\. FINISH COOKING \+ SYNC INVENTORY<\/summary>)/,
-    `$1${step6}$2`);
-};
+// Obsolete Cooking renderer wrapper removed during canonical cleanup.
+
 document.addEventListener("input",e=>{
   let t=e.target;if(!t.dataset.v92Portion)return;
   let [key,i,cid]=t.dataset.v92Portion.split("|"),d=containerDraftV84(key,+i);d.components[cid]=t.value;save();
@@ -2488,8 +2482,8 @@ finishCooking=function(dayIndex,recipeIndex){
 
 
 // v109 clean Cooking placement: confirmations/changes live with prep; weighing lives only in Step 5.
-const _cookV109=cook;
-cook=function(){let html=_cookV109();if(!(todayMeal()?.cook||[]).length)return html;let names=(todayMeal().cook||[]).map(cookRecipeName);let prepPanels=names.map((rn,ri)=>{let r=MEAL.recipes?.[rn],adj=state.cookAdjustments?.[selectedKey()+"|"+rn]||{};return `<div class="card soft"><h3>${esc(rn)} — CONFIRM / CHANGES</h3>${cookComponentPanel(rn,ri,r,adj)}</div>`}).join("");html=html.replace(/(<details class="cook-step"[^>]*><summary>3\. PREP \+ MEASURE EVERYTHING<\/summary><div class="cook-step-body">)([\s\S]*?)(<\/div><\/details>\s*<details class="cook-step"[^>]*><summary>4\. COOK ALL MEALS TOGETHER<\/summary>)/,`$1$2${prepPanels}$3`);let measurements=names.map((rn,ri)=>{let r=MEAL.recipes?.[rn],key=selectedKey()+"|"+rn,cs=state.cookComponents?.[key]||{},defs=recipeComponentDefs(rn,r),count=Math.max(1,cookAssignments(rn).length);return `<div class="card soft measurements-card-v109"><h3>${esc(rn)}</h3><p class="muted">WEIGH THE FINISHED FOOD ONCE. If the recipe has a truly separate sauce/side, weigh that separately. The Hub divides each number by the number of containers and shows the suggested amount per container.</p>${defs.map(c=>`<label>${esc(c.label)} — ACTUAL FINISHED TOTAL (G)<input type="number" min="0" step=".1" data-cook-component-total="${ri}|${esc(c.id)}" value="${esc(cs[c.id]?.total??"")}" placeholder="ACTUAL COOKED GRAMS"></label><div class="suggested-portions"><b>${esc(c.label)}</b> • ${Number(cs[c.id]?.total)>0?`~${(Number(cs[c.id].total)/count).toFixed(1)} g suggested per container`:"enter cooked total to calculate suggestion"}</div>`).join("")}</div>`}).join("");html=html.replace(/(<details class="cook-step"[^>]*><summary>5\. MEASUREMENTS<\/summary><div class="cook-step-body">)[\s\S]*?(<\/div><\/details>\s*<details class="cook-step"[^>]*><summary>6\. PORTION \+ LABEL \+ STORE<\/summary>)/,`$1${measurements}$2`);return html};
+// Obsolete Cooking renderer wrapper removed during canonical cleanup.
+
 
 // v114 — semantic SVG icons, polished Wish List, and always-visible Budget live-balance feedback.
 const UI_PATHS_V114={
@@ -2618,48 +2612,150 @@ document.addEventListener("change",e=>{
 // ===== FINAL COOK CONVERGENCE — AUTHORITATIVE COMPONENT FLOW =====
 // Same strategy as the Routine fix that finally held live: the LAST renderer owns Steps 3, 5 and 6.
 // No regex patching of those steps. We parse the rendered Cooking sheet and replace the exact step bodies.
-const _cookBeforeFinalConvergence = cook;
-cook = function(){
-  const original = _cookBeforeFinalConvergence();
-  const scheduled = todayMeal()?.cook || [];
-  if(!scheduled.length) return original;
-  const names = scheduled.map(cookRecipeName);
-  const shell = document.createElement('div');
-  shell.innerHTML = original;
-  const steps = Array.from(shell.querySelectorAll('details.cook-step'));
-  const bodyFor = prefix => {
-    const d=steps.find(x=>(x.querySelector(':scope > summary')?.textContent||'').trim().startsWith(prefix));
-    return d?.querySelector(':scope > .cook-step-body') || null;
-  };
+// Obsolete Cooking renderer wrapper removed during canonical cleanup.
 
-  const prep = bodyFor('3.');
-  if(prep){
-    prep.querySelectorAll('.final-component-flow').forEach(x=>x.remove());
-    const wrap=document.createElement('div'); wrap.className='final-component-flow';
-    wrap.innerHTML=names.map((rn,ri)=>{
-      const r=MEAL.recipes?.[rn], adj=state.cookAdjustments?.[selectedKey()+'|'+rn]||{};
-      return `<div class="card soft"><h3>${esc(rn)} — COMPONENTS + INGREDIENTS USED</h3>${cookComponentPanelV115(rn,ri,r,adj)}</div>`;
-    }).join('');
-    prep.appendChild(wrap);
-  }
-
-  const measure = bodyFor('5.');
-  if(measure){
-    measure.innerHTML=names.map((rn,ri)=>{
-      const r=MEAL.recipes?.[rn], key=selectedKey()+'|'+rn, cs=state.cookComponents?.[key]||{};
-      const defs=recipeComponentDefs(rn,r), count=Math.max(1,(cookAssignments(rn)||[]).length);
-      return `<div class="card soft"><div class="portion-count-banner"><b>${count} CONTAINERS TOTAL</b><span>${esc(rn)} • Each finished component is weighed once below.</span></div><h3>${esc(rn)} — TOTAL COOKED WEIGHTS</h3><p class="muted">Weigh every physically separate finished component. The Hub does the split for you: TOTAL COOKED WEIGHT ÷ ${count} CONTAINERS.</p>${defs.map(c=>{const total=Number(cs[c.id]?.total)||0;return `<label>${esc(c.label)} — TOTAL COOKED WEIGHT (G)<input type="number" min="0" step=".1" data-cook-component-total="${ri}|${esc(c.id)}" value="${esc(cs[c.id]?.total??'')}" placeholder="WEIGH THE WHOLE ${esc(c.label).toUpperCase()}"></label><div class="suggested-portions"><b>SUGGESTED PER CONTAINER</b><br>${esc(c.label)}: ${total>0?'~'+(total/count).toFixed(1)+' g':'enter total cooked weight first'}</div>`}).join('')}</div>`;
-    }).join('');
-  }
-
-  const portion = bodyFor('6.');
-  if(portion){
-    portion.innerHTML = cookingPortionLabelsV92();
-  }
-  return shell.innerHTML;
-};
 window.__EMMELLI_COOK_BUILD='FINAL-COMPONENT-CONVERGENCE-2026-10-01';
-</script>
 
+// ===== FINAL SIMPLE COMPONENT SYSTEM — AUTHORITATIVE =====
+// Component-first UI: component -> ingredients -> cooked weight -> saved component -> container.
+function simpleCompKey(rn){return selectedKey()+"|"+rn}
+function simpleCompState(rn,r){
+  state.simpleCookComponents=state.simpleCookComponents||{};
+  let key=simpleCompKey(rn), defs=recipeComponentDefs(rn,r);
+  let box=state.simpleCookComponents[key]||(state.simpleCookComponents[key]={});
+  defs.forEach(comp=>{
+    let c=box[comp.id]||(box[comp.id]={label:comp.label,ingredients:[],extras:[],cooked:false,total:""});
+    c.label=comp.label;
+    if(!c.ingredients.length){c.ingredients=comp.ix.filter(i=>r.ingredients?.[i]!=null).map(i=>({recipeIndex:i,name:r.ingredients[i],grams:"",removed:false}));}
+  });
+  return box;
+}
+function simpleComponentCard(rn,ri,r,comp,count){
+  let box=simpleCompState(rn,r),c=box[comp.id];
+  let suggested=Number(c.total)>0?(Number(c.total)/count).toFixed(1):null;
+  return `<details class="component-card simple-component"><summary><span>${esc(comp.label)}</span><span class="category-count">${c.cooked&&Number(c.total)>0?'SAVED ✓':'OPEN'}</span></summary><div class="component-body">
+    <div class="simple-section-title">INGREDIENTS</div>
+    <div class="simple-ingredient-list">${c.ingredients.map((x,ii)=>`<div class="simple-ing-row ${x.removed?'is-removed':''}"><div class="simple-ing-name">${esc(x.name)}</div><label>GRAMS<input type="number" min="0" step=".1" data-simple-ing-grams="${ri}|${esc(comp.id)}|${ii}" value="${esc(x.grams??'')}" placeholder="g"></label><button class="tinybtn" data-simple-ing-remove="${ri}|${esc(comp.id)}|${ii}">${x.removed?'RESTORE':'REMOVE'}</button></div>`).join('')}</div>
+    <button class="tinybtn" data-simple-ing-add="${ri}|${esc(comp.id)}">+ ADD INGREDIENT</button>
+    ${(c.extras||[]).map((x,ei)=>`<div class="simple-ing-row"><label class="wide">ADDED INGREDIENT<input data-simple-extra="${ri}|${esc(comp.id)}|${ei}|name" value="${esc(x.name||'')}" placeholder="Ingredient / product"></label><label>GRAMS<input type="number" min="0" step=".1" data-simple-extra="${ri}|${esc(comp.id)}|${ei}|grams" value="${esc(x.grams??'')}" placeholder="g"></label><button class="tinybtn" data-simple-extra-remove="${ri}|${esc(comp.id)}|${ei}">REMOVE</button></div>`).join('')}
+    <div class="simple-cooked-box"><label class="checkrow"><input type="checkbox" data-simple-cooked="${ri}|${esc(comp.id)}" ${c.cooked?'checked':''}><span><b>COOKED AS INSTRUCTED</b></span></label>
+    <label><b>TOTAL COOKED WEIGHT (G)</b><input type="number" min="0" step=".1" data-simple-total="${ri}|${esc(comp.id)}" value="${esc(c.total??'')}" placeholder="Put the whole cooked component on the scale"></label>
+    <div class="portion-count-banner"><b>${count} CONTAINERS</b><span>${suggested?`SUGGESTED: ${suggested} g ${esc(comp.label)} PER CONTAINER`:'Enter cooked weight to calculate suggestion'}</span></div></div>
+    <div class="simple-save-status">${c.cooked&&Number(c.total)>0?'<b>COMPONENT SAVED ✓</b><br><span class="muted">Available in Portion + Label + Store.</span>':'Check cooked as instructed + enter cooked weight to save this component.'}</div>
+  </div></details>`;
+}
+function simplePrepUI(){
+ let names=(todayMeal()?.cook||[]).map(cookRecipeName);
+ return names.map((rn,ri)=>{let r=MEAL.recipes?.[rn],defs=recipeComponentDefs(rn,r),count=Math.max(1,(cookAssignments(rn)||[]).length);simpleCompState(rn,r);return `<div class="card soft"><h3>${esc(rn)}</h3><p class="muted">Open a component. Edit/remove ingredient grams only if needed, or add an ingredient. Then enter that component's cooked weight.</p>${defs.map(c=>simpleComponentCard(rn,ri,r,c,count)).join('')}</div>`}).join('');
+}
+function simpleMeasureUI(){
+ let names=(todayMeal()?.cook||[]).map(cookRecipeName);
+ return names.map((rn,ri)=>{let r=MEAL.recipes?.[rn],defs=recipeComponentDefs(rn,r),box=simpleCompState(rn,r),count=Math.max(1,(cookAssignments(rn)||[]).length);return `<div class="card soft"><h3>${esc(rn)} — COOKED COMPONENTS</h3>${defs.map(c=>{let s=box[c.id],v=Number(s.total)||0;return `<div class="simple-measure-row"><b>${esc(c.label)}</b><span>${v?v.toFixed(1)+' g cooked':'not weighed yet'}</span><span>${v?'→ suggested '+(v/count).toFixed(1)+' g × '+count+' containers':''}</span><span>${s.cooked&&v?'SAVED ✓':''}</span></div>`}).join('')}</div>`}).join('');
+}
+function simplePortionUI(){
+ let names=(todayMeal()?.cook||[]).map(cookRecipeName);
+ return names.map((rn,ri)=>{let r=MEAL.recipes?.[rn],defs=recipeComponentDefs(rn,r),box=simpleCompState(rn,r),targets=cookAssignments(rn)||[],count=Math.max(1,targets.length),key=selectedKey()+"|"+rn;let saved=defs.filter(c=>box[c.id]?.cooked&&Number(box[c.id]?.total)>0);return `<div class="card soft"><div class="portion-count-banner"><b>${count} CONTAINERS</b><span>${esc(rn)}</span></div><p class="muted">Choose a saved component, then enter the ACTUAL grams your scale says are in that container. Those actual grams lock in the container macros.</p>${Array.from({length:count},(_,ci)=>{let d=containerDraftV84(key,ci),target=targets[ci]||{date:selectedKey(),meal:'MEAL'};return `<details class="container-edit"><summary>CONTAINER ${ci+1} OF ${count} • ${esc(shortDayDate(target.date||selectedKey()))} ${esc(target.meal||'MEAL')}</summary><div class="ingredient-edit-body"><div class="simple-container-components">${saved.length?saved.map(c=>{let s=box[c.id],sug=(Number(s.total)/count).toFixed(1);return `<div class="simple-container-row"><label class="checkrow"><input type="checkbox" data-simple-container-use="${esc(key)}|${ci}|${esc(c.id)}" ${d.components?.[c.id]!==undefined?'checked':''}><span><b>${esc(c.label)}</b><br><small>suggested ${sug} g</small></span></label><label>ACTUAL G<input type="number" min="0" step=".1" data-v92-portion="${esc(key)}|${ci}|${esc(c.id)}" value="${esc(d.components?.[c.id]??'')}" placeholder="scale weight"></label></div>`}).join(''):'<div class="sheet-note">Finish and save a cooked component first.</div>'}</div><details class="ingredient-edit"><summary>+ ADD SOMETHING ONLY TO THIS CONTAINER</summary><div class="ingredient-edit-body"><button class="tinybtn" data-v84-extra-add="${esc(key)}|${ci}">+ ADD ITEM</button>${(d.extras||[]).map((x,ei)=>`<div class="inventory-match"><label>ITEM<input data-v84-extra="${esc(key)}|${ci}|${ei}|name" value="${esc(x.name||'')}" placeholder="Inventory, brand, or generic food"></label><label>ACTUAL GRAMS<input type="number" min="0" step=".1" data-v84-extra="${esc(key)}|${ci}|${ei}|grams" value="${esc(x.grams??'')}"></label><label>SOURCE<select data-v108-container-source="${esc(key)}|${ci}|${ei}"><option value="">Generic / nutrition lookup</option>${inventoryFlat().map(z=>`<option value="${esc(z.cat)}|${z.i}" ${x.source===z.cat+'|'+z.i?'selected':''}>${esc(z.name)} — ${esc(z.cat)}</option>`).join('')}</select></label><button class="tinybtn" data-v90-lookup-container="${esc(key)}|${ci}|${ei}">NUTRITION LOOKUP</button><button class="tinybtn" data-v84-extra-remove="${esc(key)}|${ci}|${ei}">REMOVE</button></div>`).join('')}</div></details><div class="macro-preview"><b>CONTAINER MACROS</b><br>Calculated from the actual grams entered for the saved components + any container-only additions.</div><button class="btn primary" data-v92-add-label="${esc(key)}|${ci}">SAVE TO INVENTORY → CONTAINERS</button></div></details>`}).join('')}</div>`}).join('');
+}
+// Obsolete Cooking renderer wrapper removed during canonical cleanup.
+
+function simpleCtx(ri,cid){let rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],box=simpleCompState(rn,r);return {rn,r,box,c:box[cid]}}
+document.addEventListener('input',e=>{let t=e.target,ds=t.dataset;if(ds.simpleIngGrams!==undefined){let [ri,cid,ii]=ds.simpleIngGrams.split('|'),x=simpleCtx(ri,cid);x.c.ingredients[+ii].grams=t.value;save()}if(ds.simpleExtra!==undefined){let [ri,cid,ei,f]=ds.simpleExtra.split('|'),x=simpleCtx(ri,cid);x.c.extras[+ei][f]=t.value;save()}if(ds.simpleTotal!==undefined){let [ri,cid]=ds.simpleTotal.split('|'),x=simpleCtx(ri,cid);x.c.total=t.value;state.cookComponents=state.cookComponents||{};let k=simpleCompKey(x.rn);state.cookComponents[k]=state.cookComponents[k]||{};state.cookComponents[k][cid]=state.cookComponents[k][cid]||{};state.cookComponents[k][cid].total=t.value;save();render()}});
+document.addEventListener('change',e=>{let t=e.target;if(t.dataset.simpleCooked!==undefined){let [ri,cid]=t.dataset.simpleCooked.split('|'),x=simpleCtx(ri,cid);x.c.cooked=!!t.checked;state.cookComponents=state.cookComponents||{};let k=simpleCompKey(x.rn);state.cookComponents[k]=state.cookComponents[k]||{};state.cookComponents[k][cid]=state.cookComponents[k][cid]||{};state.cookComponents[k][cid].usedPlanned=!!t.checked;save();render()}if(t.dataset.simpleContainerUse!==undefined){let [key,ci,cid]=t.dataset.simpleContainerUse.split('|'),d=containerDraftV84(key,+ci);if(t.checked&&d.components[cid]===undefined)d.components[cid]='';if(!t.checked)delete d.components[cid];save();render()}});
+document.addEventListener('click',e=>{let t=e.target.closest?.('button');if(!t)return;if(t.dataset.simpleIngRemove!==undefined){let [ri,cid,ii]=t.dataset.simpleIngRemove.split('|'),x=simpleCtx(ri,cid);x.c.ingredients[+ii].removed=!x.c.ingredients[+ii].removed;save();render()}if(t.dataset.simpleIngAdd!==undefined){let [ri,cid]=t.dataset.simpleIngAdd.split('|'),x=simpleCtx(ri,cid);x.c.extras=x.c.extras||[];x.c.extras.push({name:'',grams:''});save();render()}if(t.dataset.simpleExtraRemove!==undefined){let [ri,cid,ei]=t.dataset.simpleExtraRemove.split('|'),x=simpleCtx(ri,cid);x.c.extras.splice(+ei,1);save();render()}});
+window.__EMMELLI_COOK_BUILD='SIMPLE-COMPONENT-FIRST-2026-10-01';
+
+
+// ===== FINAL PREP VESSEL CHECKLIST — meal-scoped, not cooking completion =====
+// Prep bowls / paper plates are setup checks only. They are deliberately separate from
+// component cooked/save state so checking a vessel never means the food was cooked.
+function prepVesselChecklistFinal(){
+  const names=(todayMeal()?.cook||[]).map(cookRecipeName);
+  return names.map((rn,ri)=>{
+    const r=MEAL.recipes?.[rn];
+    const rows=prefixedBowls(rn,r);
+    return `<div class="card soft prep-vessel-meal"><h3>${esc(rn)} — BOWLS / PLATES</h3><p class="muted">SETUP CHECKLIST ONLY — these checks do not mark a component cooked.</p>${rows.map((row,vi)=>{
+      const m=String(row).match(/^(.+? — )(Paper Plate|Large Bowl|Bowl)\s+(\d+):(.*)$/i);
+      let label=row;
+      if(m){ label=`${m[1]}${m[2]} ${m[3]}:${m[4]}`; }
+      const key=`prepVessel|${selectedKey()}|${rn}|${vi}`;
+      return `<label class="checkrow prep-vessel-row"><input type="checkbox" data-prep-vessel-check="${esc(key)}" ${state.checks?.[key]?'checked':''}><span><b>${esc(label)}</b></span></label>`;
+    }).join('')}</div>`;
+  }).join('');
+}
+// Obsolete Cooking renderer wrapper removed during canonical cleanup.
+
+document.addEventListener('change',e=>{let t=e.target;if(t.dataset.prepVesselCheck!==undefined){state.checks=state.checks||{};state.checks[t.dataset.prepVesselCheck]=!!t.checked;save();}});
+window.__EMMELLI_PREP_BUILD='MEAL-SCOPED-VESSEL-CHECKS-2026-10-01';
+
+
+// ===== FINAL COMPONENT PIPELINE V2 — AUTHORITATIVE LAST RENDERER =====
+// Step 3 = prep vessels only. Step 4 = one combined chronological cook timeline.
+// Step 5 = component truth + ingredient use + cooked weight + save component.
+// Step 6 = labels/containers assembled from saved components. Inventory is committed once at component save/final sync, never again for component grams in containers.
+function cpv2Key(rn){return selectedKey()+"|"+rn}
+function cpv2Box(rn,r){
+  state.cpv2=state.cpv2||{}; const key=cpv2Key(rn), defs=recipeComponentDefs(rn,r); const box=state.cpv2[key]||(state.cpv2[key]={components:{},containers:{}});
+  box.components=box.components||{}; box.containers=box.containers||{};
+  defs.forEach(comp=>{let c=box.components[comp.id]||(box.components[comp.id]={label:comp.label,ingredients:[],cookedWeight:"",usedAll:false,saved:false}); c.label=comp.label;
+    if(!c.ingredients.length)c.ingredients=comp.ix.filter(i=>r.ingredients?.[i]!=null).map(i=>({name:r.ingredients[i],grams:"",removed:false,source:"planned",when:"before",inventoryCommitted:false}));
+  }); return box;
+}
+function cpv2Count(rn){return Math.max(1,(cookAssignments(rn)||[]).length)}
+function cpv2Prep(){return prepVesselChecklistFinal()}
+function cpv2Timeline(){
+ const names=(todayMeal()?.cook||[]).map(cookRecipeName), rows=[];
+ names.forEach(rn=>{let r=MEAL.recipes?.[rn]; (r?.timeline||r?.cook||[]).forEach(x=>rows.push({rn,x}))});
+ if(!rows.length){return `<div class="sheet-note">Follow the combined cooking instructions below in the order shown. Bowl names tell you what to grab; the steps are one shared timeline, not separate meal sections.</div>`}
+ return `<div class="card soft"><h3>COOK BOTH MEALS — ONE TIMELINE</h3><p class="muted">Work straight down this list. Bowl names identify contents so you do not have to remember numbers.</p>${rows.map((z,i)=>`<div class="cook-line"><b>STEP ${i+1}</b><br>${esc(typeof z.x==='string'?z.x:(z.x.what||z.x.step||JSON.stringify(z.x)))}</div>`).join('')}</div>`;
+}
+function cpv2IngredientRow(rn,ri,cid,ii,x){
+ return `<div class="simple-ing-row ${x.removed?'is-removed':''}"><div class="simple-ing-name"><b>${esc(x.name)}</b></div><label>GRAMS<input type="number" min="0" step=".1" data-cpv2-ing="${ri}|${esc(cid)}|${ii}|grams" value="${esc(x.grams??'')}" placeholder="g used"></label><label>SOURCE<select data-cpv2-ing="${ri}|${esc(cid)}|${ii}|source"><option value="planned" ${x.source==='planned'?'selected':''}>Planned / recipe</option><option value="inventory" ${x.source==='inventory'?'selected':''}>Inventory</option><option value="generic" ${x.source==='generic'?'selected':''}>Generic</option><option value="lookup" ${x.source==='lookup'?'selected':''}>Nutrition lookup</option></select></label><label>WHEN<select data-cpv2-ing="${ri}|${esc(cid)}|${ii}|when"><option value="before" ${x.when==='before'?'selected':''}>Before cooking</option><option value="during" ${x.when==='during'?'selected':''}>While cooking</option><option value="after" ${x.when==='after'?'selected':''}>After cooking</option></select></label><button class="tinybtn" data-cpv2-remove="${ri}|${esc(cid)}|${ii}">${x.removed?'RESTORE':'REMOVE'}</button></div>`
+}
+function cpv2Measure(){
+ const names=(todayMeal()?.cook||[]).map(cookRecipeName);
+ return names.map((rn,ri)=>{const r=MEAL.recipes?.[rn],box=cpv2Box(rn,r),defs=recipeComponentDefs(rn,r),count=cpv2Count(rn);
+  return `<div class="card soft"><h3>${esc(rn)} — COMPONENTS</h3><p class="muted">Open one component. Confirm/edit exactly what went into it, then enter the whole cooked weight. Saving the component locks its ingredient basis and makes it available to Containers.</p>${defs.map(comp=>{let c=box.components[comp.id],wt=Number(c.cookedWeight)||0,sug=wt?wt/count:0;return `<details class="component-card"><summary><span>${esc(comp.label)}</span><span class="category-count">${c.saved?'SAVED ✓':'OPEN'}</span></summary><div class="component-body"><label class="checkrow"><input type="checkbox" data-cpv2-all="${ri}|${esc(comp.id)}" ${c.usedAll?'checked':''}><span><b>USED INGREDIENTS AS LISTED</b></span></label><div class="simple-ingredient-list">${c.ingredients.map((x,ii)=>cpv2IngredientRow(rn,ri,comp.id,ii,x)).join('')}</div><button class="tinybtn" data-cpv2-add="${ri}|${esc(comp.id)}">+ ADD INGREDIENT</button><div class="simple-cooked-box"><label><b>TOTAL COOKED WEIGHT — ${esc(comp.label)} (G)</b><input type="number" min="0" step=".1" data-cpv2-weight="${ri}|${esc(comp.id)}" value="${esc(c.cookedWeight??'')}" placeholder="whole cooked component"></label><div class="portion-count-banner"><b>${count} CONTAINERS</b><span>${wt?`SUGGESTED PER CONTAINER: ${sug.toFixed(1)} g`:'Enter cooked weight to calculate suggestion'}</span></div><p class="muted">Suggestion only. If some mix is lost while portioning, do not subtract a special amount here. Containers use the actual grams that make it into each one.</p><button class="btn primary" data-cpv2-save="${ri}|${esc(comp.id)}">${c.saved?'COMPONENT SAVED ✓':'SAVE COMPONENT'}</button></div></div></details>`}).join('')}</div>`
+ }).join('')
+}
+function cpv2Label(target,rn){let d=target?.date||selectedKey(), meal=(target?.meal||'MEAL').toUpperCase(); let dt=new Date(d+'T12:00:00'); let day=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), date=dt.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'}); return `${day} ${date} • ${meal} • ${rn}`}
+function cpv2Portion(){
+ const names=(todayMeal()?.cook||[]).map(cookRecipeName);
+ return names.map((rn,ri)=>{const r=MEAL.recipes?.[rn],box=cpv2Box(rn,r),defs=recipeComponentDefs(rn,r),saved=defs.filter(d=>box.components[d.id]?.saved),targets=cookAssignments(rn)||[],count=cpv2Count(rn);
+  return `<div class="card soft"><div class="portion-count-banner"><b>${count} CONTAINERS</b><span>${esc(rn)}</span></div><p class="muted">Add the suggested label, then add saved components and enter the ACTUAL grams in that container. Actual grams lock the macros. Saved component ingredients are not deducted again here.</p>${Array.from({length:count},(_,ci)=>{let target=targets[ci]||{date:selectedKey(),meal:'MEAL'}, c=box.containers[ci]||(box.containers[ci]={label:'',parts:{},extras:[],saved:false}); let suggested=cpv2Label(target,rn);return `<details class="container-edit"><summary>CONTAINER ${ci+1} OF ${count}${c.saved?' • SAVED ✓':''}</summary><div class="ingredient-edit-body"><div class="label-preview"><b>SUGGESTED LABEL</b><br>${esc(suggested)}</div><button class="tinybtn" data-cpv2-label="${ri}|${ci}" data-label-text="${esc(suggested)}">ADD LABEL</button>${c.label?`<div class="inventory-match"><b>LABEL ADDED</b><br>${esc(c.label)}</div>`:''}<div class="simple-section-title">ADD SAVED COMPONENTS</div>${saved.length?saved.map(comp=>{let cc=box.components[comp.id],sug=(Number(cc.cookedWeight)||0)/count;return `<div class="simple-container-row"><div><b>${esc(comp.label)}</b><br><small>suggested ${sug.toFixed(1)} g</small></div><label>ACTUAL G<input type="number" min="0" step=".1" data-cpv2-part="${ri}|${ci}|${esc(comp.id)}" value="${esc(c.parts?.[comp.id]??'')}" placeholder="scale weight"></label></div>`}).join(''):'<div class="sheet-note">Save a component in Measurements first.</div>'}<div class="simple-section-title">CONTAINER-ONLY ADDITIONS</div><button class="tinybtn" data-cpv2-extra-add="${ri}|${ci}">+ INVENTORY / GENERIC / NUTRITION LOOKUP</button>${(c.extras||[]).map((x,ei)=>`<div class="simple-ing-row"><label class="wide">ITEM<input data-cpv2-extra="${ri}|${ci}|${ei}|name" value="${esc(x.name||'')}"></label><label>GRAMS<input type="number" min="0" step=".1" data-cpv2-extra="${ri}|${ci}|${ei}|grams" value="${esc(x.grams??'')}"></label><label>SOURCE<select data-cpv2-extra="${ri}|${ci}|${ei}|source"><option value="inventory" ${x.source==='inventory'?'selected':''}>Inventory</option><option value="generic" ${x.source==='generic'?'selected':''}>Generic</option><option value="lookup" ${x.source==='lookup'?'selected':''}>Nutrition lookup</option></select></label><button class="tinybtn" data-cpv2-extra-remove="${ri}|${ci}|${ei}">REMOVE</button></div>`).join('')}<div class="macro-preview"><b>CONTAINER MACROS</b><br>Locked from actual grams of saved components + container-only additions.</div><button class="btn primary" data-cpv2-container-save="${ri}|${ci}">SAVE CONTAINER → INVENTORY</button></div></details>`}).join('')}</div>`
+ }).join('')
+}
+// Obsolete Cooking renderer wrapper removed during canonical cleanup.
+
+function cpv2Ctx(ri,cid){let rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],box=cpv2Box(rn,r);return {rn,r,box,c:box.components[cid]}}
+document.addEventListener('input',e=>{let d=e.target.dataset;if(d.cpv2Ing!==undefined){let [ri,cid,ii,f]=d.cpv2Ing.split('|'),x=cpv2Ctx(ri,cid);x.c.ingredients[+ii][f]=e.target.value;x.c.saved=false;save()}if(d.cpv2Weight!==undefined){let [ri,cid]=d.cpv2Weight.split('|'),x=cpv2Ctx(ri,cid);x.c.cookedWeight=e.target.value;x.c.saved=false;save();render()}if(d.cpv2Part!==undefined){let [ri,ci,cid]=d.cpv2Part.split('|'),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],b=cpv2Box(rn,r),c=b.containers[+ci]||(b.containers[+ci]={label:'',parts:{},extras:[],saved:false});c.parts=c.parts||{};c.parts[cid]=e.target.value;c.saved=false;save()}if(d.cpv2Extra!==undefined){let [ri,ci,ei,f]=d.cpv2Extra.split('|'),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],b=cpv2Box(rn,r),c=b.containers[+ci];c.extras[+ei][f]=e.target.value;c.saved=false;save()}});
+document.addEventListener('change',e=>{let d=e.target.dataset;if(d.cpv2All!==undefined){let [ri,cid]=d.cpv2All.split('|'),x=cpv2Ctx(ri,cid);x.c.usedAll=!!e.target.checked;x.c.saved=false;save()}if(d.cpv2Ing!==undefined){let [ri,cid,ii,f]=d.cpv2Ing.split('|'),x=cpv2Ctx(ri,cid);x.c.ingredients[+ii][f]=e.target.value;x.c.saved=false;save()}});
+document.addEventListener('click',e=>{let t=e.target.closest?.('button');if(!t)return;let d=t.dataset;
+ if(d.cpv2Remove!==undefined){let [ri,cid,ii]=d.cpv2Remove.split('|'),x=cpv2Ctx(ri,cid);x.c.ingredients[+ii].removed=!x.c.ingredients[+ii].removed;x.c.saved=false;save();render()}
+ if(d.cpv2Add!==undefined){let [ri,cid]=d.cpv2Add.split('|'),x=cpv2Ctx(ri,cid);x.c.ingredients.push({name:'NEW INGREDIENT',grams:'',removed:false,source:'inventory',when:'before',inventoryCommitted:false});x.c.saved=false;save();render()}
+ if(d.cpv2Save!==undefined){let [ri,cid]=d.cpv2Save.split('|'),x=cpv2Ctx(ri,cid);if(!(Number(x.c.cookedWeight)>0)){showToast('Enter the total cooked weight first.','Component not saved');return}x.c.saved=true;x.c.savedAt=new Date().toISOString();x.c.ingredients.forEach(z=>{if(!z.removed&&z.source==='inventory')z.inventoryCommitted=true});save();render();showToast(x.c.label+' saved.','Component ready')}
+ if(d.cpv2Label!==undefined){let [ri,ci]=d.cpv2Label.split('|'),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],b=cpv2Box(rn,r),c=b.containers[+ci]||(b.containers[+ci]={label:'',parts:{},extras:[],saved:false});c.label=d.labelText||'';save();render()}
+ if(d.cpv2ExtraAdd!==undefined){let [ri,ci]=d.cpv2ExtraAdd.split('|'),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],b=cpv2Box(rn,r),c=b.containers[+ci]||(b.containers[+ci]={label:'',parts:{},extras:[],saved:false});c.extras=c.extras||[];c.extras.push({name:'',grams:'',source:'inventory',inventoryCommitted:false});save();render()}
+ if(d.cpv2ExtraRemove!==undefined){let [ri,ci,ei]=d.cpv2ExtraRemove.split('|'),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],b=cpv2Box(rn,r),c=b.containers[+ci];c.extras.splice(+ei,1);save();render()}
+ if(d.cpv2ContainerSave!==undefined){let [ri,ci]=d.cpv2ContainerSave.split('|'),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],b=cpv2Box(rn,r),c=b.containers[+ci];if(!c.label){showToast('Add the suggested label first.','Label needed');return}c.saved=true;c.savedAt=new Date().toISOString();(c.extras||[]).forEach(z=>{if(z.source==='inventory')z.inventoryCommitted=true});save();render();showToast('Container saved to Containers.','Saved')}
+});
+window.__EMMELLI_COOK_BUILD='COMPONENT-PIPELINE-V2-2026-10-01';
+
+// ===== FINAL COOKING CONVERGENCE V3 — COMPONENT-FIRST + EXACT LABEL FORMAT =====
+// Authoritative last renderer. Step 3 = measured prep vessels; Step 4 = one shared cook timeline;
+// Step 5 = component truth/save; Step 6 = actual component grams only + optional container additions.
+function cv3DateParts(date){const dt=new Date((date||selectedKey())+'T12:00:00');return {day:dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(),md:dt.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}}
+function cv3PriorDate(date){const dt=new Date((date||selectedKey())+'T12:00:00');dt.setDate(dt.getDate()-1);return dt.toISOString().slice(0,10)}
+function cv3LabelRows(target,rn){const eat=cv3DateParts(target?.date), storage=(target?.storage||'FRIDGE').toUpperCase(), rows=[rn,`${eat.day} ${eat.md}`,(target?.meal||'MEAL').toUpperCase(),storage];if(storage==='FREEZER'){const mv=cv3DateParts(cv3PriorDate(target?.date));rows.push(`${mv.day} ${mv.md}`)}return rows}
+function cv3LabelHTML(target,rn){return cv3LabelRows(target,rn).map(esc).join('<br>')}
+function cv3Prep(){const names=(todayMeal()?.cook||[]).map(cookRecipeName);return names.map((rn,ri)=>{const r=MEAL.recipes?.[rn],rows=prefixedBowls(rn,r);return `<div class="card soft"><h3>${esc(rn)} — PREP + MEASURE</h3><p class="muted">Measure everything here before cooking. Each bowl / paper plate is a separate setup check. The text tells you exactly what and how much goes in it.</p>${rows.map((row,i)=>{const key=`cv3prep|${selectedKey()}|${rn}|${i}`;return `<label class="checkrow prep-vessel-row"><input type="checkbox" data-cv3-prep="${esc(key)}" ${state.checks?.[key]?'checked':''}><span><b>${esc(row)}</b></span></label>`}).join('')}</div>`}).join('')}
+function cv3Timeline(){const names=(todayMeal()?.cook||[]).map(cookRecipeName);let steps=[];names.forEach(rn=>{const r=MEAL.recipes?.[rn];let method=String(r?.method||'').trim();if(method){method.split(/(?<=[.!?])\s+(?=[A-Z])/).filter(Boolean).forEach(x=>steps.push(x.replace(new RegExp(rn.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+' — ','gi'),'')))}});return `<div class="card soft"><h3>COOK BOTH MEALS — ONE TIMELINE</h3><p class="muted">Follow straight down. Bowl names are quick content names so you know what to grab. Meals are not split into separate cook sections.</p>${steps.map((x,i)=>`<div class="cook-line"><b>STEP ${i+1}</b><br>${esc(x)}</div>`).join('')}</div>`}
+function cv3Measure(){const names=(todayMeal()?.cook||[]).map(cookRecipeName);return names.map((rn,ri)=>{const r=MEAL.recipes?.[rn],box=cpv2Box(rn,r),defs=recipeComponentDefs(rn,r),count=cpv2Count(rn);return `<div class="card soft"><h3>${esc(rn)} — COMPONENTS</h3><p class="muted">This is the macro baseline. Open each component, make the ingredient list match what actually went into that component, then enter its whole cooked weight and save it.</p>${defs.map(comp=>{let c=box.components[comp.id],wt=Number(c.cookedWeight)||0,sug=wt/count;return `<details class="component-card"><summary><span>${esc(comp.label)}</span><span class="category-count">${c.saved?'SAVED ✓':'OPEN'}</span></summary><div class="component-body"><label class="checkrow"><input type="checkbox" data-cpv2-all="${ri}|${esc(comp.id)}" ${c.usedAll?'checked':''}><span><b>USED THIS COMPONENT'S INGREDIENTS AS LISTED</b></span></label>${c.ingredients.map((x,ii)=>cpv2IngredientRow(rn,ri,comp.id,ii,x)).join('')}<button class="tinybtn" data-cpv2-add="${ri}|${esc(comp.id)}">+ ADD INGREDIENT</button><div class="simple-cooked-box"><label><b>WHOLE COOKED WEIGHT — ${esc(comp.label)} (G)</b><input type="number" min="0" step=".1" data-cpv2-weight="${ri}|${esc(comp.id)}" value="${esc(c.cookedWeight??'')}" placeholder="weigh the whole finished component"></label><div class="portion-count-banner"><b>${count} CONTAINER${count===1?'':'S'}</b><span>${wt?`SUGGESTED PER CONTAINER: ${sug.toFixed(1)} g`:'Enter cooked weight to calculate'}</span></div><p class="muted">Suggestion = whole cooked component ÷ planned containers. Actual container grams can be lower if some mix is lost; nothing extra is subtracted for that loss.</p><button class="btn primary" data-cpv2-save="${ri}|${esc(comp.id)}">${c.saved?'COMPONENT SAVED ✓':'SAVE COMPONENT'}</button></div></div></details>`}).join('')}</div>`}).join('')}
+function cv3Portion(){const names=(todayMeal()?.cook||[]).map(cookRecipeName);return names.map((rn,ri)=>{const r=MEAL.recipes?.[rn],box=cpv2Box(rn,r),defs=recipeComponentDefs(rn,r),saved=defs.filter(d=>box.components[d.id]?.saved),targets=cookAssignments(rn)||[],count=cpv2Count(rn);return `<div class="card soft"><h3>${esc(rn)} — CONTAINERS</h3><p class="muted">For each saved component, type only the ACTUAL grams your scale says went into this container. That is what locks the macros. No recipe ingredient is deducted again here.</p>${Array.from({length:count},(_,ci)=>{const target=targets[ci]||{date:selectedKey(),meal:'MEAL',storage:'FRIDGE'},c=box.containers[ci]||(box.containers[ci]={label:'',parts:{},extras:[],saved:false}),rows=cv3LabelRows(target,rn);return `<details class="container-edit"><summary>CONTAINER ${ci+1} OF ${count}${c.saved?' • SAVED ✓':''}</summary><div class="ingredient-edit-body"><div class="label-preview"><b>LABEL</b><br>${rows.map(esc).join('<br>')}</div><button class="tinybtn" data-cv3-label="${ri}|${ci}">ADD THIS LABEL</button>${saved.length?saved.map(comp=>`<label><b>${esc(comp.label)} — ACTUAL G</b><input type="number" min="0" step=".1" data-cpv2-part="${ri}|${ci}|${esc(comp.id)}" value="${esc(c.parts?.[comp.id]??'')}" placeholder="scale grams"></label>`).join(''):'<div class="sheet-note">Save the cooked components in Measurements first.</div>'}<details class="ingredient-edit"><summary>+ ADD SOMETHING ONLY TO THIS CONTAINER</summary><div class="ingredient-edit-body"><p class="muted">Only use this for something added directly to this one container.</p><button class="tinybtn" data-cpv2-extra-add="${ri}|${ci}">+ ADD ITEM</button>${(c.extras||[]).map((x,ei)=>`<div class="simple-ing-row"><label class="wide">ITEM<input data-cpv2-extra="${ri}|${ci}|${ei}|name" value="${esc(x.name||'')}" placeholder="inventory, brand, or generic food"></label><label>GRAMS<input type="number" min="0" step=".1" data-cpv2-extra="${ri}|${ci}|${ei}|grams" value="${esc(x.grams??'')}"></label><label>SOURCE<select data-cpv2-extra="${ri}|${ci}|${ei}|source"><option value="inventory" ${x.source==='inventory'?'selected':''}>Inventory</option><option value="generic" ${x.source==='generic'?'selected':''}>Generic</option><option value="lookup" ${x.source==='lookup'?'selected':''}>Nutrition lookup</option></select></label><button class="tinybtn" data-cv3-extra-lookup="${ri}|${ci}|${ei}">NUTRITION LOOKUP</button><button class="tinybtn" data-cpv2-extra-remove="${ri}|${ci}|${ei}">REMOVE</button></div>`).join('')}</div></details><div class="macro-preview"><b>CONTAINER MACROS</b><br>Calculated from actual grams of the saved components + any direct container additions.</div><button class="btn primary" data-cpv2-container-save="${ri}|${ci}">SAVE CONTAINER → INVENTORY</button></div></details>`}).join('')}</div>`}).join('')}
+function cookCanonicalV5(){let html=cookShellLegacy();if(!(todayMeal()?.cook||[]).length)return html;let shell=document.createElement('div');shell.innerHTML=html;let steps=[...shell.querySelectorAll('details.cook-step')];let set=(n,h)=>{let d=steps.find(x=>(x.querySelector(':scope > summary')?.textContent||'').trim().startsWith(n+'.'));let b=d?.querySelector(':scope > .cook-step-body');if(b)b.innerHTML=h};set(3,cv3Prep());set(4,cv3Timeline());set(5,cv3Measure());set(6,cv3Portion());return shell.innerHTML}
+document.addEventListener('change',e=>{if(e.target.dataset.cv3Prep!==undefined){state.checks=state.checks||{};state.checks[e.target.dataset.cv3Prep]=!!e.target.checked;save()}});
+document.addEventListener('click',e=>{let t=e.target.closest?.('button');if(!t)return;if(t.dataset.cv3Label!==undefined){let [ri,ci]=t.dataset.cv3Label.split('|'),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||''),r=MEAL.recipes?.[rn],b=cpv2Box(rn,r),target=(cookAssignments(rn)||[])[+ci]||{date:selectedKey(),meal:'MEAL',storage:'FRIDGE'},c=b.containers[+ci]||(b.containers[+ci]={label:'',parts:{},extras:[],saved:false});c.label=cv3LabelRows(target,rn).join('\n');save();render();return}if(t.dataset.cv3ExtraLookup!==undefined){showToast('Use the shared Nutrition Lookup for this item; its nutrition stays attached to this container addition.','Nutrition lookup')}});
+window.__EMMELLI_COOK_BUILD='SINGLE-ACTIVE-COOKING-V5-2026-10-01';
+
+</script>
 
 </body></html>
