@@ -3710,9 +3710,9 @@ window.__EMMELLI_BUILD='V19-SIMPLE-CONTAINER-MOVE-DEEP-FREEZER';save();
   function boot(){
     var app=document.getElementById('app');
     try{
-      if(typeof window.render==='function') window.render();
-      else if(typeof render==='function') render();
-      else throw new Error('The Hub render function did not load.');
+      // The Hub renderer intentionally lives inside the main application IIFE and renders itself.
+      // Do NOT require a global window.render here; doing so falsely reports a startup failure
+      // after a successful render on GitHub Pages/Safari. Verify the rendered DOM instead.
       app=document.getElementById('app');
       if(!app || !String(app.innerHTML||'').trim()) throw new Error('The Hub rendered no content.');
       var loading=document.getElementById('hub-loading');
