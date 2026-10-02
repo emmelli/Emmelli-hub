@@ -2048,10 +2048,7 @@ function applySep30InventoryTruthV75(){
 }
 applySep30InventoryTruthV75();
 
-// V16 CURRENT INVENTORY TRUTH: always run after the older Sep 30 migration so an already-set Oct 1 marker can never allow stale broth/stock quantities to reappear. This is idempotent and preserves unrelated inventory/user data.
-function enforceOct1InventoryTruthV16(){
- if(typeof v7ApplyInventoryCorrections==="function")v7ApplyInventoryCorrections();
-}
+// Oct 1 inventory truth is re-applied inside the canonical cooking script after v7ApplyInventoryCorrections is defined.
 
 
 // Current meal truth: no sourdough remains; future bread references cannot stay stale.
@@ -2936,7 +2933,7 @@ function v7ApplyInventoryCorrections(){
  set('Pantry',/^AP flour$/i,'~1/4 cup LOOSE','PREPARED COBBLER DRY MIX IS RESERVED PREP AND IS NOT INCLUDED IN THIS LOOSE FLOUR AMOUNT');
  let p=state.inventory.Pantry||[];if(!p.some(x=>/^Potatoes$/i.test(x.name||'')))p.push({name:'Potatoes',qty:'0 — OUT',notes:'OCT 1 LIVE COOK ACTUAL'});else p.filter(x=>/^Potatoes$/i.test(x.name||'')).forEach(x=>x.qty='0 — OUT');
 }
-enforceOct1InventoryTruthV16();
+v7ApplyInventoryCorrections();
 function v7Session(){let v=v7Ensure(),k=selectedKey();if(k==='2026-10-01')v7SeedOct1();if(!v.sessions[k])v.sessions[k]={date:k,stage:1,checks:{},components:{},portions:{},leftovers:{},reservedPrep:[]};return v.sessions[k]}
 function v7ExpectedContainers(sess){if(selectedKey()==='2026-10-01')return 6;let n=0;for(let rn of v7SessionNames())n+=Math.max(1,(cookAssignments(rn)||[]).length||2);return n}
 function v7GenericComponents(){let sess=v7Session();if(Object.keys(sess.components||{}).length)return sess.components;for(let rn of v7SessionNames()){let r=MEAL.recipes?.[rn];let id=rn.toLowerCase().replace(/[^a-z0-9]+/g,'-');sess.components[id]={id,meal:rn,label:`${rn.toUpperCase()} • COMPLETE MEAL`,madeAsPlanned:false,weight:'',ingredients:(r?.ingredients||[]).map((x,i)=>({name:x,actual:'',timing:'AS PLANNED',source:'PLANNED',plannedIndex:i})),saved:false}}return sess.components}
