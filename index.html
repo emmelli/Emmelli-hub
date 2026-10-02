@@ -815,18 +815,10 @@ summary{border-radius:12px}
 .cook-v7-top,.cook-v7-steps,.cook-v7-control,.cook-v7-group,.cook-v7-component,.cook-v7-leftover,.cook-v7-audit{text-transform:uppercase}
 
 </style>
-<script>
-window.__emmelliStartupError=function(msg){window.__EMMELLI_LAST_ERROR=String(msg||'Unknown startup error');var a=document.getElementById('app');if(a)a.innerHTML='<section style="background:#fff;color:#5f3e49;padding:18px;margin:14px;border-radius:20px"><h2>HUB STARTUP ERROR</h2><pre style="white-space:pre-wrap;overflow-wrap:anywhere">'+window.__EMMELLI_LAST_ERROR.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</pre></section>'};
-window.addEventListener('error',function(e){window.__emmelliStartupError((e.message||'JavaScript error')+'\n'+(e.filename||'')+':'+(e.lineno||'')+':'+(e.colno||''))});
-window.addEventListener('unhandledrejection',function(e){window.__emmelliStartupError('Promise error: '+String(e.reason&&e.reason.message||e.reason))});
-</script>
-
 </head>
-<body data-build="2026-10-02-V22-RUNTIME-STARTUP-FIX">
-<div id="boot-sentinel" style="position:relative;z-index:99999;margin:12px;padding:14px;border:1px solid #ead7de;border-radius:18px;background:#fff;color:#5f3e49;font:700 14px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">EMMELLI HUB V22 • STARTING…</div>
+<body data-build="2026-10-02-CLEAN-RUNTIME">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S WEEKLY HUB</h2><p style="margin:0">Starting Hub V11 — macro + rice rule audit…</p><p style="margin:8px 0 0;font-size:13px">Oct 5–11 audited meal plan loaded • rice allowed any day when batch-cooked/stored for freshness • Sunday included.</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
-<script>window.addEventListener('load',function(){setTimeout(function(){if(document.getElementById('hub-loading'))window.__emmelliStartupError('V10 application loaded but the Hub did not replace the startup shell.');},8000)});</script>
 <script>
 (()=>{"use strict";
 function budgetOccurrenceAmountV125(row){
@@ -2226,7 +2218,7 @@ function wish(){
 }
 function wishCat(c){let arr=state.wish[c]||[],total=arr.reduce((a,x)=>a+Math.max(0,Number(x.price||0)),0);return hero(c,"Wish List")+back("Wish List")+`<section class="card">${arr.map((x,i)=>`<div class="checkrow"><input type="checkbox" data-wish-done="${c}|${i}" ${x.done?'checked':''}><span style="flex:1">${safeLink(x.link)?`<a href="${esc(safeLink(x.link))}" target="_blank" rel="noopener noreferrer">${esc(x.item)}</a>`:esc(x.item)}</span><b>${money(x.price)}</b><button class="btn" data-wish-edit="${c}|${i}">Edit</button><button class="btn" data-wish-del="${c}|${i}" aria-label="Remove wish item">×</button></div>`).join("")||'<p class="muted">Nothing here yet.</p>'}<div class="formgrid"><input id="wishItem" aria-label="Wish item" placeholder="Item"><input id="wishPrice" aria-label="Wish item price" type="number" min="0" step=".01" placeholder="Price"><input id="wishLink" aria-label="Wish item optional link" type="url" placeholder="Optional link"></div><button class="btn primary" data-wish-add="${c}">Add Item</button></section><section class="card soft"><div class="muted">${esc(c)} TOTAL</div><div class="metric money">${money(total)}</div></section>`}
 function validateSelectedDayContext(){let d=DAYS[state.day],meal=(MEAL.days||{})[selectedKey()]||null;if(state.route==="today"&&state.sub==="measure"&&state.day!==0)state.sub=null;if(state.route==="today"&&state.sub==="reset"&&state.day!==6)state.sub=null;if(state.route==="food"&&state.sub==="grocery"&&state.day!==0)state.sub=null;if(state.route==="food"&&state.sub==="cook"&&!(meal?.cook?.length))state.sub=null;if(state.route==="gym"&&state.sub==="run"&&DAY_ACTIVITY[d]!=="RUN")state.sub=null;}
-function render(){validateSelectedDayContext();nav();let fn={today,food,gym,budget,history,wish}[state.route]||today;let html;if(state.route==="today"&&state.sub){let subpages={routine,faith,goals,school,weigh,measure,reset};html=subpages[state.sub]?subpages[state.sub]():today()}else html=fn();document.getElementById("app").innerHTML=html+sheetMarkup()+toastMarkup();var __sent=document.getElementById("boot-sentinel");if(__sent&&document.getElementById("app").textContent.trim())__sent.remove()}
+function render(){validateSelectedDayContext();nav();let fn={today,food,gym,budget,history,wish}[state.route]||today;let html;if(state.route==="today"&&state.sub){let subpages={routine,faith,goals,school,weigh,measure,reset};html=subpages[state.sub]?subpages[state.sub]():today()}else html=fn();document.getElementById("app").innerHTML=html+sheetMarkup()+toastMarkup()}
 document.addEventListener("input",e=>{
  let nn=e.target.closest?.("[data-nutrition-note]");if(nn){let [ri,ii]=nn.dataset.nutritionNote.split("|"),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||"");state.nutritionFacts=state.nutritionFacts||{};let n=state.nutritionFacts[rn+"|"+ii]||(state.nutritionFacts[rn+"|"+ii]={});n.note=nn.value;save();return}
 
@@ -3701,29 +3693,6 @@ document.addEventListener('click',e=>{let b=e.target.closest?.('button');if(!b)r
 // Remove obsolete automatic best-fit state without deleting any physical containers.
 if(state.rebalance)state.rebalance={active:null};for(const x of (state.inventory?.Containers||[])){delete x.rescheduleProposal;if(x.assignmentStatus==='RESCHEDULE NEEDED'){x.assignmentStatus='UNASSIGNED';x.eat='UNASSIGNED';x.meal='UNASSIGNED'}}
 window.__EMMELLI_BUILD='V19-SIMPLE-CONTAINER-MOVE-DEEP-FREEZER';save();
-})();
-</script>
-<!-- V22 • NON-DESTRUCTIVE STARTUP VERIFIER • 2026-10-02 -->
-<script>
-(function(){
-  'use strict';
-  function verify(){
-    var app=document.getElementById('app'), sent=document.getElementById('boot-sentinel');
-    var loading=document.getElementById('hub-loading');
-    if(app && !loading && String(app.textContent||'').trim()){
-      window.__EMMELLI_BOOT_OK=true;
-      if(sent) sent.remove();
-      return;
-    }
-    window.__EMMELLI_BOOT_OK=false;
-    // Never overwrite a real JavaScript error with a generic BOOT error.
-    if(window.__EMMELLI_LAST_ERROR) return;
-    if(app){
-      app.innerHTML='<section style="background:#fff;color:#5f3e49;padding:18px;margin:14px;border:2px solid #e8b8c8;border-radius:20px"><h2>HUB DID NOT FINISH STARTING</h2><p>The application code loaded, but the first screen did not finish rendering.</p><p style="font-size:13px">Your saved Hub data has not been deleted.</p></section>';
-    }
-  }
-  if(document.readyState==='complete') setTimeout(verify,1200);
-  else window.addEventListener('load',function(){setTimeout(verify,1200)},{once:true});
 })();
 </script>
 </body>
