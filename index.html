@@ -816,14 +816,14 @@ summary{border-radius:12px}
 
 </style>
 <script>
-window.__emmelliStartupError=function(msg){var a=document.getElementById('app');if(a)a.innerHTML='<section style="background:#fff;color:#5f3e49;padding:18px;margin:14px;border-radius:20px"><h2>HUB STARTUP ERROR</h2><pre style="white-space:pre-wrap">'+String(msg).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</pre></section>'};
+window.__emmelliStartupError=function(msg){window.__EMMELLI_LAST_ERROR=String(msg||'Unknown startup error');var a=document.getElementById('app');if(a)a.innerHTML='<section style="background:#fff;color:#5f3e49;padding:18px;margin:14px;border-radius:20px"><h2>HUB STARTUP ERROR</h2><pre style="white-space:pre-wrap;overflow-wrap:anywhere">'+window.__EMMELLI_LAST_ERROR.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</pre></section>'};
 window.addEventListener('error',function(e){window.__emmelliStartupError((e.message||'JavaScript error')+'\n'+(e.filename||'')+':'+(e.lineno||'')+':'+(e.colno||''))});
 window.addEventListener('unhandledrejection',function(e){window.__emmelliStartupError('Promise error: '+String(e.reason&&e.reason.message||e.reason))});
 </script>
 
 </head>
-<body data-build="2026-10-02-V21-WHITE-SCREEN-GUARD">
-<div id="boot-sentinel" style="position:relative;z-index:99999;margin:12px;padding:14px;border:1px solid #ead7de;border-radius:18px;background:#fff;color:#5f3e49;font:700 14px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">EMMELLI HUB V21 • STARTING…</div>
+<body data-build="2026-10-02-V22-RUNTIME-STARTUP-FIX">
+<div id="boot-sentinel" style="position:relative;z-index:99999;margin:12px;padding:14px;border:1px solid #ead7de;border-radius:18px;background:#fff;color:#5f3e49;font:700 14px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">EMMELLI HUB V22 • STARTING…</div>
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S WEEKLY HUB</h2><p style="margin:0">Starting Hub V11 — macro + rice rule audit…</p><p style="margin:8px 0 0;font-size:13px">Oct 5–11 audited meal plan loaded • rice allowed any day when batch-cooked/stored for freshness • Sunday included.</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>window.addEventListener('load',function(){setTimeout(function(){if(document.getElementById('hub-loading'))window.__emmelliStartupError('V10 application loaded but the Hub did not replace the startup shell.');},8000)});</script>
@@ -3703,36 +3703,27 @@ if(state.rebalance)state.rebalance={active:null};for(const x of (state.inventory
 window.__EMMELLI_BUILD='V19-SIMPLE-CONTAINER-MOVE-DEEP-FREEZER';save();
 })();
 </script>
-<!-- V20 • HARD STARTUP / WHITE-SCREEN GUARD • 2026-10-02 -->
+<!-- V22 • NON-DESTRUCTIVE STARTUP VERIFIER • 2026-10-02 -->
 <script>
 (function(){
   'use strict';
-  function boot(){
-    var app=document.getElementById('app');
-    try{
-      // The Hub renderer intentionally lives inside the main application IIFE and renders itself.
-      // Do NOT require a global window.render here; doing so falsely reports a startup failure
-      // after a successful render on GitHub Pages/Safari. Verify the rendered DOM instead.
-      app=document.getElementById('app');
-      if(!app || !String(app.innerHTML||'').trim()) throw new Error('The Hub rendered no content.');
-      var loading=document.getElementById('hub-loading');
-      if(loading) throw new Error('The startup shell was not replaced by the Hub.');
-      window.__EMMELLI_BOOT_OK=true; var sent=document.getElementById('boot-sentinel'); if(sent)sent.remove();
-    }catch(err){
-      window.__EMMELLI_BOOT_OK=false;
-      var msg=(err&&err.stack)||(err&&err.message)||String(err);
-      if(typeof window.__emmelliStartupError==='function') window.__emmelliStartupError(msg);
-      else if(app) app.innerHTML='<section style="background:#fff;color:#5f3e49;padding:18px;margin:14px;border:2px solid #e8b8c8;border-radius:20px"><h2>HUB STARTUP ERROR</h2><pre style="white-space:pre-wrap;overflow-wrap:anywhere">'+String(msg).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</pre></section>';
+  function verify(){
+    var app=document.getElementById('app'), sent=document.getElementById('boot-sentinel');
+    var loading=document.getElementById('hub-loading');
+    if(app && !loading && String(app.textContent||'').trim()){
+      window.__EMMELLI_BOOT_OK=true;
+      if(sent) sent.remove();
+      return;
+    }
+    window.__EMMELLI_BOOT_OK=false;
+    // Never overwrite a real JavaScript error with a generic BOOT error.
+    if(window.__EMMELLI_LAST_ERROR) return;
+    if(app){
+      app.innerHTML='<section style="background:#fff;color:#5f3e49;padding:18px;margin:14px;border:2px solid #e8b8c8;border-radius:20px"><h2>HUB DID NOT FINISH STARTING</h2><p>The application code loaded, but the first screen did not finish rendering.</p><p style="font-size:13px">Your saved Hub data has not been deleted.</p></section>';
     }
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
-  else boot();
-  setTimeout(function(){
-    if(!window.__EMMELLI_BOOT_OK){
-      var app=document.getElementById('app');
-      if(app && !String(app.textContent||'').trim() && typeof window.__emmelliStartupError==='function') window.__emmelliStartupError('The Hub did not finish startup.');
-    }
-  },1500);
+  if(document.readyState==='complete') setTimeout(verify,1200);
+  else window.addEventListener('load',function(){setTimeout(verify,1200)},{once:true});
 })();
 </script>
 </body>
