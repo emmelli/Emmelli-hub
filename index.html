@@ -822,7 +822,8 @@ window.addEventListener('unhandledrejection',function(e){window.__emmelliStartup
 </script>
 
 </head>
-<body data-build="2026-10-02-V10-STARTUP-FIXED">
+<body data-build="2026-10-02-V21-WHITE-SCREEN-GUARD">
+<div id="boot-sentinel" style="position:relative;z-index:99999;margin:12px;padding:14px;border:1px solid #ead7de;border-radius:18px;background:#fff;color:#5f3e49;font:700 14px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">EMMELLI HUB V21 • STARTING…</div>
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S WEEKLY HUB</h2><p style="margin:0">Starting Hub V11 — macro + rice rule audit…</p><p style="margin:8px 0 0;font-size:13px">Oct 5–11 audited meal plan loaded • rice allowed any day when batch-cooked/stored for freshness • Sunday included.</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>window.addEventListener('load',function(){setTimeout(function(){if(document.getElementById('hub-loading'))window.__emmelliStartupError('V10 application loaded but the Hub did not replace the startup shell.');},8000)});</script>
@@ -2225,7 +2226,7 @@ function wish(){
 }
 function wishCat(c){let arr=state.wish[c]||[],total=arr.reduce((a,x)=>a+Math.max(0,Number(x.price||0)),0);return hero(c,"Wish List")+back("Wish List")+`<section class="card">${arr.map((x,i)=>`<div class="checkrow"><input type="checkbox" data-wish-done="${c}|${i}" ${x.done?'checked':''}><span style="flex:1">${safeLink(x.link)?`<a href="${esc(safeLink(x.link))}" target="_blank" rel="noopener noreferrer">${esc(x.item)}</a>`:esc(x.item)}</span><b>${money(x.price)}</b><button class="btn" data-wish-edit="${c}|${i}">Edit</button><button class="btn" data-wish-del="${c}|${i}" aria-label="Remove wish item">×</button></div>`).join("")||'<p class="muted">Nothing here yet.</p>'}<div class="formgrid"><input id="wishItem" aria-label="Wish item" placeholder="Item"><input id="wishPrice" aria-label="Wish item price" type="number" min="0" step=".01" placeholder="Price"><input id="wishLink" aria-label="Wish item optional link" type="url" placeholder="Optional link"></div><button class="btn primary" data-wish-add="${c}">Add Item</button></section><section class="card soft"><div class="muted">${esc(c)} TOTAL</div><div class="metric money">${money(total)}</div></section>`}
 function validateSelectedDayContext(){let d=DAYS[state.day],meal=(MEAL.days||{})[selectedKey()]||null;if(state.route==="today"&&state.sub==="measure"&&state.day!==0)state.sub=null;if(state.route==="today"&&state.sub==="reset"&&state.day!==6)state.sub=null;if(state.route==="food"&&state.sub==="grocery"&&state.day!==0)state.sub=null;if(state.route==="food"&&state.sub==="cook"&&!(meal?.cook?.length))state.sub=null;if(state.route==="gym"&&state.sub==="run"&&DAY_ACTIVITY[d]!=="RUN")state.sub=null;}
-function render(){validateSelectedDayContext();nav();let fn={today,food,gym,budget,history,wish}[state.route]||today;let html;if(state.route==="today"&&state.sub){let subpages={routine,faith,goals,school,weigh,measure,reset};html=subpages[state.sub]?subpages[state.sub]():today()}else html=fn();document.getElementById("app").innerHTML=html+sheetMarkup()+toastMarkup()}
+function render(){validateSelectedDayContext();nav();let fn={today,food,gym,budget,history,wish}[state.route]||today;let html;if(state.route==="today"&&state.sub){let subpages={routine,faith,goals,school,weigh,measure,reset};html=subpages[state.sub]?subpages[state.sub]():today()}else html=fn();document.getElementById("app").innerHTML=html+sheetMarkup()+toastMarkup();var __sent=document.getElementById("boot-sentinel");if(__sent&&document.getElementById("app").textContent.trim())__sent.remove()}
 document.addEventListener("input",e=>{
  let nn=e.target.closest?.("[data-nutrition-note]");if(nn){let [ri,ii]=nn.dataset.nutritionNote.split("|"),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||"");state.nutritionFacts=state.nutritionFacts||{};let n=state.nutritionFacts[rn+"|"+ii]||(state.nutritionFacts[rn+"|"+ii]={});n.note=nn.value;save();return}
 
@@ -3700,6 +3701,38 @@ document.addEventListener('click',e=>{let b=e.target.closest?.('button');if(!b)r
 // Remove obsolete automatic best-fit state without deleting any physical containers.
 if(state.rebalance)state.rebalance={active:null};for(const x of (state.inventory?.Containers||[])){delete x.rescheduleProposal;if(x.assignmentStatus==='RESCHEDULE NEEDED'){x.assignmentStatus='UNASSIGNED';x.eat='UNASSIGNED';x.meal='UNASSIGNED'}}
 window.__EMMELLI_BUILD='V19-SIMPLE-CONTAINER-MOVE-DEEP-FREEZER';save();
+})();
+</script>
+<!-- V20 • HARD STARTUP / WHITE-SCREEN GUARD • 2026-10-02 -->
+<script>
+(function(){
+  'use strict';
+  function boot(){
+    var app=document.getElementById('app');
+    try{
+      if(typeof window.render==='function') window.render();
+      else if(typeof render==='function') render();
+      else throw new Error('The Hub render function did not load.');
+      app=document.getElementById('app');
+      if(!app || !String(app.innerHTML||'').trim()) throw new Error('The Hub rendered no content.');
+      var loading=document.getElementById('hub-loading');
+      if(loading) throw new Error('The startup shell was not replaced by the Hub.');
+      window.__EMMELLI_BOOT_OK=true; var sent=document.getElementById('boot-sentinel'); if(sent)sent.remove();
+    }catch(err){
+      window.__EMMELLI_BOOT_OK=false;
+      var msg=(err&&err.stack)||(err&&err.message)||String(err);
+      if(typeof window.__emmelliStartupError==='function') window.__emmelliStartupError(msg);
+      else if(app) app.innerHTML='<section style="background:#fff;color:#5f3e49;padding:18px;margin:14px;border:2px solid #e8b8c8;border-radius:20px"><h2>HUB STARTUP ERROR</h2><pre style="white-space:pre-wrap;overflow-wrap:anywhere">'+String(msg).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</pre></section>';
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
+  else boot();
+  setTimeout(function(){
+    if(!window.__EMMELLI_BOOT_OK){
+      var app=document.getElementById('app');
+      if(app && !String(app.textContent||'').trim() && typeof window.__emmelliStartupError==='function') window.__emmelliStartupError('The Hub did not finish startup.');
+    }
+  },1500);
 })();
 </script>
 </body>
