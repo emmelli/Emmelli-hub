@@ -3691,7 +3691,10 @@ document.addEventListener('click',e=>{let b=e.target.closest?.('button');if(!b)r
 },true);
 // Remove obsolete automatic best-fit state without deleting any physical containers.
 if(state.rebalance)state.rebalance={active:null};for(const x of (state.inventory?.Containers||[])){delete x.rescheduleProposal;if(x.assignmentStatus==='RESCHEDULE NEEDED'){x.assignmentStatus='UNASSIGNED';x.eat='UNASSIGNED';x.meal='UNASSIGNED'}}
-window.__EMMELLI_BUILD='V19-SIMPLE-CONTAINER-MOVE-DEEP-FREEZER';save();
+window.__EMMELLI_BUILD='V20-BOOT-RESTORED-SIMPLE-CONTAINER-MOVE-DEEP-FREEZER';
+save();
+// Final boot: all migrations and feature patches above must finish before the first paint.
+render();
 
 })();
 
