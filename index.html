@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-04-MATURE-RESTORE-SURGICAL-1">
+<meta name="emmelli-current-build" content="2026-10-04-V36-TODAY-COOK-RECEIPT-AUDIT-2">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -5327,7 +5327,7 @@ gym=function(){
   if(activity==='REST')return hero('Gym',d)+`<section class="card"><h2>REST / RECOVERY DAY</h2><p class="muted">NO LIFTING, TREADMILL, OR AB CIRCUIT IS SCHEDULED TODAY.</p></section><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
   if(!plan)return hero('Gym',d)+`<section class="card"><p>ACTIVITY PLAN NEEDS ATTENTION.</p></section>`;
   const strength=strengthPanelV45(d,k,plan),tm=treadmillPanelV36(k,d),abs=abPanelV36(k);
-  const ordered=`${strength}${tm}${abs}`;
+  const ordered=(d==='Monday'||d==='Wednesday')?`${tm}${abs}${strength}`:`${strength}${tm}${abs}`;
   return hero('Gym',d)+ordered+`<button class="btn primary workout-save" data-save-gym>${state.gymSaved?.[k]?'WORKOUT SAVED • SAVE AGAIN':'SAVE WORKOUT TO HISTORY'}</button><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
 };
 
@@ -6019,8 +6019,92 @@ today = function(){
   const receipt=`<section class="card day-receipt receipt-top"><button class="btn primary" data-toggle-day-receipt><span><b>RECEIPT READINESS • ${s.done}/${s.total} SECTIONS COMPLETE</b><br><small>${s.done===s.total?'READY • COMPLETE DAY RECORD':`${s.total-s.done} SECTION${s.total-s.done===1?'':'S'} STILL INCOMPLETE`}</small></span><span class="receipt-chevron">${receiptOpen?'▲':'▼'}</span></button>${receiptOpen?`<div class="receipt-list">${s.sections.map(sec=>`<div class="receipt-missing"><div class="row between"><b>${esc(sec.name)}</b><span class="category-count">${sec.done}/${sec.total}</span></div>${sec.missing.length?`<small class="muted">STILL NEEDED: ${sec.missing.map(esc).join(' • ')}</small>`:`<small class="receipt-good">COMPLETE</small>`}</div>`).join('')}</div>`:''}</section>`;
   return `<section class="hero"><div class="eyebrow">TODAY</div><h1>${esc(fullSelectedDate())}</h1>${week()}</section>${receipt}<div class="grid today-destinations"><button class="tile" data-sub="routine"><b>ROUTINE</b><span>${done}/${total} COMPLETE</span></button><button class="tile" data-sub="faith"><b>BIBLE + FAITH</b><span>READING • PRAYER • DEVOTIONAL • REFLECTION</span></button><button class="tile" data-sub="goals"><b>GOALS</b><span>GOALS • WATER • DAILY HEALTH</span></button><button class="tile" data-sub="school"><b>STUDY TODAY</b><span>${esc(STUDY[d])} • 30 MIN</span></button><button class="tile" data-sub="weigh"><b>DAILY WEIGH-IN</b><span>FEEDS BODY PROGRESS + HISTORY</span></button><section class="tile today-commentary-tile" aria-label="Today Commentary"><b>TODAY COMMENTARY</b><span>${esc(commentary.join(' '))}</span></section>${contextual}</div>`;
 };
-window.__EMMELLI_BUILD='CURRENT-RECENT-LOCKED-2026-10-04';
-render(); // final startup render after current locked overrides
+
+// === 2026-10-04 SURGICAL MATURE-SCREEN RESTORE ===
+// Keeps the mature data/runtime. Only restores the rich root screens that later overrides made too sparse.
+
+function foodRootMatureRestore(){
+  const d=todayMeal();
+  const glance=`<section class="card meal-glance"><div class="cute-title"><span>${uiIconV114('heart')}</span><h2>MEALS AT A GLANCE</h2><span></span></div><small class="meal-glance-date">${esc(fullSelectedDate().toUpperCase())}</small><div class="meal-tiles">${d?['breakfast','pre','post','lunch','dinner','snacks'].map(x=>d[x]?`<div class="meal-tile"><b>${x==='pre'?'PRE-WORKOUT':x==='post'?'POST-WORKOUT':x.toUpperCase()}</b><p>${esc(d[x])}</p></div>`:'').join(''):`<p class="muted">NO MEAL PLAN IS SAVED FOR THIS DATE.</p>`}</div></section>`;
+  const actions=`<section class="card"><h2>FOOD TOOLS</h2><div class="grid">
+    <button class="tile" data-sub="mealplan"><b>MEAL PLAN</b><span>FULL WEEK • RECIPES • PORTIONS</span></button>
+    <button class="tile" data-sub="inventory"><b>INVENTORY</b><span>FRIDGE • FREEZER • PANTRY • SEASONINGS • CONTAINERS</span></button>
+    ${state.day===0?`<button class="tile" data-sub="grocery"><b>GROCERY</b><span>MONDAY SHOPPING + INVENTORY CHECK</span></button>`:''}
+    ${[0,2,3].includes(state.day)?`<button class="tile" data-sub="cook"><b>COOKING</b><span>TODAY'S FULL COOKING WORKFLOW</span></button>`:''}
+  </div></section>`;
+  return hero('FOOD',DAYS[state.day])+glance+actualMealCardsV44()+actualAddPanelV40()+actualLogsV40()+macroRowsV44()+actions+c19Panel();
+}
+const foodMatureSubRouter=food;
+food=function(){
+  if(!state.sub)return foodRootMatureRestore();
+  if(state.sub==='todayfood')return foodRootMatureRestore();
+  return foodMatureSubRouter();
+};
+
+function workoutProgressMatureRestore(d,k,plan){
+  const log=state.gymLog[k]||{}, targets=state.gymTargets||{};
+  const strengthDone=plan.steps.filter(ex=>{
+    const z=log[ex.name]||{}, sets=targets[d+'|'+ex.name]||ex.sets;
+    return sets.every((_,i)=>z['p'+i]===true || Number(z['r'+i]||0)>0);
+  }).length;
+  const a=abStateV36(k), absDone=AB_WORKOUT_V36.filter((_,i)=>!!a['done'+i]).length;
+  const tmDone=state.treadmill?.[k]?.done?1:0;
+  const done=strengthDone+absDone+tmDone, total=plan.steps.length+AB_WORKOUT_V36.length+1;
+  return `<section class="card workout-progress-card"><div class="row between"><div><h2 style="margin:0">WORKOUT PROGRESS</h2><small class="muted">STRENGTH • TREADMILL • ABS</small></div><b>${done}/${total}</b></div>
+  <div class="receipt-list">
+    <div class="receipt-missing"><div class="row between"><b>STRENGTH</b><span class="category-count">${strengthDone}/${plan.steps.length}</span></div></div>
+    <div class="receipt-missing"><div class="row between"><b>TREADMILL</b><span class="category-count">${tmDone}/1</span></div></div>
+    <div class="receipt-missing"><div class="row between"><b>ABS</b><span class="category-count">${absDone}/${AB_WORKOUT_V36.length}</span></div></div>
+  </div></section>`;
+}
+const gymMatureSubRouter=gym;
+gym=function(){
+  if(state.sub==='body')return body();
+  const d=DAYS[state.day],k=selectedKey(),activity=DAY_ACTIVITY[d],plan=GYM_PLAN[d];
+  if(activity==='RUN')return runScreen();
+  if(activity==='REST')return hero('GYM',d)+`<section class="card"><h2>REST / RECOVERY DAY</h2><p class="muted">NO LIFTING, TREADMILL, OR AB CIRCUIT IS SCHEDULED TODAY.</p></section><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
+  if(!plan)return gymMatureSubRouter();
+  const strength=strengthPanelV45(d,k,plan),tm=treadmillPanelV36(k,d),abs=abPanelV36(k);
+  return hero('GYM',d)+workoutProgressMatureRestore(d,k,plan)+strength+tm+abs+
+    `<button class="btn primary workout-save" data-save-gym>${state.gymSaved?.[k]?'WORKOUT SAVED • SAVE AGAIN':'SAVE WORKOUT TO HISTORY'}</button>
+     <button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
+};
+
+function wishRootMatureRestore(){
+  const all=WISHCATS.flatMap(c=>(state.wish[c]||[]).map((x,i)=>({...x,c,i})));
+  const items=WISHCATS.map(c=>({c,value:(state.wish[c]||[]).reduce((a,x)=>a+Math.max(0,Number(x.price)||0),0)}));
+  const total=items.reduce((a,x)=>a+x.value,0);
+  return hero('WISH LIST','DREAM BOARD')+
+  `<section class="card"><h2>ADD TO WISH LIST</h2><div class="formgrid">
+    <label>TITLE<input id="wishRootItem" placeholder="WHAT DO YOU WANT?"></label>
+    <label>PRICE<input id="wishRootPrice" type="number" min="0" step=".01" placeholder="0.00"></label>
+    <label>CATEGORY<select id="wishRootCategory">${WISHCATS.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select></label>
+    <label class="wide">LINK<input id="wishRootLink" type="url" placeholder="OPTIONAL LINK"></label>
+  </div><button class="btn primary" data-wish-root-add>ADD ITEM</button></section>
+  <section class="card"><h2>CATEGORIES</h2><div class="grid">${WISHCATS.map(c=>`<button class="tile" data-wish="${c}"><b>${c}</b><span>${(state.wish[c]||[]).length} ITEMS • ${money(items.find(x=>x.c===c)?.value||0)}</span></button>`).join('')}</div></section>
+  <section class="card"><h2>ALL WISH LIST ITEMS</h2>${all.map(x=>`<div class="checkrow ${x.done?'done-item':''}"><input type="checkbox" data-wish-done="${x.c}|${x.i}" ${x.done?'checked':''}><span style="flex:1">${safeLink(x.link)?`<a href="${esc(safeLink(x.link))}" target="_blank" rel="noopener noreferrer"><b>${esc(x.item)}</b></a>`:`<b>${esc(x.item)}</b>`}<small> • ${esc(x.c)}</small></span><b>${money(x.price)}</b><button class="btn" data-wish-edit="${x.c}|${x.i}">EDIT</button><button class="tinybtn" data-wish-del="${x.c}|${x.i}">×</button></div>`).join('')||'<p class="muted">NOTHING SAVED YET.</p>'}</section>
+  <section class="card"><h2>WISH LIST MIX BY DOLLARS</h2>${donutData(items,x=>x.c,x=>x.value)}</section>
+  <section class="card soft"><div class="muted">WISH LIST TOTAL</div><div class="metric money">${money(total)}</div></section>`;
+}
+const wishMatureSubRouter=wish;
+wish=function(){if(state.sub&&state.sub.startsWith('wish:'))return wishCat(state.sub.slice(5));return wishRootMatureRestore();};
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest?.('[data-wish-root-add]'); if(!b)return;
+  e.stopImmediatePropagation();
+  const item=document.getElementById('wishRootItem')?.value.trim();
+  const price=Number(document.getElementById('wishRootPrice')?.value);
+  const c=document.getElementById('wishRootCategory')?.value;
+  const link=document.getElementById('wishRootLink')?.value.trim()||'';
+  if(!item||!c||!Number.isFinite(price)){showToast('ENTER A TITLE, PRICE, AND CATEGORY.','WISH LIST');return}
+  (state.wish[c]||(state.wish[c]=[])).push({item,price,link,done:false});
+  save();render();
+},true);
+
+window.__EMMELLI_BUILD='2026-10-04-MATURE-SURGICAL-RESTORE-FOOD-GYM-WISH';
+
+window.__EMMELLI_BUILD='2026-10-04-MATURE-SURGICAL-RESTORE';
+render(); // final startup render after surgical mature-screen restores
 
 </script>
 </body>
