@@ -834,7 +834,42 @@ summary{border-radius:12px}
 
 /* V44 recent UI corrections */
 .macro-v44{padding:18px!important}.macro-v44-list{display:grid;gap:12px}.macro-v44-row{padding:12px 0;border-top:1px solid rgba(113,70,83,.12)}.macro-v44-row:first-child{border-top:0}.macro-v44-head,.macro-v44-foot{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.macro-v44-head b{font-size:15px;letter-spacing:.04em}.macro-v44-head span,.macro-v44-foot{font-size:12px;color:var(--muted)}.macro-v44-track{height:9px;border-radius:999px;background:#f4e5ea;overflow:hidden;margin:8px 0}.macro-v44-track span{display:block;height:100%;background:currentColor;border-radius:999px;color:#9d6376}.macro-v44-foot b{color:var(--ink)}.macro-v44-note{margin:12px 0 0}.actual-component-checks{display:grid;gap:8px;margin:12px 0}.actual-component-check{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#fff}.actual-component-check input{width:20px;height:20px;flex:0 0 auto}.actual-component-check span{display:flex;justify-content:space-between;align-items:center;gap:12px;flex:1}.meal-glance-date{display:block;text-align:center;margin:-2px 0 12px;color:var(--muted);font-weight:750;letter-spacing:.04em}.actual-plan-check{align-items:center}
+
+/* 2026-10-06 SURGICAL PHONE + WORKOUT DROPDOWN + HANDOFF CARD FIX */
+.workout-section-drop{border:1px solid var(--cuteLine);border-radius:22px;background:linear-gradient(145deg,#fff,#fff7fa);box-shadow:var(--cuteShadow);margin:11px 0;overflow:hidden}
+.workout-section-drop>summary{list-style:none;cursor:pointer;padding:15px 48px 15px 16px;position:relative;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:900}
+.workout-section-drop>summary::-webkit-details-marker{display:none}.workout-section-drop>summary:after{content:'+';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:28px;height:28px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--pink);font-size:18px}.workout-section-drop[open]>summary:after{content:'–'}
+.workout-section-drop>summary small{display:block;margin-top:2px;font-size:10px;color:var(--muted)}.workout-section-body{padding:0 10px 10px}.workout-section-body>.card{margin:0!important;box-shadow:none!important;border-radius:17px!important}
+.thaw-handoff-card{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start;margin:10px 0!important;padding:13px 14px!important;border:1.5px solid #e7b7c7!important;background:linear-gradient(145deg,#fff8fb,#f9e4ec)!important;box-shadow:0 7px 18px rgba(126,73,91,.08)!important}.thaw-handoff-card .handoff-mark{width:30px;height:30px;border:1px solid #df9eb4;border-radius:10px;display:grid;place-items:center;font-weight:900;color:#a65d75;background:#fff}.thaw-handoff-card b{display:block;font-size:12px;letter-spacing:.06em;margin-bottom:4px}.thaw-handoff-card p{margin:0;font-size:12px;line-height:1.45;color:#755762}
+@media(max-width:520px){
+ .workout-section-drop>summary{padding:13px 44px 13px 13px}.workout-section-body{padding:0 7px 8px}
+ .workout-section-body .exercise-card{padding:12px!important;overflow:hidden}
+ .workout-section-body .setrow{grid-template-columns:26px 24px minmax(0,1fr) 62px!important;gap:5px!important;align-items:end!important}
+ .workout-section-body .setrow>b{font-size:9px!important;line-height:1.05!important;overflow-wrap:normal!important;word-break:normal!important}
+ .workout-section-body .setrow label{font-size:8px!important;line-height:1.05!important;min-width:0!important}
+ .workout-section-body .setrow input:not([type=checkbox]){min-width:0!important;padding:7px 5px!important;font-size:13px!important}
+ .workout-section-body .ab-setrow{grid-template-columns:52px 26px minmax(0,1fr)!important;align-items:center!important}
+ .workout-section-body .ab-setrow>b{font-size:10px!important;white-space:normal!important}
+ .workout-section-body .ab-rep-readout{font-size:11px!important;line-height:1.2!important}
+ .workout-section-body .ab-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+ .workout-section-body .ab-actions .exercise-action{min-height:44px!important;font-size:9px!important;overflow-wrap:anywhere!important}
+ .treadmill-grid{grid-template-columns:1fr!important}
+ .thaw-handoff-card{grid-template-columns:30px minmax(0,1fr);padding:12px!important}
+}
+
+
+/* HISTORY V60 */
+
+.history-option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.history-option{min-width:0;min-height:82px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#fff,#fff5f8);padding:13px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;color:inherit}.history-option span{min-width:0}.history-option b{display:block;font-size:14px;line-height:1.2}.history-option small{display:block;margin-top:5px;font-size:9px;line-height:1.35;color:#8d6b76}.history-option strong{font-size:24px;color:var(--pink2)}
+.history-browser-head{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;text-align:center;gap:8px}.history-browser-head h2{margin:2px 0 0!important}.history-browser-head small{font-size:9px;color:#8d6b76;font-weight:900}.history-month-arrow{width:44px;height:44px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--pink);font-size:25px}.history-jump{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:13px 0}.history-jump label{font-size:9px;font-weight:900}.history-jump select{margin-top:4px;min-height:40px;padding:7px 9px}
+.history-cal-weekdays,.history-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.history-cal-weekdays{margin:8px 0 5px}.history-cal-weekdays b{text-align:center;font-size:8px;color:#987781}.history-cal-day,.history-cal-blank{aspect-ratio:1/1;min-width:0}.history-cal-day{position:relative;border:1px solid #eedce2;border-radius:12px;background:#fff;color:#75545f;font-weight:850;padding:0;display:grid;place-items:center}.history-cal-day:disabled{opacity:.32;background:#fffafa}.history-cal-day.has-history{background:linear-gradient(145deg,#fff,#fbe7ee);border-color:#dfafbf}.history-cal-day i{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--pink);bottom:5px}.history-cal-day.selected-history-day{box-shadow:inset 0 0 0 2px var(--pink2)}.history-calendar-key{display:flex;align-items:center;justify-content:center;gap:6px;font-size:9px;font-weight:800;color:#8d6b76;margin:11px 0 0}.history-calendar-key i{width:6px;height:6px;border-radius:50%;background:var(--pink)}
+.history-recent-row{width:100%;border:0;border-bottom:1px solid #f1e2e6;background:transparent;padding:11px 3px;display:flex;align-items:center;justify-content:space-between;text-align:left;color:inherit}.history-recent-row:last-child{border-bottom:0}.history-recent-row b,.history-recent-row small{display:block}.history-recent-row small{font-size:9px;color:#8d6b76;margin-top:3px}.history-recent-row strong{font-size:21px;color:var(--pink2)}
+.history-day-glance h2{margin:3px 0 0!important;font-size:18px!important}.history-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.history-glance-grid>div{border:1px solid var(--line);border-radius:14px;background:#fff9fb;padding:10px;min-width:0}.history-glance-grid small,.history-glance-grid b{display:block}.history-glance-grid small{font-size:8px;color:#947780}.history-glance-grid b{font-size:11px;line-height:1.3;margin-top:3px;overflow-wrap:anywhere}
+.history-receipt-sections{display:grid;gap:8px}.history-receipt-section{border:1px solid var(--line);border-radius:17px;background:#fff;overflow:hidden}.history-receipt-section summary{list-style:none;cursor:pointer;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}.history-receipt-section summary::-webkit-details-marker{display:none}.history-receipt-section summary span{min-width:0}.history-receipt-section summary b,.history-receipt-section summary small{display:block}.history-receipt-section summary small{font-size:9px;color:#8d6b76;margin-top:3px}.history-receipt-section summary strong{font-size:20px;color:var(--pink)}.history-receipt-section[open] summary strong{transform:rotate(45deg)}.history-receipt-section>div{padding:0 14px 14px;border-top:1px solid #f3e3e8}.history-receipt-section.no-entry{opacity:.58}.history-category-day p{line-height:1.65}
+@media(max-width:430px){.history-option-grid{grid-template-columns:1fr}.history-option{min-height:68px}.history-cal-weekdays,.history-calendar{gap:3px}.history-cal-day{border-radius:9px;font-size:11px}.history-jump{grid-template-columns:1fr 1fr}.history-glance-grid{grid-template-columns:1fr 1fr}}
+
 </style>
+<meta name="emmelli-v70-live-date-time" content="America/New_York • auto-day • live-commentary • top-date">
 </head>
 <body data-build="2026-10-02-CLEAN-RUNTIME">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S WEEKLY HUB</h2><p style="margin:0">Starting Hub V11 — macro + rice rule audit…</p><p style="margin:8px 0 0;font-size:13px">Oct 5–11 audited meal plan loaded • rice allowed any day when batch-cooked/stored for freshness • Sunday included.</p></section></div>
@@ -883,8 +918,8 @@ const MEAL={
     "fiber": "≥28 g"
   },
   "gymFuel": {
-    "pre": "100 g banana + 15 g honey",
-    "post": "1 scoop ISO100"
+    "pre": "100 g banana + 20 g honey",
+    "post": "1 labeled serving Dymatize ISO100 Cocoa Pebbles"
   },
   "mondayCoverage": {
     "status": "MONDAY COOKING COMPLETE — 4 PORTIONS PACKED; TUESDAY PORTIONS EATEN",
@@ -2040,6 +2075,35 @@ function budgetEvents(y,m){
  return ev.sort((a,b)=>a.date-b.date||({income:0,spend:1,save:2,bill:3}[a.kind]-{income:0,spend:1,save:2,bill:3}[b.kind]))
 }
 function localDateKey(dt=new Date()){let y=dt.getFullYear(),m=String(dt.getMonth()+1).padStart(2,"0"),d=String(dt.getDate()).padStart(2,"0");return `${y}-${m}-${d}`}
+
+/* V70 LIVE DATE + TIME AUTHORITY — TODAY follows the real Lakewood Ranch/New York calendar once per day, while manual day browsing remains available afterward. */
+function hubNowPartsV70(){
+ const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'long',year:'numeric',month:'2-digit',day:'2-digit',hour:'numeric',minute:'2-digit',hour12:true}).formatToParts(new Date());
+ const o={};parts.forEach(x=>{if(x.type!=='literal')o[x.type]=x.value});
+ return {weekday:o.weekday||'',key:`${o.year}-${o.month}-${o.day}`,time:`${o.hour}:${o.minute} ${o.dayPeriod}`,minutes:((Number(o.hour)%12)+(o.dayPeriod==='PM'?12:0))*60+Number(o.minute)};
+}
+function syncTodayCalendarV70(){
+ const n=hubNowPartsV70(),map={Monday:0,Tuesday:1,Wednesday:2,Thursday:3,Friday:4,Saturday:5,Sunday:6};
+ state.checks=state.checks||{};
+ if(state.checks['v70|lastRealDay']!==n.key){state.day=map[n.weekday]??state.day;state.weekOffset=0;state.checks['v70|lastRealDay']=n.key;save()}
+ return n;
+}
+function liveTodayCommentaryV70(){
+ const n=hubNowPartsV70(),idx={Monday:0,Tuesday:1,Wednesday:2,Thursday:3,Friday:4,Saturday:5,Sunday:6}[n.weekday],isRealToday=(state.weekOffset||0)===0&&state.day===idx;
+ if(!isRealToday)return `VIEWING ${fullSelectedDate().toUpperCase()} • LIVE TODAY IS ${n.weekday.toUpperCase()} • ${n.time}.`;
+ const d=DAYS[state.day],tl=timeline(d),unfinished=tl.filter(x=>!x.t.done),active=unfinished.find(x=>n.minutes>=x.st&&n.minutes<x.en),next=unfinished.find(x=>x.st>n.minutes),overdue=unfinished.filter(x=>x.en<=n.minutes);
+ let bits=[`${n.weekday.toUpperCase()} • ${n.time}`];
+ if(active)bits.push(`NOW: ${active.t.name} • ${fmt(active.st)}–${fmt(active.en)}`);
+ else if(overdue.length)bits.push(`EARLIEST UNFINISHED: ${overdue[0].t.name}`);
+ else if(next)bits.push(`NEXT: ${next.t.name} • ${fmt(next.st)}–${fmt(next.en)}`);
+ else bits.push(unfinished.length?'ROUTINE ITEMS STILL OPEN':'ROUTINE COMPLETE');
+ const meal=todayMeal(); if(meal?.cook?.length)bits.push(`COOKING TODAY: ${meal.cook.length} RECIPES`);
+ if(meal?.thaw&&!/^Nothing/i.test(meal.thaw))bits.push(`TONIGHT: ${meal.thaw}`);
+ const wd=[1,2,3,4,5].filter(i=>state.water[selectedKey()+'|'+i]).length;if(wd<5)bits.push(`WATER ${wd}/5`);
+ return bits.join(' • ')+'.';
+}
+syncTodayCalendarV70();
+
 function autopayKey(x){return `autopay|${localDateKey(x.date)}|${encodeURIComponent(x.n)}|${Number(x.baseA??x.a).toFixed(2)}`}
 function monthId(y,m){return `${y}-${String(m+1).padStart(2,"0")}`}
 function monthExtra(y,m){let id=`${y}-${m}`;return (state.budget.buys[id]||[]).reduce((a,x)=>a+Math.max(0,Number(x.price||0)),0)}
@@ -2224,6 +2288,7 @@ function food(){
   </div></section>`;
 }
 function validateSelectedDayContext(){let d=DAYS[state.day],meal=(MEAL.days||{})[selectedKey()]||null;if(state.route==="today"&&state.sub==="measure"&&state.day!==0)state.sub=null;if(state.route==="today"&&state.sub==="reset"&&state.day!==6)state.sub=null;if(state.route==="food"&&state.sub==="grocery"&&state.day!==0)state.sub=null;if(state.route==="food"&&state.sub==="cook"&&!['Monday','Wednesday','Thursday'].includes(DAYS[state.day]))state.sub=null;if(state.route==="gym"&&state.sub==="run"&&DAY_ACTIVITY[d]!=="RUN")state.sub=null;}
+let history;
 function render(){validateSelectedDayContext();nav();let fn={today,food,gym,budget,history,wish}[state.route]||today;let html;if(state.route==="today"&&state.sub){let subpages={routine,faith,goals,school,weigh,measure,reset};html=subpages[state.sub]?subpages[state.sub]():today()}else html=fn();document.getElementById("app").innerHTML=html+sheetMarkup()+toastMarkup()}
 document.addEventListener("input",e=>{
  let gf=e.target.closest?.("[data-gym-field]");if(gf){let [name,f]=gf.dataset.gymField.split("|"),k=selectedKey(),log=state.gymLog[k]||(state.gymLog[k]={}),z=log[name]||(log[name]={});z[f]=f.startsWith("r")?String(Math.max(0,Math.min(12,+gf.value||0))):gf.value.trim();if(f.startsWith("w")||f.startsWith("r")){let i=Number(f.slice(1));z["p"+i]=false;let box=gf.closest('.setrow')?.querySelector('[data-gym-set-planned]');if(box)box.checked=false;z.done=false;gf.closest('.exercise-card')?.classList.remove('completed')}delete state.gymSaved[k];save();return}
@@ -2241,6 +2306,20 @@ document.addEventListener("change",async e=>{
  let rl=e.target.closest?.("[data-raw-location]");if(rl){let id=rl.dataset.rawLocation,x=state.rawPortions[id]||(state.rawPortions[id]={});x.storage=rl.value;save();render();return}
  let hs=e.target.closest?.("[data-haul-scan]");if(hs&&hs.files?.[0]){let key=hs.dataset.haulScan;try{if(!("BarcodeDetector" in window))throw new Error("unsupported");let img=await createImageBitmap(hs.files[0]),det=new BarcodeDetector({formats:["upc_a","upc_e","ean_13","ean_8"]}),codes=await det.detect(img);if(!codes.length)throw new Error("not found");let h=state.mondayHaul[key]||(state.mondayHaul[key]={});h.upc=codes[0].rawValue;save();render();showToast("Barcode captured. Confirm the product and quantity, then add it.","Purchase");}catch(err){showToast("This browser could not read that barcode. Type the UPC or enter the product manually.","Barcode");}return}
 let f=e.target.closest?.("[data-barcode-file]");if(!f||!f.files?.[0])return;let key=f.dataset.barcodeFile;try{if(!("BarcodeDetector" in window))throw new Error("unsupported");let img=await createImageBitmap(f.files[0]),det=new BarcodeDetector({formats:["upc_a","upc_e","ean_13","ean_8"]}),codes=await det.detect(img);if(!codes.length)throw new Error("not found");state.groceryBarcodes=state.groceryBarcodes||{};state.groceryBarcodes[key]=codes[0].rawValue;save();render();showToast("Barcode saved to this grocery item.","Barcode scanned")}catch(err){showToast("Camera barcode reading is not supported here or the code was not detected. You can type the UPC in the small field instead.","Barcode")}});
+// 2026-10-06: reliable Budget + History option navigation (runs before legacy click handlers).
+document.addEventListener("click",e=>{
+ const b=e.target.closest?.("[data-budget-tool],[data-budget-year],[data-budget-month],[data-week],[data-hist],[data-histnav]");
+ if(!b)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ if(b.dataset.budgetTool){let [kind,y,m,parent]=b.dataset.budgetTool.split("|");state.sub=`${kind}:${y}:${m}:${parent||"budget"}`;}
+ else if(b.dataset.budgetYear){state.sub="year:"+b.dataset.budgetYear;}
+ else if(b.dataset.budgetMonth){let [y,m]=b.dataset.budgetMonth.split("|");state.sub=`month:${y}:${m}`;}
+ else if(b.dataset.week){let [y,m,w]=b.dataset.week.split("|");state.sub=`week:${y}:${m}:${w}`;}
+ else if(b.dataset.hist){state.sub=`hist:${b.dataset.hist}:year`;}
+ else if(b.dataset.histnav){let [type,level,...v]=b.dataset.histnav.split("|");state.sub=v.length&&v.some(x=>x!=="")?`hist:${type}:${level}:${v.join("|")}`:`hist:${type}:${level}`;}
+ save();render();appTop();
+},true);
+
 document.addEventListener("click",e=>{
  let direct=e.target.closest?.("[data-grocery-to-inventory],[data-add-haul],[data-confirm-raw]");
  if(direct?.hasAttribute("data-grocery-to-inventory")){state.route="food";state.sub="inventory";state.inventoryTab="Fridge";save();render();return}
@@ -4092,7 +4171,7 @@ const budgetBaseV21=budget;
 budget=function(){
   let html=budgetBaseV21();
   if(!state.sub){
-    const info=paycheckWeekInfoV21(selectedDate());
+    const info=paycheckWeekInfoV21(new Date(selectedKey()+"T12:00:00"));
     if(info.week)html=html.replace(/(<section class="comment-widget budget-commentary">)/,`<section class="card soft"><b>CURRENT PAYCHECK WEEK • ${info.start.toLocaleString("en",{month:"long"}).toUpperCase()} WEEK ${info.week}</b><p>${info.start.toLocaleDateString()} → ${info.end.toLocaleDateString()} • TUESDAY PAYDAY CYCLE</p></section>$1`);
   }
   return html;
@@ -5836,6 +5915,7 @@ historyDay=function(type,d){
 
 // V44 — RECENT UI CORRECTIONS. Preserve V43 systems; replace only active Food/Gym presentation and actual-container component logging.
 function macroRowsV44(){
+  const round=n=>Math.round((Number(n)||0)*10)/10;
   const k=selectedKey(),p=plannedMacroV21(k),a=foodLogMacrosV21(k);
   const cfg={
     calories:{label:'CALORIES',unit:'KCAL',min:2000,max:2000},
@@ -5881,10 +5961,6 @@ window.__EMMELLI_FOOD_BUILD='V44-ACTUAL-COMPONENT-CHECKS';
 window.__EMMELLI_COOK_BUILD='V43-FOUR-DROPDOWNS-CONTAINERS-CLOSED-LOOP';
 
 render();
-
-})();
-
-
 
 
 // === V47 — unified six-destination system + compact daily History receipt ===
@@ -5996,11 +6072,25 @@ today = function(){
   const openGoals=(typeof openGoalsThroughSelectedDayV42==='function'?openGoalsThroughSelectedDayV42(k):[]);
   const important=openGoals.filter(g=>g.important), ordered=[...important,...openGoals.filter(g=>!g.important)];
   const meal=todayMeal();
-  const thaw=(meal?.thaw&&!/^Nothing/i.test(String(meal.thaw)))?String(meal.thaw):'';
+  const rawThaw=String(meal?.thaw||'').trim();
+  // TODAY only surfaces a real action. Explanatory storage/meal-plan notes stay in the underlying Food data.
+  const thaw=/^(MOVE|THAW)\b/i.test(rawThaw)?rawThaw:'';
   const commentary=[];
-  if(ordered.length) commentary.push('OPEN GOALS: '+ordered.map(g=>(g.important?'IMPORTANT • ':'')+g.text).join(' • ')+'.');
-  if(thaw) commentary.push('THAW / MOVE TO FRIDGE: '+thaw);
-  if(!commentary.length) commentary.push('NO OPEN COMMENTARY ITEMS.');
+  const n=hubNowPartsV70(), realIdx={Monday:0,Tuesday:1,Wednesday:2,Thursday:3,Friday:4,Saturday:5,Sunday:6}[n.weekday];
+  const isRealToday=(state.weekOffset||0)===0&&state.day===realIdx;
+  if(isRealToday){
+    const unfinished=tl.filter(x=>!x.t.done);
+    const active=unfinished.find(x=>n.minutes>=x.st&&n.minutes<x.en);
+    const overdue=unfinished.find(x=>x.en<=n.minutes);
+    const next=unfinished.find(x=>x.st>n.minutes);
+    if(active) commentary.push(`NOW: ${active.t.name} • UNTIL ${fmt(active.en)}.`);
+    else if(overdue) commentary.push(`DO NEXT: ${overdue.t.name}.`);
+    else if(next) commentary.push(`NEXT: ${next.t.name} • ${fmt(next.st)}.`);
+    else commentary.push(unfinished.length?'ROUTINE ITEMS STILL OPEN.':'ROUTINE COMPLETE.');
+    if(ordered.length) commentary.push(`OPEN GOAL: ${ordered[0].important?'IMPORTANT • ':''}${ordered[0].text}.`);
+  }else{
+    commentary.push(`VIEWING ${fullSelectedDate().toUpperCase()}.`);
+  }
   let contextual='';
   if(state.day===0){
     contextual+=`<button class="tile" data-route="gym"><b>GYM</b><span>GLUTES & QUADS</span></button>`;
@@ -6015,9 +6105,10 @@ today = function(){
   } else if(state.day===6){
     contextual+=`<button class="tile" data-sub="reset"><b>SUNDAY RESET</b><span>HOME + WEEK RESET</span></button>`;
   }
-  if([0,2,3].includes(state.day)) contextual+=`<button class="tile" data-route="food" data-sub="cooking"><b>COOKING</b><span>TODAY'S COOKING SESSION</span></button>`;
+  if([0,2,3].includes(state.day)) contextual+=`<button class="tile" data-route="food" data-sub="cook"><b>COOKING</b><span>TODAY'S COOKING SESSION</span></button>`;
   const receipt=`<section class="card day-receipt receipt-top"><button class="btn primary" data-toggle-day-receipt><span><b>RECEIPT READINESS • ${s.done}/${s.total} SECTIONS COMPLETE</b><br><small>${s.done===s.total?'READY • COMPLETE DAY RECORD':`${s.total-s.done} SECTION${s.total-s.done===1?'':'S'} STILL INCOMPLETE`}</small></span><span class="receipt-chevron">${receiptOpen?'▲':'▼'}</span></button>${receiptOpen?`<div class="receipt-list">${s.sections.map(sec=>`<div class="receipt-missing"><div class="row between"><b>${esc(sec.name)}</b><span class="category-count">${sec.done}/${sec.total}</span></div>${sec.missing.length?`<small class="muted">STILL NEEDED: ${sec.missing.map(esc).join(' • ')}</small>`:`<small class="receipt-good">COMPLETE</small>`}</div>`).join('')}</div>`:''}</section>`;
-  return `<section class="hero"><div class="eyebrow">TODAY</div><h1>${esc(fullSelectedDate())}</h1>${week()}</section>${receipt}<div class="grid today-destinations"><button class="tile" data-sub="routine"><b>ROUTINE</b><span>${done}/${total} COMPLETE</span></button><button class="tile" data-sub="faith"><b>BIBLE + FAITH</b><span>READING • PRAYER • DEVOTIONAL • REFLECTION</span></button><button class="tile" data-sub="goals"><b>GOALS</b><span>GOALS • WATER • DAILY HEALTH</span></button><button class="tile" data-sub="school"><b>STUDY TODAY</b><span>${esc(STUDY[d])} • 30 MIN</span></button><button class="tile" data-sub="weigh"><b>DAILY WEIGH-IN</b><span>FEEDS BODY PROGRESS + HISTORY</span></button><section class="tile today-commentary-tile" aria-label="Today Commentary"><b>TODAY COMMENTARY</b><span>${esc(commentary.join(' '))}</span></section>${contextual}</div>`;
+  const handoffCard=thaw?`<section class="card thaw-handoff-card"><div class="handoff-mark">→</div><div><b>THAW / HANDOFF</b><p>${esc(thaw)}</p></div></section>`:'';
+  return `<section class="hero"><div class="eyebrow">TODAY</div><h1>${esc(fullSelectedDate())}</h1>${week()}</section>${receipt}<div class="grid today-destinations"><button class="tile" data-sub="routine"><b>ROUTINE</b><span>${done}/${total} COMPLETE</span></button><button class="tile" data-sub="faith"><b>BIBLE + FAITH</b><span>READING • PRAYER • DEVOTIONAL • REFLECTION</span></button><button class="tile" data-sub="goals"><b>GOALS</b><span>GOALS • WATER • DAILY HEALTH</span></button><button class="tile" data-sub="school"><b>STUDY TODAY</b><span>${esc(STUDY[d])} • 30 MIN</span></button><button class="tile" data-sub="weigh"><b>DAILY WEIGH-IN</b><span>FEEDS BODY PROGRESS + HISTORY</span></button><section class="tile today-commentary-tile" aria-label="Today Commentary"><b>TODAY COMMENTARY</b><span>${esc(commentary.join(' '))}</span></section>${contextual}</div>${handoffCard}`;
 };
 
 // === 2026-10-04 SURGICAL MATURE-SCREEN RESTORE ===
@@ -6065,7 +6156,8 @@ gym=function(){
   if(activity==='REST')return hero('GYM',d)+`<section class="card"><h2>REST / RECOVERY DAY</h2><p class="muted">NO LIFTING, TREADMILL, OR AB CIRCUIT IS SCHEDULED TODAY.</p></section><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
   if(!plan)return gymMatureSubRouter();
   const strength=strengthPanelV45(d,k,plan),tm=treadmillPanelV36(k,d),abs=abPanelV36(k);
-  return hero('GYM',d)+workoutProgressMatureRestore(d,k,plan)+strength+tm+abs+
+  const drop=(title,sub,body)=>`<details class="workout-section-drop"><summary><span>${esc(title)}<small>${esc(sub)}</small></span></summary><div class="workout-section-body">${body}</div></details>`;
+  return hero('GYM',d)+workoutProgressMatureRestore(d,k,plan)+drop('STRENGTH',plan.title,strength)+drop('TREADMILL','30 MIN • ACTUALS + COMPLETE',tm)+drop('ABS','15-MINUTE VIDEO • 6 MOVES',abs)+
     `<button class="btn primary workout-save" data-save-gym>${state.gymSaved?.[k]?'WORKOUT SAVED • SAVE AGAIN':'SAVE WORKOUT TO HISTORY'}</button>
      <button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
 };
@@ -6103,9 +6195,772 @@ document.addEventListener('click',e=>{
 
 window.__EMMELLI_BUILD='2026-10-04-MATURE-SURGICAL-RESTORE-FOOD-GYM-WISH';
 
-window.__EMMELLI_BUILD='2026-10-04-MATURE-SURGICAL-RESTORE';
-render(); // final startup render after surgical mature-screen restores
 
+
+// === 2026-10-06 HISTORY CALENDAR + ORGANIZED RECEIPTS ===
+// Display/navigation only: preserves the mature historical stores and exact-date records.
+function historyLabelV60(type){return ({complete:'ALL HISTORY',routine:'ROUTINE HISTORY',food:'FOOD HISTORY',gym:'GYM / WORKOUT HISTORY',body:'BODY PROGRESS HISTORY',goals:'GOALS HISTORY',bible:'BIBLE + FAITH HISTORY',school:'STUDY HISTORY',cooking:'COOKING HISTORY',water:'WATER / DAILY HEALTH HISTORY'})[type]||'HISTORY'}
+function historyMonthKeyV60(){return selectedKey().slice(0,7)}
+function historyCalendarV60(type,monthKey){
+  if(!/^\d{4}-\d{2}$/.test(monthKey||''))monthKey=historyMonthKeyV60();
+  const [y,m]=monthKey.split('-').map(Number), first=new Date(y,m-1,1,12), last=new Date(y,m,0,12), dates=histDates(type), saved=new Set(dates), monthDates=dates.filter(d=>d.startsWith(monthKey+'-'));
+  const start=(first.getDay()+6)%7, cells=[];
+  for(let i=0;i<start;i++)cells.push('<span class="history-cal-blank"></span>');
+  for(let day=1;day<=last.getDate();day++){
+    const d=`${y}-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`, has=saved.has(d), today=d===selectedKey();
+    cells.push(`<button class="history-cal-day ${has?'has-history':''} ${today?'selected-history-day':''}" data-history-date="${d}" ${has?'':'disabled'}><span>${day}</span>${has?'<i></i>':''}</button>`);
+  }
+  const years=[...new Set([...dates.map(d=>d.slice(0,4)),String(y)])].sort().reverse();
+  const months=Array.from({length:12},(_,i)=>({v:String(i+1).padStart(2,'0'),n:new Date(2026,i,1).toLocaleString('en',{month:'long'}).toUpperCase()}));
+  const recent=dates.slice().sort().reverse().slice(0,6);
+  return `<section class="card history-browser-card">
+    <div class="history-browser-head"><button class="history-month-arrow" data-history-month-shift="-1" aria-label="Previous month">‹</button><div><small>BROWSE HISTORY</small><h2>${first.toLocaleString('en',{month:'long',year:'numeric'}).toUpperCase()}</h2></div><button class="history-month-arrow" data-history-month-shift="1" aria-label="Next month">›</button></div>
+    <div class="history-jump"><label>YEAR<select data-history-year>${years.map(v=>`<option value="${v}" ${+v===y?'selected':''}>${v}</option>`).join('')}</select></label><label>MONTH<select data-history-month>${months.map(x=>`<option value="${x.v}" ${+x.v===m?'selected':''}>${x.n}</option>`).join('')}</select></label></div>
+    <div class="history-cal-weekdays">${['MON','TUE','WED','THU','FRI','SAT','SUN'].map(x=>`<b>${x}</b>`).join('')}</div>
+    <div class="history-calendar">${cells.join('')}</div>
+    <p class="history-calendar-key"><i></i> SAVED HISTORY • TAP A MARKED DAY</p>
+  </section>
+  <section class="card history-recent"><div class="row between"><h2>RECENT DAYS</h2><small>${dates.length} SAVED DAY${dates.length===1?'':'S'}</small></div>${recent.length?recent.map(d=>`<button class="history-recent-row" data-history-date="${d}"><span><b>${new Date(d+'T12:00:00').toLocaleDateString('en',{weekday:'short',month:'short',day:'numeric'}).toUpperCase()}</b><small>${type==='complete'?historyRecentKindsV60(d):historyLabelV60(type)}</small></span><strong>›</strong></button>`).join(''):'<p class="muted">NO SAVED HISTORY IN THIS CATEGORY YET.</p>'}</section>`;
+}
+function historyRecentKindsV60(d){
+ const kinds=[]; if(histDates('routine').includes(d))kinds.push('ROUTINE'); if(histDates('food').includes(d))kinds.push('FOOD'); if(histDates('gym').includes(d))kinds.push('GYM'); if(histDates('school').includes(d))kinds.push('STUDY'); if(histDates('cooking').includes(d))kinds.push('COOKING'); if(histDates('bible').includes(d))kinds.push('FAITH'); return kinds.slice(0,4).join(' • ')||'DAILY RECEIPT';
+}
+function historySummaryV60(type,d){
+ if(type==='routine'){let snap=state.routineSnapshots?.[d],idx=(new Date(d+'T12:00:00').getDay()+6)%7,tasks=snap?.tasks||state.routineV2?.[DAYS[idx]]?.tasks||[],rs=state.routineStatus?.[d]||{},done=tasks.filter(t=>snap?t.done:rs[t.id]).length;return `${done}/${tasks.length||0} COMPLETE`}
+ if(type==='food'){let a=state.actualFood?.[d]||{},p=Number(a.protein);return Number.isFinite(p)&&p>0?`${Math.round(p)} G PROTEIN`:`${(state.foodHistory||[]).filter(x=>(x.date||'').slice(0,10)===d).length} LOGGED`}
+ if(type==='gym')return state.gymSaved?.[d]?'WORKOUT SAVED':hasRun(d)?'RUN SAVED':'NO WORKOUT';
+ if(type==='body')return hasWeight(d)?`${state.weight[d]} LB`:'SAVED';
+ if(type==='goals'){let list=state.goalsByDate?.[d]||[],h=state.goalHistory?.[d]||{};return `${list.filter((_,i)=>h[i]?.done).length}/${list.length} COMPLETE`}
+ if(type==='bible')return `${(state.bible?.[d]?.entries||[]).filter(Boolean).length} ENTRIES`;
+ if(type==='school')return hasStudy(d)?'SAVED':'NO ENTRY';
+ if(type==='cooking')return `${Object.keys(state.cookLog||{}).filter(k=>k.startsWith(d)).length} RECORDS`;
+ if(type==='water')return `${[1,2,3,4,5].filter(i=>state.water?.[d+'|'+i]).length}/5 WATER`;
+ return 'SAVED';
+}
+function allHistoryReceiptV60(d){
+ const cats=[['routine','ROUTINE'],['food','FOOD'],['gym','GYM / WORKOUT'],['body','BODY PROGRESS'],['goals','GOALS'],['bible','BIBLE + FAITH'],['school','STUDY'],['cooking','COOKING'],['water','WATER / DAILY HEALTH']];
+ const active=cats.filter(([t])=>histDates(t).includes(d));
+ const a=state.actualFood?.[d]||{}, macros=hasMacros(d)?`${a.calories??'—'} KCAL • ${a.protein??'—'} G PROTEIN • ${a.fiber??'—'} G FIBER`:'NO FINAL MACROS';
+ return `<section class="card history-day-glance"><div class="row between"><div><small>DAY AT A GLANCE</small><h2>${new Date(d+'T12:00:00').toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'}).toUpperCase()}</h2></div><span class="paid-tag">${active.length} ACTIVE SECTIONS</span></div><div class="history-glance-grid"><div><small>ROUTINE</small><b>${historySummaryV60('routine',d)}</b></div><div><small>FOOD</small><b>${macros}</b></div><div><small>WORKOUT</small><b>${historySummaryV60('gym',d)}</b></div><div><small>WATER</small><b>${historySummaryV60('water',d)}</b></div></div></section>
+ <section class="history-receipt-sections">${cats.map(([t,label])=>{const has=histDates(t).includes(d);return `<details class="history-receipt-section ${has?'has-entry':'no-entry'}"><summary><span><b>${label}</b><small>${has?historySummaryV60(t,d):'NO ENTRY'}</small></span><strong>+</strong></summary><div>${has?historyDay(t,d):'<p class="muted">NO HISTORY WAS SAVED FOR THIS SECTION ON THIS DATE.</p>'}</div></details>`}).join('')}</section>`;
+}
+const historyDrillBeforeV60=historyDrill;
+historyDrill=function(){
+ const parts=state.sub?.split(':')||[],type=parts[1]||'complete',level=parts[2]||'year',val=parts.slice(3).join(':'),title=historyLabelV60(type);
+ if(level==='day'){
+   const d=val,month=d.slice(0,7);
+   return hero(title,new Date(d+'T12:00:00').toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric',year:'numeric'}).toUpperCase())+`<button class="btn back" data-history-back-calendar="${type}|${month}">‹ BACK TO CALENDAR</button>`+(type==='complete'?allHistoryReceiptV60(d):`<section class="card history-category-day"><div class="row between"><h2>${title}</h2><span class="paid-tag">${historySummaryV60(type,d)}</span></div>${historyDay(type,d)}</section>`);
+ }
+ let month=historyMonthKeyV60();
+ if(level==='week'&&/^\d{4}-\d{2}$/.test(val))month=val;
+ else if(level==='month'&&/^\d{4}$/.test(val))month=val+'-'+historyMonthKeyV60().slice(5);
+ else if(level==='days'){const q=val.split('|');if(/^\d{4}-\d{2}$/.test(q[0]))month=q[0]}
+ return hero(title,'CHOOSE A DATE')+back('HISTORY')+historyCalendarV60(type,month);
+};
+history=function(){
+ if(state.sub?.startsWith('hist:'))return historyDrill();
+ const cats=[['complete','ALL HISTORY','DAILY RECEIPTS • EVERYTHING TOGETHER'],['routine','ROUTINE HISTORY','COMPLETION • WAKE TIME • CHANGES'],['food','FOOD HISTORY','ACTUAL FOOD • PORTIONS • MACROS'],['gym','GYM / WORKOUT HISTORY','SAVED WORKOUTS • TREADMILL • ABS • RUNS'],['body','BODY PROGRESS HISTORY','WEIGHT • MEASUREMENTS • ACTIVITY'],['goals','GOALS HISTORY','DAILY GOALS + COMPLETION'],['bible','BIBLE + FAITH HISTORY','PRAYER • DEVOTIONAL • PSALMS • REFLECTION'],['school','STUDY HISTORY','STUDY NOTES + RESOURCES'],['cooking','COOKING HISTORY','RECIPES • WEIGHTS • CONTAINERS'],['water','WATER / DAILY HEALTH HISTORY','WATER • VITAMINS • CREATINE']];
+ return hero('HISTORY','EVERY HISTORY TYPE IN ONE PLACE')+`<section class="card history-options-card"><div class="history-option-grid">${cats.map(([t,l,s])=>`<button class="history-option" data-hist="${t}"><span><b>${l}</b><small>${s}</small></span><strong>›</strong></button>`).join('')}</div></section>`;
+};
+document.addEventListener('click',e=>{
+ const shift=e.target.closest?.('[data-history-month-shift]'), date=e.target.closest?.('[data-history-date]'), backCal=e.target.closest?.('[data-history-back-calendar]');
+ if(!shift&&!date&&!backCal)return;
+ e.stopImmediatePropagation();
+ const p=(state.sub||'hist:complete:year').split(':'),type=p[1]||'complete';
+ if(date){state.sub=`hist:${type}:day:${date.dataset.historyDate}`;save();render();appTop();return}
+ if(backCal){const [t,m]=backCal.dataset.historyBackCalendar.split('|');state.sub=`hist:${t}:week:${m}`;save();render();appTop();return}
+ let month=(p[2]==='week'&&/^\d{4}-\d{2}$/.test(p[3]||''))?p[3]:historyMonthKeyV60(),dt=new Date(month+'-01T12:00:00');dt.setMonth(dt.getMonth()+Number(shift.dataset.historyMonthShift||0));state.sub=`hist:${type}:week:${localDateKey(dt).slice(0,7)}`;save();render();
+},true);
+document.addEventListener('change',e=>{
+ const y=e.target.closest?.('[data-history-year]'),m=e.target.closest?.('[data-history-month]');if(!y&&!m)return;e.stopImmediatePropagation();
+ const p=(state.sub||'hist:complete:year').split(':'),type=p[1]||'complete',card=e.target.closest('.history-browser-card'),ys=card?.querySelector('[data-history-year]')?.value||historyMonthKeyV60().slice(0,4),ms=card?.querySelector('[data-history-month]')?.value||historyMonthKeyV60().slice(5);state.sub=`hist:${type}:week:${ys}-${ms}`;save();render();
+},true);
+window.__EMMELLI_BUILD='2026-10-06-HISTORY-CALENDAR-RECEIPTS';
+
+
+
+
+window.__EMMELLI_BUILD='2026-10-06-HISTORY-CALENDAR-RECEIPTS';
+
+// ===== V62 LOCKED ACTIVE MEAL PLAN • TUE 10/06 → MON 10/12 =====
+// Surgical data correction only: preserves mature Hub/UI/history/budget/gym systems.
+(function applyLockedMealPlanV62(){
+  MEAL.week='2026-10-06';
+  MEAL.label='TUE 10/6 → MON 10/12 • LOCKED • INVENTORY-FIRST • FILLING PORTIONS';
+  MEAL.targets={calories:'~2,000',protein:'≥135 g',carbs:'220–250 g',fat:'55–70 g',fiber:'≥28 g'};
+  MEAL.gymFuel={pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles'};
+  const D=MEAL.days;
+  D['2026-10-06']={day:'TUESDAY',activity:'WORK • RUN/ABS DAY',breakfast:'ACTUAL FIRST MEAL — Creamy Pesto Chicken / fettuccine • first labeled portion • EATEN',pre:'',post:'',lunch:'AT WORK — Homemade Hamburger Helper • actual labeled 600 g container',dinner:'AFTER WORK — 1 serving ISO100 Cocoa Pebbles + 200 g blackberries + 15 g chia',snacks:'LATER — 1 additional ISO100 Cocoa Pebbles • 1 apple ONLY IF STILL HUNGRY',cook:[],prep:'NO COOKING. Work until 7 PM. Do not add another pasta/rice/oatmeal/honey-heavy meal today.',thaw:'Keep existing container labels. Tuesday Pesto portion is eaten; Saturday Pesto portion remains frozen under its original label.'};
+  D['2026-10-07']={day:'WEDNESDAY',activity:'GYM + COOK',breakfast:'2 slices Base Culture Honey Wheat Sourdough + 40 g avocado + 1 egg + 1 deli cheddar slice + 100 g blackberries',pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',lunch:'Mild Korean Beef — FULL filling portion + 100 g cooked rice + 200 g broccoli',dinner:'Protein oatmeal bowl — 1 Quaker Protein oatmeal packet + 120 mL half-and-half + 150 g blackberries + 15 g chia + 1 ISO100',snacks:'Use only if genuinely hungry after planned meals.',cook:['Mild Korean Beef — make filling protein-first portions','Chicken Alfredo with Frozen Spinach — cook and save both portions for later destinations'],prep:'COOK BOTH RECIPES. Weigh ACTUAL finished components before packing. Do NOT auto-split 50/50 if that creates weak portions; destination-day macros + filling portions control suggested grams.',thaw:'Use Wednesday proteins safely thawed/refrigerated as applicable.'};
+  D['2026-10-08']={day:'THURSDAY',activity:'RUN/ABS + COOK',breakfast:'2 slices Base Culture Honey Wheat Sourdough + 35 g cream cheese + 55 g raspberries + 20 g honey + 1 ISO100',pre:'',post:'',lunch:'Homemade Hamburger Helper — existing labeled 600 g Thursday container + 200 g broccoli',dinner:'Protein oatmeal bowl — 1 Quaker Protein oatmeal packet + 120 mL half-and-half + 150 g blackberries + 15 g chia + 1 ISO100',snacks:'No forced extras; eat to the locked macro plan and hunger.',cook:['Garlic-Butter Steak Bites with sides — make 2 filling portions'],prep:'THURSDAY HAS ONE REAL RECIPE. Do not invent a second recipe. Weigh finished steak/sides before packing and label from actual grams.',thaw:'Preserve existing Helper label. No Chicken + Veg/Broth Base exists.'};
+  D['2026-10-09']={day:'FRIDAY',activity:'GYM',breakfast:'2 slices Base Culture Honey Wheat Sourdough + 40 g avocado + 1 egg + 1 deli cheddar slice + 100 g blackberries',pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',lunch:'Chicken Alfredo with fettuccine + 150–200 g frozen spinach — FULL filling portion',dinner:'Garlic-Butter Steak Bites — FULL filling portion + 200–250 g cauliflower • add only a small/moderate rice portion if needed for day carbs',snacks:'150 g blackberries + 15 g chia',cook:[],prep:'NO COOKING.',thaw:'FRIDAY: move the existing labeled Saturday Creamy Pesto Chicken container FREEZER → FRIDGE.'};
+  D['2026-10-10']={day:'SATURDAY',activity:'REST',breakfast:'Protein oatmeal — 1 Quaker Protein oatmeal packet + 120 mL half-and-half + 20 g honey + 150 g blackberries + 15 g chia + 1 ISO100',pre:'',post:'',lunch:'Creamy Pesto Chicken — EXISTING LABELED SECOND PORTION + its cauliflower • label remains unchanged',dinner:'Garlic-Butter Steak Bites — second FULL portion + 200 g broccoli/cauliflower + moderate rice',snacks:'15 g almonds and/or additional berries ONLY IF HUNGRY / macros allow',cook:[],prep:'NO COOKING.',thaw:'Use Friday-thawed Pesto container.'};
+  D['2026-10-11']={day:'SUNDAY',activity:'REST',breakfast:'Protein oatmeal — 1 Quaker Protein oatmeal packet + 120 mL half-and-half + 20 g honey + 150 g blackberries + 15 g chia + 1 ISO100',pre:'',post:'',lunch:'Chicken Alfredo with fettuccine + 200 g frozen spinach/broccoli — second FULL portion',dinner:'Mild Korean Beef — second FULL portion + 200 g broccoli + smaller rice serving than Wednesday',snacks:'1 apple + additional blackberries only if needed',cook:[],prep:'NO COOKING.',thaw:'No forced thaw beyond labeled/safely stored food.'};
+  D['2026-10-12']={day:'MONDAY',activity:'GYM + NEW COOK CYCLE',breakfast:'2 slices Base Culture Honey Wheat Sourdough + 35 g cream cheese + 55 g raspberries + 20 g honey + 1 ISO100',pre:'',post:'',lunch:'ONE frozen Homemade Hamburger Helper container at its ACTUAL LABELED GRAM WEIGHT + 200 g broccoli',dinner:'NEXT MONDAY COOK-CYCLE DINNER — choose from the next inventory-first plan; do not invent or pre-deduct ingredients',snacks:'150–200 g blackberries + 15 g chia • add ISO100 if the new dinner does not independently bring protein to ≥135 g',cook:['NEXT MONDAY COOK CYCLE — TO BE SET FROM SAFE LEFTOVERS + LIVE INVENTORY FIRST'],prep:'Before planning/buying: check safe leftover containers and perishables first. Incorporate safe leftovers where macros/expiration fit; buy/cook only true shortages.',thaw:'Use only the actual labeled frozen Helper portion assigned for lunch.'};
+
+  // Approved projected daily macro targets. Actual logged food/container nutrition replaces these estimates.
+  Object.assign(DAY_MACRO_PLAN,{
+    '2026-10-06':{calories:2025,protein:148,carbs:238,fat:65,fiber:30,note:'ESTIMATE • actual Pesto + 600 g Helper + planned ISO100/berries/chia. Actual logged nutrition replaces estimate.'},
+    '2026-10-07':{calories:2000,protein:142,carbs:233,fat:63,fiber:30,note:'ESTIMATE • filling protein-first Korean Beef lunch; Alfredo is cooked but saved.'},
+    '2026-10-08':{calories:1975,protein:142,carbs:235,fat:62,fiber:31,note:'ESTIMATE • 600 g Helper remains filling; Thursday cooking is Steak only.'},
+    '2026-10-09':{calories:2025,protein:152,carbs:230,fat:65,fiber:29,note:'ESTIMATE • full Alfredo + full Steak; rice stays small/moderate.'},
+    '2026-10-10':{calories:2025,protein:148,carbs:233,fat:65,fiber:30,note:'ESTIMATE • existing labeled Pesto lunch is preserved.'},
+    '2026-10-11':{calories:2025,protein:148,carbs:235,fat:63,fiber:31,note:'ESTIMATE • Alfredo + Korean Beef with smaller rice serving.'},
+    '2026-10-12':{status:'DINNER PENDING NEXT COOK CYCLE',note:'Breakfast + labeled frozen Helper lunch are locked. Final day macros complete after the next Monday dinner is selected from safe leftovers/live inventory.'}
+  });
+
+  // Current recipe truth for recipes still relevant to this cycle.
+  if(MEAL.recipes){
+    delete MEAL.recipes['Chicken + Vegetable/Broth Base'];
+    delete MEAL.recipes['Creamy Garlic-Parmesan Chicken'];
+    MEAL.recipes['Creamy Pesto Chicken']={...(MEAL.recipes['Creamy Pesto Chicken']||{}),sourceLabel:'MONDAY 10/05 ACTUAL • LOCKED',ingredients:['354 g chicken breast ACTUAL','5 g olive oil ACTUAL','seasonings as actually used','ACTUAL sauce ingredients from saved cooking record','200 g Great Value fettuccine dry ACTUAL','337 g frozen cauliflower ACTUAL → 319 g cooked'],weigh:'FINISHED MAIN BATCH 1,023 G ACTUAL • packed into the two existing labeled portions. Preserve labels; first portion eaten Tue 10/6, second remains Sat 10/10 lunch.'};
+    MEAL.recipes['Saucy Homemade Hamburger Helper']={...(MEAL.recipes['Saucy Homemade Hamburger Helper']||{}),sourceLabel:'MONDAY 10/05 ACTUAL RESCUED BATCH • LOCKED',ingredients:['340 g 80/20 ground beef ACTUAL','3 g olive oil','75 g white onion','6 g minced garlic','10 g flour + 2 tbsp additional flour ESTIMATE','115 mL beef broth — USED UP','258 mL Fairlife milk total — 209 mL older/open + 49 mL whole','15 g Dijon','15 g Worcestershire','1 g paprika','380 g Great Value elbow macaroni dry ACTUAL — USED UP','340 g frozen corn ACTUAL','40 g Daisy sour cream','salt + pepper as actually used'],weigh:'FINISHED BATCH 2,179 G ACTUAL. Existing 600 G Tuesday + 600 G Thursday labels stay unchanged. Frozen remainder stays under ACTUAL packed labels; never force theoretical weights.'};
+    MEAL.recipes['Mild Korean Beef']={...(MEAL.recipes['Mild Korean Beef']||{}),sourceLabel:'WEDNESDAY CURRENT PLAN • USE ACTUAL PURCHASED BEEF',ingredients:(MEAL.recipes['Mild Korean Beef']?.ingredients||[]).map(x=>/400 g 93\/7 ground beef/i.test(x)?'400 g 80/20 ground beef — current purchased beef':x)};
+    MEAL.recipes['Chicken Alfredo with Frozen Spinach']={...(MEAL.recipes['Chicken Alfredo with Frozen Spinach']||{}),sourceLabel:'WEDNESDAY CURRENT PLAN • INVENTORY-FIRST',ingredients:(MEAL.recipes['Chicken Alfredo with Frozen Spinach']?.ingredients||[]).map(x=>/400 g chicken/i.test(x)?'454 g chicken — current allocation':/40 g heavy cream/i.test(x)?'NO HEAVY CREAM — OUT • use current inventory-based sauce correction when cooking':x)};
+    MEAL.recipes['Garlic-Butter Steak Bites with Rice and Cauliflower']={...(MEAL.recipes['Garlic-Butter Steak Bites with Rice and Cauliflower']||{}),sourceLabel:'THURSDAY CURRENT PLAN • ACTUAL PURCHASE',ingredients:(MEAL.recipes['Garlic-Butter Steak Bites with Rice and Cauliflower']?.ingredients||[]).map(x=>/400 g sirloin/i.test(x)?'~454 g / 1 lb purchased stew meat — actual Thursday protein':x)};
+  }
+  if(typeof RECIPE_COMPONENTS==='object'&&RECIPE_COMPONENTS){delete RECIPE_COMPONENTS['Chicken + Vegetable/Broth Base'];delete RECIPE_COMPONENTS['Creamy Garlic-Parmesan Chicken'];}
+
+  // Destination assignments: preserve already-made labels; create new labels only after actual cooked weights Wed/Thu.
+  const prior=cookAssignments;
+  cookAssignments=function(name){
+    const A={
+      'Creamy Pesto Chicken':[{date:'2026-10-06',meal:'FIRST MEAL • EATEN',storage:'EATEN'},{date:'2026-10-10',meal:'LUNCH',storage:'FREEZER • THAW FRI 10/09'}],
+      'Saucy Homemade Hamburger Helper':[{date:'2026-10-06',meal:'WORK MEAL',storage:'600 G • AT WORK • PLANNED — NOT YET EATEN'},{date:'2026-10-08',meal:'LUNCH',storage:'600 G • EXISTING LABEL'}],
+      'Mild Korean Beef':[{date:'2026-10-07',meal:'LUNCH',storage:'FRIDGE'},{date:'2026-10-11',meal:'DINNER',storage:'FREEZER'}],
+      'Chicken Alfredo with Frozen Spinach':[{date:'2026-10-09',meal:'LUNCH',storage:'FRIDGE'},{date:'2026-10-11',meal:'LUNCH',storage:'FREEZER'}],
+      'Garlic-Butter Steak Bites with Rice and Cauliflower':[{date:'2026-10-09',meal:'DINNER',storage:'FRIDGE'},{date:'2026-10-10',meal:'DINNER',storage:'FRIDGE/FREEZER AS SAFE'}]
+    }; return A[name]||prior(name)||[];
+  };
+
+  // Live inventory hard corrections. Do not invent balances when starting amount is unknown.
+  state.inventory=state.inventory||{};
+  const cats=['Fridge','Freezer','Deep Freezer','Pantry','Seasonings'];
+  const rows=()=>cats.flatMap(cat=>(state.inventory[cat]||[]).map(x=>({cat,x})));
+  function invSet(rx,qty,notes,catFallback='Pantry'){
+    let hits=rows().filter(z=>rx.test(String(z.x.name||'')));
+    if(hits.length)hits.forEach(z=>{z.x.qty=qty;z.x.notes=notes});
+    else {state.inventory[catFallback]=state.inventory[catFallback]||[];state.inventory[catFallback].push({name:notes.split(' • ')[0],qty,notes});}
+  }
+  invSet(/elbow macaroni/i,'0 — OUT','Great Value elbow macaroni • MON 10/05 ACTUAL • 380 G USED • OUT');
+  invSet(/fettuccine/i,'~278 g','Great Value fettuccine • 478 G START − 200 G MON ACTUAL');
+  invSet(/spaghetti/i,'466 g','Great Value spaghetti • CURRENT CONFIRMED');
+  invSet(/jumbo.*shell/i,'205 g','Great Value jumbo pasta shells • CURRENT CONFIRMED');
+  invSet(/beef broth/i,'0 — OUT','Beef broth • 115 ML USED MON • OUT','Fridge');
+  invSet(/heavy (whipping )?cream/i,'0 — OUT','Heavy whipping cream • CURRENT CONFIRMED OUT','Fridge');
+  invSet(/^Eggs$/i,'3','Eggs • 3 REMAIN AFTER MONDAY BREAKFAST','Fridge');
+  invSet(/white onion/i,'4 whole','White onions • EXACT CURRENT PHYSICAL COUNT • NO PARTIAL PIECES','Pantry');
+  invSet(/Daisy.*sour cream|sour cream/i,'~357 g','Daisy sour cream • 40 G USED MON • EXP 12/07/2026','Fridge');
+  invSet(/raw honey|honey/i,'~852 g','Great Value Raw Honey • 55 G USED MON • expected remainder unless later use is logged','Pantry');
+  invSet(/broccoli/i,'~510 g before new planned use','Frozen broccoli • last confirmed live amount; deduct only as actually used','Freezer');
+  invSet(/cauliflower/i,'ACTUAL REMAINING FROM LIVE BAG/INVENTORY','Frozen cauliflower • 337 G USED MON → 319 G COOKED • packaging/tare is not food weight','Freezer');
+
+  MEAL.auditV62={status:'LOCKED ACTIVE PLAN • TUE 10/06 → MON 10/12',rules:['EXISTING PESTO + HELPER LABELS DO NOT CHANGE','FILLING PORTIONS • PROTEIN FIRST • STARCH SECOND','WED COOK: KOREAN BEEF + CHICKEN ALFREDO','THU COOK: GARLIC-BUTTER STEAK BITES ONLY — DO NOT INVENT A SECOND RECIPE','WEIGH FINISHED COMPONENTS BEFORE NEW LABELS','SAFE LEFTOVERS ROLL FORWARD AND ARE USED BEFORE NEW GROCERIES','ACTUAL EATING/COOKING OVERRIDES PLANNED ESTIMATES','INVENTORY DEDUCTS ONLY WHEN ACTUALLY USED/EATEN/DISCARDED'],note:'Current approved plan. Projected macros are estimates until actual cooked weights/container macros are saved.'};
+  window.__EMMELLI_BUILD='2026-10-06-MOST-UPDATED-FULLY-CHECKED-V63';
+  save();
+})();
+
+// Meal-plan header correction: the old generic EXACTLY-2-EVERY-COOK-DAY rule is no longer authoritative for this locked week.
+const mealPlanScreenV62Base=mealPlanScreen;
+mealPlanScreen=function(){
+  let html=mealPlanScreenV62Base();
+  html=html.replace(/EXACTLY 2 RECIPES PER MON\/WED\/THU COOK[^<]*/,'WED: 2 REAL RECIPES • THU: 1 REAL RECIPE • MON 10/12: NEXT CYCLE SET FROM SAFE LEFTOVERS + LIVE INVENTORY • FILLING PORTIONS • ACTUAL WEIGHTS BEFORE LABELS');
+  return html;
+};
+
+
+// === V73 FINAL MASTER DATA SAFETY ===
+// Current reusable gym-fuel truth. Historical dated meal records remain historical and are not used as current defaults.
+window.__EMMELLI_CURRENT_NUTRITION_POLICY=Object.freeze({
+  calories:'~2,000',protein:'≥135 g',carbs:'220–250 g',fat:'55–70 g',fiber:'≥28 g',
+  saturatedFat:'≤13 g/day when feasible',
+  pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',
+  principle:'ESTIMATED PLAN AROUND TARGETS; ACTUAL PRODUCT + INGREDIENT + FINISHED COMPONENT + PACKED CONTAINER WEIGHTS REPLACE ESTIMATES.'
+});
+window.__EMMELLI_MASTER='V73 • FINAL LAB-ALIGNED CLEAN MASTER';
+
+// === 2026-10-06 LOCKED LDL-CONSCIOUS MEAL PLAN + TUESDAY ACTUALS ===
+// Newest-wins surgical override. Preserves mature Hub behavior and existing saved data.
+(function(){
+  const D=MEAL.days;
+  D['2026-10-06']={day:'TUESDAY',activity:'WORK • RUN/ABS DAY',breakfast:'ACTUAL — Creamy Pesto Chicken / fettuccine • first labeled container • EATEN',pre:'',post:'',lunch:'ACTUAL — Homemade Hamburger Helper • 600 g labeled work container • EATEN',dinner:'AFTER WORK — 200 g blackberries + 15 g chia + 1 serving Dymatize ISO100 Cocoa Pebbles',snacks:'1 apple ONLY IF STILL HUNGRY • additional ISO100 only if actual protein is short',cook:[],prep:'NO COOKING. TODAY SHOPPING: ROMAINE LETTUCE + JPAN GINGER DRESSING + CROUTONS + FRESH CILANTRO. Black beans, pinto beans and Skinnygirl Caesar are already in inventory.',thaw:'Saturday Creamy Pesto Chicken portion remains frozen under its original label • THAW FRI 10/09.'};
+  D['2026-10-07']={day:'WEDNESDAY',activity:'GYM + COOK',breakfast:'Avocado Egg Toast — 1 Base Culture Honey Wheat Sourdough slice + 40 g avocado + lime juice + salt + 1 egg + 150 g blackberries',pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',lunch:'Cilantro-Lime Beef + Black Bean Rice Bowl — filling portion • smaller 80/20 beef portion + Goya black beans + basmati rice + avocado + cheese + lime + cilantro + creamy sauce + incorporated vegetable',dinner:'Chicken Alfredo — filling portion • chicken + fettuccine + frozen spinach + garlic + Parmesan + lighter creamy sauce using current inventory • NO heavy cream',snacks:'Only if genuinely hungry / actual macros require it.',cook:['Cilantro-Lime Beef + Black Bean Rice Bowls','Chicken Alfredo'],prep:'COOK BOTH RECIPES. Weigh ACTUAL finished components before packing. Actual ingredient weights + finished weights determine container macros and suggested grams.',thaw:'Use safely refrigerated/thawed Wednesday proteins as applicable.'};
+  D['2026-10-08']={day:'THURSDAY',activity:'RUN/ABS + COOK',breakfast:'Cream Cheese Raspberry Toast — 1 sourdough slice + 35 g cream cheese + 55 g raspberries + 20 g honey + 1 ISO100',pre:'',post:'',lunch:'Homemade Hamburger Helper — existing labeled 600 g Thursday container',dinner:'BIG Chicken Caesar — romaine + substantial seasoned chicken + Skinnygirl Caesar + Parmesan + croutons + avocado • FULL DINNER-SIZED SALAD',snacks:'Only if genuinely hungry / actual macros require it.',cook:['Chicken Caesar components','Garlic-Lemon Steak Bites + Seasoned Rice'],prep:'COOK / PREP BOTH THURSDAY ITEMS. Keep Caesar components fresh/separate as needed. Weigh actual steak/rice and cooked components before packing.',thaw:'Preserve the existing 600 g Helper label.'};
+  D['2026-10-09']={day:'FRIDAY',activity:'GYM',breakfast:'Avocado Egg Toast — 1 sourdough slice + 40 g avocado + lime juice + salt + 1 egg + 150 g blackberries',pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',lunch:'Cilantro-Lime Beef + Black Bean Rice Bowl — second filling portion',dinner:'JPAN Ginger Steak Salad + Rice — large salad + steak + avocado + crunchy topping + ACTUAL JPAN ginger dressing + basmati rice',snacks:'Only if genuinely hungry / actual macros require it.',cook:[],prep:'NO COOKING.',thaw:'MOVE EXISTING LABELED SATURDAY CREAMY PESTO CHICKEN CONTAINER FREEZER → FRIDGE.'};
+  D['2026-10-10']={day:'SATURDAY',activity:'REST',breakfast:'Protein Oatmeal — 1 Quaker Protein packet + 120 mL Fairlife + 20 g honey + 50 g blackberries + 15 g chia',pre:'',post:'',lunch:'Creamy Pesto Chicken — EXISTING LABELED SECOND PORTION + its cauliflower • label remains SAT 10/10 LUNCH • thawed Friday',dinner:'Loaded Mexican Steak Bowl — Thursday Garlic-Lemon Steak Bites + basmati rice + black/pinto beans + avocado + cheese + cilantro + lime + creamy sauce',snacks:'Only if genuinely hungry / actual macros require it.',cook:[],prep:'NO COOKING.',thaw:'Use Friday-thawed Pesto container.'};
+  D['2026-10-11']={day:'SUNDAY',activity:'REST',breakfast:'Protein Oatmeal — 1 Quaker Protein packet + 120 mL Fairlife + 20 g honey + 50 g blackberries + 15 g chia',pre:'',post:'',lunch:'Chicken Alfredo — second filling portion',dinner:'BIG JPAN Ginger Salad Bowl — large salad + black beans + avocado + basmati rice + crunchy topping + ACTUAL JPAN ginger dressing • NO CHICKEN • modest cheese only if desired / macros allow',snacks:'Only if genuinely hungry / actual macros require it.',cook:[],prep:'NO COOKING.',thaw:'Use only safely stored/labeled food.'};
+  D['2026-10-12']={day:'MONDAY',activity:'GYM + NEW COOK CYCLE',breakfast:'Cream Cheese Raspberry Toast — 1 sourdough slice + 35 g cream cheese + 55 g raspberries + 20 g honey',pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',lunch:'Garlic-Lemon Steak Bites + Seasoned Rice — filling portion from Thursday cooking',dinner:'FIRST MEAL FROM MONDAY NEW COOK CYCLE — set from next inventory-first plan; do not pre-deduct ingredients',snacks:'Only if genuinely hungry / actual macros require it.',cook:['NEXT MONDAY COOK CYCLE — choose 2 recipes from safe leftovers + live inventory first'],prep:'Start the next cycle inventory-first. Remaining 979 g frozen Helper stays frozen unless deliberately scheduled later.',thaw:'Follow actual labels and safe storage.'};
+
+  // Do not show obsolete fake precision. New meals are calculated from actual ingredient/cooked/container weights.
+  Object.assign(DAY_MACRO_PLAN,{
+    '2026-10-06':{status:'ACTUALS IN PROGRESS',note:'Pesto container + 600 g Helper are confirmed EATEN. Remaining food is blackberries + chia + ISO100; actual nutrition replaces projections.'},
+    '2026-10-07':{status:'ACTUAL COOK WEIGHTS REQUIRED',note:'TARGET ~2,000 kcal • ≥135 g protein • 220–250 g carbs • 55–70 g fat • ≥28 g fiber • LDL-conscious saturated fat. Final totals calculate from actual Wednesday cooking weights.'},
+    '2026-10-08':{status:'ACTUALS REQUIRED',note:'Existing 600 g Helper is fixed. Keep the rest of the day LDL-conscious; actual container + Caesar amounts determine final totals.'},
+    '2026-10-09':{status:'ACTUAL PORTIONS REQUIRED',note:'TARGET ~2,000 kcal • ≥135 P • 220–250 C • 55–70 F • ≥28 fiber • LDL-conscious saturated fat.'},
+    '2026-10-10':{status:'ACTUAL PORTIONS REQUIRED',note:'Existing Pesto container stays exact; Thursday steak-bowl actual weights complete the day.'},
+    '2026-10-11':{status:'ACTUAL PORTIONS REQUIRED',note:'Chicken Alfredo actual container + JPAN bowl actual ingredients determine final totals.'},
+    '2026-10-12':{status:'DINNER PENDING NEXT COOK CYCLE',note:'Breakfast, gym PRE/POST and steak lunch are locked; dinner comes from the next inventory-first cycle.'}
+  });
+
+  // Current recipe naming / destinations for this locked cycle.
+  if(MEAL.recipes){
+    MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']={sourceLabel:'WED 10/07 • LOCKED LDL-CONSCIOUS PLAN',ingredients:['80/20 ground beef — use smaller measured portion','Goya black beans — measured actual amount','Basmati rice — measured actual amount','Avocado — measured actual amount','Cheese — measured actual amount','Lime juice','Fresh cilantro','Creamy sauce — measure actual ingredients','Incorporated vegetable — use live inventory'],weigh:'WEIGH FINISHED COMPONENTS / ACTUAL INGREDIENTS BEFORE PACKING. Filling portion first; macros from actuals.'};
+    MEAL.recipes['Chicken Alfredo']={sourceLabel:'WED 10/07 • LOCKED LDL-CONSCIOUS PLAN',ingredients:['Chicken breast — actual measured amount','Great Value fettuccine — actual dry amount','Frozen spinach — actual amount','Garlic','Kraft Parmesan — measured amount','Fairlife / current lower-saturated-fat sauce ingredients — measured','NO HEAVY CREAM — OUT'],weigh:'WEIGH ACTUAL FINISHED COMPONENTS BEFORE PACKING. Preserve creamy texture without heavy-cream saturated-fat stacking.'};
+    MEAL.recipes['Garlic-Lemon Steak Bites + Seasoned Rice']={sourceLabel:'THU 10/08 • LOCKED PLAN',ingredients:['Purchased stew/steak meat — actual measured amount','Garlic','Lemon / lime as used','Olive oil — measured','Seasonings','Basmati rice — measured actual amount'],weigh:'WEIGH FINISHED STEAK + RICE BEFORE PACKING.'};
+  }
+  if(typeof RECIPE_COMPONENTS==='object'&&RECIPE_COMPONENTS){
+    RECIPE_COMPONENTS['Cilantro-Lime Beef + Black Bean Rice Bowl']=[{id:'main',label:'BEEF + BLACK BEANS',ix:[0,1,4,5,6,7,8]},{id:'rice',label:'RICE',ix:[2]},{id:'avocado',label:'AVOCADO',ix:[3]}];
+    RECIPE_COMPONENTS['Chicken Alfredo']=[{id:'main',label:'CHICKEN + ALFREDO SAUCE',ix:[0,2,3,4,5,6]},{id:'pasta',label:'FETTUCCINE',ix:[1]}];
+    RECIPE_COMPONENTS['Garlic-Lemon Steak Bites + Seasoned Rice']=[{id:'main',label:'GARLIC-LEMON STEAK BITES',ix:[0,1,2,3,4]},{id:'rice',label:'SEASONED RICE',ix:[5]}];
+  }
+  const priorAssignmentsV64=cookAssignments;
+  cookAssignments=function(name){
+    const A={
+      'Creamy Pesto Chicken':[{date:'2026-10-06',meal:'FIRST MEAL • EATEN',storage:'EATEN'},{date:'2026-10-10',meal:'LUNCH',storage:'FREEZER • THAW FRI 10/09'}],
+      'Saucy Homemade Hamburger Helper':[{date:'2026-10-06',meal:'WORK MEAL • EATEN',storage:'600 G • EATEN'},{date:'2026-10-08',meal:'LUNCH',storage:'600 G • EXISTING LABEL'}],
+      'Cilantro-Lime Beef + Black Bean Rice Bowl':[{date:'2026-10-07',meal:'LUNCH',storage:'FRIDGE'},{date:'2026-10-09',meal:'LUNCH',storage:'FRIDGE'}],
+      'Chicken Alfredo':[{date:'2026-10-07',meal:'DINNER',storage:'FRIDGE'},{date:'2026-10-11',meal:'LUNCH',storage:'FREEZER / THAW SAFELY'}],
+      'Garlic-Lemon Steak Bites + Seasoned Rice':[{date:'2026-10-10',meal:'DINNER • LOADED MEXICAN STEAK BOWL',storage:'FRIDGE/FREEZER AS SAFE'},{date:'2026-10-12',meal:'LUNCH',storage:'FRIDGE/FREEZER AS SAFE'}]
+    }; return A[name]||priorAssignmentsV64(name)||[];
+  };
+
+  // Record the user's explicit Tuesday actuals once, without inventing nutrition.
+  state.foodHistory=state.foodHistory||[];
+  function hasTueActual(rx){return state.foodHistory.some(x=>String(x.date||'').slice(0,10)==='2026-10-06'&&(x.type==='ATE'||x.type==='ATE CONTAINER')&&rx.test(String(x.name||x.recipe||x.container||'')))}
+  function consumeNamedContainer(rx,label,amount){
+    if(hasTueActual(rx))return;
+    let i=(state.inventory?.Containers||[]).findIndex(c=>rx.test(String(c.recipe||c.name||''))&&(String(c.eat||c.plannedDate||'').slice(0,10)==='2026-10-06'||rx.test(label)));
+    let c=i>=0?state.inventory.Containers[i]:null;
+    let log={id:'locked-actual-20261006-'+label.toLowerCase().replace(/[^a-z0-9]+/g,'-'),date:'2026-10-06',type:'ATE CONTAINER',name:label,recipe:c?.recipe||label,mealSlot:rx.test('Helper')?'lunch':'breakfast',amount:amount||'',macros:c?.macros?structuredClone(c.macros):null,componentReceiptV40:c?containerReceiptV40(c):[],containerSnapshotV40:c?structuredClone(c):null,lockedUserConfirmed:true};
+    state.foodHistory.push(log);
+    if(i>=0)state.inventory.Containers.splice(i,1);
+  }
+  consumeNamedContainer(/Creamy Pesto Chicken/i,'Creamy Pesto Chicken','EXISTING LABELED PORTION');
+  consumeNamedContainer(/Hamburger Helper/i,'Homemade Hamburger Helper','600 g');
+
+  // Restore the two physically confirmed current containers after Tuesday's eaten portions are removed.
+  // Do not invent macro precision: Monday's saved Pesto sauce composition was not fully confirmed here,
+  // and the Helper remainder must follow physical labels rather than a theoretical split.
+  state.inventory=state.inventory||{};
+  state.inventory.Containers=state.inventory.Containers||[];
+  function ensureLockedContainerV75(id,record){
+    const at=state.inventory.Containers.findIndex(x=>x.id===id);
+    if(at<0)state.inventory.Containers.push({id,...record});
+  }
+  ensureLockedContainerV75('locked-pesto-sat-20261010',{
+    name:'Creamy Pesto Chicken',recipe:'Creamy Pesto Chicken',qty:'~511 g main portion • cauliflower component saved with meal',count:1,storage:'FREEZER',eat:'2026-10-10',plannedDate:'2026-10-10',meal:'LUNCH',created:'2026-10-05',actualPackedGrams:511,
+    labelRows:['CREAMY PESTO CHICKEN','SAT 10/10 LUNCH','~511 G MAIN PORTION','FREEZER','THAW FRI 10/9'],
+    notes:'CONFIRMED PHYSICAL CURRENT CONTAINER • original label preserved • main batch finished at 1,023 g and this was the approximately 511 g second portion. Cauliflower was a separately weighed component; no invented split grams.',
+    macros:null,nutritionComplete:false,lockedUserConfirmed:true
+  });
+  ensureLockedContainerV75('locked-helper-thu-20261008',{
+    name:'Homemade Hamburger Helper',recipe:'Saucy Homemade Hamburger Helper',qty:'600 g',count:1,storage:'FREEZER',eat:'2026-10-08',plannedDate:'2026-10-08',meal:'LUNCH',created:'2026-10-05',actualPackedGrams:600,
+    labelRows:['HOMEMADE HAMBURGER HELPER','THU 10/8 LUNCH','600 G','FREEZER'],
+    notes:'CONFIRMED PHYSICAL CURRENT CONTAINER • 600 g Thursday label. Separate additional frozen Helper remainder totals 979 g across its actual physical labels; no theoretical 487/492 split is created.',
+    macros:null,nutritionComplete:false,lockedUserConfirmed:true
+  });
+
+  // Grocery status from newest explicit inventory confirmation.
+  state.inventory=state.inventory||{};
+  state.inventory.Pantry=state.inventory.Pantry||[];
+  state.inventory.Fridge=state.inventory.Fridge||[];
+  function upsertInv(name,qty,notes,cat='Pantry'){
+    const all=['Fridge','Freezer','Deep Freezer','Pantry','Seasonings']; let hit=null;
+    for(const c of all){const x=(state.inventory[c]||[]).find(z=>String(z.name||'').toLowerCase()===name.toLowerCase());if(x){hit=x;break}}
+    if(hit){hit.qty=qty;hit.notes=notes}else{state.inventory[cat]=state.inventory[cat]||[];state.inventory[cat].push({name,qty,notes})}
+  }
+  upsertInv('Romaine lettuce','0 — OUT • BUY TODAY','Newest confirmation 10/06 • needed for Thu/Fri/Sun salads','Fridge');
+  upsertInv('JPAN ginger dressing','0 — OUT • BUY TODAY','Newest confirmation 10/06 • actual JPAN ginger dressing for Fri/Sun','Fridge');
+  upsertInv('Croutons','0 — OUT • BUY TODAY','Newest confirmation 10/06 • needed for Caesar / crunchy salad topping','Pantry');
+  upsertInv('Fresh cilantro','0 — OUT • BUY TODAY','Newest confirmation 10/06 • needed for bowls','Fridge');
+  upsertInv('Skinnygirl Caesar Dressing','HAVE','Confirmed current bottle • use for Caesar meals','Fridge');
+  upsertInv('Goya Black Beans','3 × 439 g cans • HAVE','Confirmed inventory • no later deduction found','Pantry');
+  upsertInv('Simply Nature Pinto Beans','1 × ~15.5 oz can • HAVE','Confirmed inventory • no later deduction found','Pantry');
+
+  MEAL.auditV64={status:'LOCKED ACTIVE LDL-CONSCIOUS PLAN • TUE 10/06 → MON 10/12',rules:['TUE 10/06 PESTO + 600 G HELPER CONFIRMED EATEN','NO SAME ENTRÉE BACK-TO-BACK','AVOCADO EGG TOAST ALWAYS INCLUDES 40 G AVOCADO + LIME JUICE + SALT','WED/FRI GYM PRE = 100 G BANANA + 20 G HONEY • POST = 1 ISO100','FILLING FOOD IS A HARD REQUIREMENT','RED MEAT ALLOWED BUT REDUCED / SPACED • LDL-CONSCIOUS SATURATED-FAT STACKING','USE BLACK/PINTO BEANS ALREADY OWNED','SKINNYGIRL CAESAR ALREADY OWNED','BUY TODAY: ROMAINE + JPAN GINGER DRESSING + CROUTONS + CILANTRO','979 G REMAINING HELPER STAYS FROZEN','ACTUAL COOKED WEIGHTS / PACKED GRAMS OVERRIDE ESTIMATES'],note:'Newest approved plan. Actual nutrition is calculated from exact labels + actual cooked/container weights; do not display invented precision.'};
+  window.__EMMELLI_BUILD='2026-10-06-LDL-MEAL-PLAN-LOCKED-V64';
+  save();
+})();
+
+// Header reflects newest locked cooking plan.
+const mealPlanScreenV64Base=mealPlanScreen;
+mealPlanScreen=function(){
+  let html=mealPlanScreenV64Base();
+  html=html.replace(/WED: 2 REAL RECIPES[^<]*/,'WED: BEEF + BLACK BEAN BOWLS + CHICKEN ALFREDO • THU: CHICKEN CAESAR COMPONENTS + GARLIC-LEMON STEAK BITES/RICE • ACTUAL WEIGHTS BEFORE LABELS');
+  return html;
+};
+
+
+// === V65 — PERMANENT CURRENT-WEEK CLEANUP / CONSISTENCY PASS ===
+// Keep historical records, but remove superseded meal-plan data from active planning surfaces.
+(function(){
+  // Superseded active recipes must not reappear in current cooking / recipe pickers.
+  if(MEAL && MEAL.recipes){
+    delete MEAL.recipes['Mild Korean Beef'];
+    delete MEAL.recipes['Garlic-Butter Steak Bites'];
+    delete MEAL.recipes['Chicken + Vegetable/Broth Base'];
+  }
+  if(typeof RECIPE_COMPONENTS==='object' && RECIPE_COMPONENTS){
+    delete RECIPE_COMPONENTS['Mild Korean Beef'];
+    delete RECIPE_COMPONENTS['Garlic-Butter Steak Bites'];
+    delete RECIPE_COMPONENTS['Chicken + Vegetable/Broth Base'];
+  }
+
+  // Old projected macro numbers belonged to the superseded plan. Never present them as current.
+  if(typeof DAY_MACRO_PLAN==='object' && DAY_MACRO_PLAN){
+    Object.assign(DAY_MACRO_PLAN,{
+      '2026-10-06':{status:'ACTUALS IN PROGRESS',note:'Pesto + 600 g Helper confirmed eaten. Remaining food logs from actual intake; no invented precision.'},
+      '2026-10-07':{status:'ACTUAL COOK WEIGHTS REQUIRED',note:'TARGET ~2,000 kcal • ≥135 P • 220–250 C • 55–70 F • ≥28 fiber • LDL-conscious saturated fat. Calculate from exact labels + actual Wednesday cooking weights.'},
+      '2026-10-08':{status:'ACTUALS REQUIRED',note:'Existing 600 g Helper is fixed. Caesar + other intake use actual amounts; keep remaining saturated fat low.'},
+      '2026-10-09':{status:'ACTUAL PORTIONS REQUIRED',note:'Use actual beef-bowl + JPAN steak-salad/rice amounts. Target macros + LDL-conscious saturated fat.'},
+      '2026-10-10':{status:'ACTUAL PORTIONS REQUIRED',note:'Existing labeled Pesto is fixed; Mexican steak bowl uses actual packed weights.'},
+      '2026-10-11':{status:'ACTUAL PORTIONS REQUIRED',note:'Chicken Alfredo + JPAN bowl use actual ingredients/portions.'},
+      '2026-10-12':{status:'DINNER PENDING NEXT COOK CYCLE',note:'Breakfast + gym PRE/POST + steak/rice lunch locked. Dinner comes from the next inventory-first cycle.'}
+    });
+  }
+
+  // Thursday steak cook supplies ALL THREE later steak uses: Fri salad, Sat Mexican bowl, Mon lunch.
+  const assignmentsBeforeV65=cookAssignments;
+  cookAssignments=function(name){
+    if(name==='Garlic-Lemon Steak Bites + Seasoned Rice') return [
+      {date:'2026-10-09',meal:'DINNER • JPAN GINGER STEAK SALAD + RICE',storage:'FRIDGE'},
+      {date:'2026-10-10',meal:'DINNER • LOADED MEXICAN STEAK BOWL',storage:'FRIDGE'},
+      {date:'2026-10-12',meal:'LUNCH • GARLIC-LEMON STEAK BITES + SEASONED RICE',storage:'FREEZER • THAW SAFELY FOR MONDAY'}
+    ];
+    return assignmentsBeforeV65(name)||[];
+  };
+  MEAL.days['2026-10-08'].prep='COOK / PREP BOTH THURSDAY ITEMS. CHICKEN CAESAR COMPONENTS ARE FOR THURSDAY DINNER. GARLIC-LEMON STEAK + RICE MUST MAKE 3 ACTUAL PORTIONS: FRI DINNER, SAT DINNER, MON LUNCH. Weigh actual finished steak/rice before packing; actual grams determine macros.';
+
+  // Keep the newest audit as the single current authority.
+  MEAL.auditV62=MEAL.auditV64;
+  MEAL.auditV65={...MEAL.auditV64,status:'PERMANENT LOCKED ACTIVE LDL-CONSCIOUS PLAN • TUE 10/06 → MON 10/12',rules:[...MEAL.auditV64.rules,'THU GARLIC-LEMON STEAK/RICE = 3 ACTUAL PORTIONS • FRI/SAT/MON','SUPERSEDED KOREAN BEEF / GARLIC-BUTTER STEAK / BROTH-BASE RECIPES REMOVED FROM ACTIVE PLAN','OLD PROJECTED MACROS ARE NOT CURRENT • ACTUAL LABELS + WEIGHTS DRIVE RECEIPTS'],note:'V65 permanent current-week authority. Historical logs remain intact; superseded planning data cannot override this plan.'};
+  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-LDL-LOCKED-V65';
+  save();
+})();
+
+// Show the one-time supplemental Tuesday shopping list inside Food instead of relying on the Monday-only grocery screen.
+const mealPlanScreenV65Base=mealPlanScreen;
+mealPlanScreen=function(){
+  let html=mealPlanScreenV65Base();
+  if(state.day===1){
+    const card=`<section class="card soft"><h2>TODAY'S SUPPLEMENTAL GROCERY</h2><p><b>BUY:</b> ROMAINE LETTUCE • JPAN GINGER DRESSING • CROUTONS • FRESH CILANTRO</p><p class="muted">DO NOT REBUY: SKINNYGIRL CAESAR • GOYA BLACK BEANS (3 CANS) • PINTO BEANS (1 CAN). Purchase checkoffs should flow to Inventory only when actually bought.</p></section>`;
+    const anchor='<section class="card';
+    const i=html.indexOf(anchor);
+    html=i>=0?html.slice(0,i)+card+html.slice(i):card+html;
+  }
+  return html;
+};
+
+render(); // final startup render after history redesign
+
+
+
+/* V66 PERMANENT COOKING AUDIT — current LDL plan + minimal-entry component workflow */
+(function(){
+  // Thursday's first cook item must be a real recipe, not a label-only placeholder.
+  MEAL.recipes=MEAL.recipes||{};
+  MEAL.recipes['Chicken Caesar components']={sourceLabel:'THU 10/08 • LOCKED LDL-CONSCIOUS PLAN',ingredients:[
+    'Chicken breast — use actual measured amount','Romaine lettuce — use actual amount','Skinnygirl Caesar Dressing — use actual amount','Kraft Parmesan — use actual amount','Croutons — use actual amount','Avocado — use actual amount'
+  ],weigh:'KEEP SALAD COMPONENTS SEPARATE UNTIL EATING. RECORD ACTUAL CHICKEN + TOPPING AMOUNTS; DO NOT PRE-DRESS ROMAINE.'};
+  if(typeof RECIPE_COMPONENTS==='object'&&RECIPE_COMPONENTS){
+    RECIPE_COMPONENTS['Chicken Caesar components']=[
+      {id:'chicken',label:'SEASONED CHICKEN',ix:[0]},
+      {id:'salad',label:'CAESAR SALAD + TOPPINGS',ix:[1,2,3,4,5]}
+    ];
+  }
+  const assV66=cookAssignments;
+  cookAssignments=function(name){
+    if(name==='Chicken Caesar components')return [{date:'2026-10-08',meal:'DINNER • BIG CHICKEN CAESAR',storage:'FRIDGE • KEEP DRESSING/CRUNCH SEPARATE'}];
+    return assV66(name)||[];
+  };
+
+  // Current prep is intentionally minimal: only separate things that enter at different times.
+  const prepV66=v7PrepDefs;
+  v7PrepDefs=function(){
+    if(selectedKey()==='2026-10-07')return {
+      'Cilantro-Lime Beef + Black Bean Rice Bowl':[
+        {id:'wed-beef-1',title:'BOWL 1 • BEEF SEASONING / SAUCE',lines:['Measure the sauce/seasoning ingredients you are actually using. Keep cilantro + lime for the finish.']},
+        {id:'wed-beef-2',title:'BOWL 2 • BLACK BEANS + FINISH',lines:['Drain/measure black beans. Portion avocado, cheese, cilantro + lime separately for finishing.']},
+        {id:'wed-beef-3',title:'RICE',lines:['Measure basmati rice for the batch.']}
+      ],
+      'Chicken Alfredo':[
+        {id:'wed-alf-1',title:'BOWL 1 • ALFREDO SAUCE',lines:['Measure Fairlife/current sauce base + Parmesan. Keep garlic ready for the pan.']},
+        {id:'wed-alf-2',title:'BOWL 2 • SPINACH',lines:['Weigh frozen spinach before thawing/squeezing.']},
+        {id:'wed-alf-3',title:'CHICKEN + PASTA',lines:['Measure chicken and dry fettuccine. Keep raw chicken on its own plate.']}
+      ]
+    };
+    if(selectedKey()==='2026-10-08')return {
+      'Chicken Caesar components':[
+        {id:'thu-caesar-1',title:'CAESAR SETUP',lines:['Wash/dry romaine. Keep Skinnygirl Caesar, Parmesan, croutons and avocado separate until eating.']},
+        {id:'thu-caesar-2',title:'CHICKEN',lines:['Measure/season chicken on a separate raw-meat plate.']}
+      ],
+      'Garlic-Lemon Steak Bites + Seasoned Rice':[
+        {id:'thu-steak-1',title:'STEAK',lines:['Measure/season steak. Keep garlic + lemon/lime ready for the finish.']},
+        {id:'thu-steak-2',title:'RICE',lines:['Measure basmati rice + seasonings for 3 later portions.']}
+      ]
+    };
+    return prepV66();
+  };
+
+  // Replace stale Korean-beef / old-Helper timelines on the two active cook days.
+  const tlV66=v7TimelineRows;
+  v7TimelineRows=function(){
+    if(selectedKey()==='2026-10-07')return [
+      ['BOTH RECIPES','KITCHEN','Get both recipes out. Start rice water + pasta water. Keep raw chicken separate.','OFF','0:00–0:08','Stations ready','Open PREP + MEASURE and check off the small prep list.'],
+      ['BEEF + BLACK BEAN BOWL','RICE POT + SKILLET','Start basmati rice. Brown the measured ground beef to 160°F; drain excess rendered fat if needed.','SIMMER / MEDIUM-HIGH','0:08–0:22','Rice cooking; beef 160°F','Start Alfredo chicken + fettuccine.'],
+      ['CHICKEN ALFREDO','PASTA POT + SKILLET','Cook fettuccine. Cook measured chicken in olive oil to 165°F; remove/rest.','BOIL / MEDIUM-HIGH','0:12–0:28','Pasta tender; chicken 165°F','Finish beef bowl mixture.'],
+      ['BEEF + BLACK BEAN BOWL','BEEF SKILLET','Add measured black beans + sauce/seasoning. Keep it moist. Finish with lime/cilantro; keep avocado/cheese for portioning/eating.','MEDIUM → LOW','0:22–0:32','Hot, saucy, not dry','Finish rice.'],
+      ['CHICKEN ALFREDO','ALFREDO SKILLET','Cook garlic briefly. Add measured lighter sauce base + Parmesan, then spinach and fettuccine. Return chicken; loosen with pasta water until creamy.','LOW-MEDIUM','0:28–0:40','Creamy, coated, not dry','Do not add heavy cream.'],
+      ['BOTH RECIPES','SCALE','Go to CONTAINERS. Confirm each component, enter ONLY anything that changed, then enter each finished component weight.','OFF','0:40–0:50','Component weights saved','Actual weights drive suggested portions.'],
+      ['BOTH RECIPES','CONTAINERS','Pack the suggested portions, then enter the ACTUAL grams that landed in each container. Apply labels/storage.','OFF','0:50–1:10','All containers accounted for','Actual packed grams win over suggestions.'],
+      ['CLEANUP','KITCHEN','Complete cleanup.','OFF','1:10–1:40','Kitchen reset','Done.']
+    ];
+    if(selectedKey()==='2026-10-08')return [
+      ['BOTH RECIPES','KITCHEN','Get Caesar components + steak/rice ingredients out. Start rice water.','OFF','0:00–0:08','Everything ready','Keep raw chicken and steak on separate plates.'],
+      ['CHICKEN CAESAR','SKILLET / AIR FRYER','Cook seasoned chicken to 165°F. Wash/dry romaine. Keep dressing, Parmesan, croutons and avocado separate until dinner.','MEDIUM-HIGH','0:08–0:25','Chicken 165°F; salad components ready','Start rice.'],
+      ['STEAK + RICE','RICE POT + HOT SKILLET','Cook seasoned rice. Sear steak bites without crowding. Finish steak with garlic + lemon/lime and measured olive oil.','SIMMER / HIGH','0:18–0:35','Rice tender; steak browned to desired doneness','Rest steak briefly.'],
+      ['BOTH RECIPES','SCALE','Go to CONTAINERS. Weigh cooked Caesar chicken and steak/rice components. Caesar greens/toppings stay separate and fresh.','OFF','0:35–0:45','Weights saved','Steak/rice must support 3 portions: Fri dinner, Sat dinner, Mon lunch.'],
+      ['BOTH RECIPES','CONTAINERS','Pack steak/rice into 3 portions using suggested grams, then record ACTUAL packed grams. Save Caesar components for Thursday dinner.','OFF','0:45–1:00','All portions accounted for','Label Fri/Sat/Mon destinations.'],
+      ['CLEANUP','KITCHEN','Complete cleanup.','OFF','1:00–1:30','Kitchen reset','Done.']
+    ];
+    return tlV66();
+  };
+
+  // Minimal-entry component screen: planned = one checkbox; fields are hidden unless something changed.
+  v7Stage5=function(){
+    let comps=v7GenericComponents();
+    return Object.values(comps).map(c=>{
+      let targets=v7ComponentTargetCount(c.meal),cm=v7CompMacros(c),wt=Number(c.weight)||0;
+      let changes=(c.ingredients||[]).map((ing,i)=>`<div class="cook-v7-ing"><div class="cook-v7-wide"><b>${esc(ing.name||'INGREDIENT')}</b><div class="cook-v7-source">${esc((ing.source||'PLANNED').toUpperCase())}</div></div><label>ACTUAL AMOUNT<input data-v7-ing="${esc(c.id)}|${i}|actual" value="${esc(ing.actual||'')}" placeholder="only change if different"></label><div><button class="tinybtn" data-v7-change-product="${esc(c.id)}|${i}">CHANGE PRODUCT</button><button class="tinybtn" data-v7-remove-ing="${esc(c.id)}|${i}">REMOVE</button></div></div>`).join('');
+      return `<details class="cook-v7-component"><summary><span>${esc(c.meal.toUpperCase())} • ${esc(c.label.toUpperCase())}</span><span>${c.saved?'SAVED ✓':'NEEDS WEIGHT'}</span></summary><div class="cook-v7-component-body"><label class="cook-v7-check"><input type="checkbox" data-v7-planned="${esc(c.id)}" ${c.madeAsPlanned?'checked':''}><span><b>MADE AS LISTED</b> • CHECK THIS IF NOTHING CHANGED</span></label><details class="cook-v7-group"><summary>CHANGED SOMETHING? • EDIT INGREDIENTS</summary><div class="cook-v7-group-body"><p class="cook-v7-mini">ONLY OPEN THIS IF YOU USED A DIFFERENT PRODUCT/AMOUNT OR ADDED/REMOVED SOMETHING.</p>${changes}<div class="cook-v7-pillrow"><button class="tinybtn" data-v37-add-ing="${esc(c.id)}|inventory">+ INVENTORY</button><button class="tinybtn" data-v37-add-ing="${esc(c.id)}|generic">+ GENERIC</button><button class="tinybtn" data-v37-add-ing="${esc(c.id)}|lookup">+ NUTRITION LOOKUP</button></div></div></details><label><b>ACTUAL FINISHED WEIGHT (G)</b><input type="number" min="0" step="1" data-v7-weight="${esc(c.id)}" value="${esc(c.weight??'')}" placeholder="put whole component on scale"></label><div class="cook-v7-suggest"><b>MAKE ${targets} CONTAINER${targets===1?'':'S'}</b><br>${wt?`SUGGESTED ${esc(c.label)}: ${(wt/targets).toFixed(1)} G EACH`:'ENTER FINISHED WEIGHT → HUB CALCULATES SUGGESTED GRAMS'}<br><span class="cook-v7-mini">YOU ONLY ENTER ACTUAL PACKED GRAMS LATER. NO RE-ENTERING INGREDIENTS.</span></div><div class="cook-v7-mini">${cm.known?`MACROS READY • ${macroLine(cm.macros)}`:'MACROS FINISH WHEN REQUIRED PRODUCT NUTRITION / ACTUALS ARE LINKED.'}</div><button class="btn primary" data-v7-save-comp="${esc(c.id)}">${c.saved?'COMPONENT SAVED ✓':'SAVE COMPONENT'}</button></div></details>`;
+    }).join('');
+  };
+
+  v42ContainersStep=function(){
+    return `<section class="card soft"><h3>1 • COMPONENTS</h3><p class="muted"><b>KEEP IT SIMPLE:</b> IF YOU MADE IT AS LISTED, CHECK MADE AS LISTED. ONLY EDIT INGREDIENTS IF SOMETHING ACTUALLY CHANGED. THEN ENTER ONE FINISHED WEIGHT FOR EACH COMPONENT.</p>${v7Stage5()}</section><section class="card soft"><h3>2 • CONTAINERS</h3><p class="muted">THE HUB GIVES A SUGGESTED SPLIT. PUT THE FOOD ON YOUR SCALE AND ENTER ONLY THE ACTUAL COMPONENT GRAMS THAT LANDED IN EACH CONTAINER. THEN SAVE THE LABEL/LOCATION. ACTUAL GRAMS WIN.</p>${v7Stage6()}</section>`;
+  };
+
+  // Clear only not-yet-started stale sessions for the two future cook dates so old recipe components cannot survive into the new plan.
+  try{
+    let root=state.cookV7?.sessions||{};
+    for(const k of ['2026-10-07','2026-10-08']){
+      let ss=root[k];
+      if(ss && !ss.inventoryCommitted && !Object.values(ss.portions||{}).some(p=>p.saved)) delete root[k];
+    }
+  }catch(e){}
+
+  MEAL.auditV66={status:'PERMANENT COOKING UI AUDITED • V66',rules:[
+    'CURRENT WED/THU COOKING INSTRUCTIONS MATCH THE LOCKED LDL PLAN',
+    'THURSDAY CHICKEN CAESAR IS A REAL COMPONENT RECIPE, NOT A PLACEHOLDER',
+    'COMPONENT INPUT IS MINIMAL: MADE AS LISTED + FINISHED WEIGHT; EDIT INGREDIENTS ONLY WHEN SOMETHING CHANGED',
+    'CONTAINERS REQUIRE ONLY ACTUAL PACKED COMPONENT GRAMS + LABEL/LOCATION',
+    'THURSDAY STEAK/RICE MAKES 3 DESTINATIONS: FRI/SAT/MON',
+    'STALE KOREAN-BEEF / OLD-HELPER COOK TIMELINES CANNOT DRIVE WED/THU'
+  ],note:'Cooking audit prioritizes simple data entry while preserving exact inventory/macros/container receipts.'};
+  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-COOKING-AUDITED-V66';
+  save();
+})();
+
+
+/* V67 PERMANENT INVENTORY-FIRST COOKING + MONDAY GROCERY INTAKE */
+(function(){
+  // Cooking corrections must come from the live Inventory only. Grocery shopping happens before cooking,
+  // so the normal cook flow never asks Emmelli to create a generic/off-inventory food record.
+  v7Stage5=function(){
+    let comps=v7GenericComponents();
+    return Object.values(comps).map(c=>{
+      let targets=v7ComponentTargetCount(c.meal),cm=v7CompMacros(c),wt=Number(c.weight)||0;
+      let changes=(c.ingredients||[]).map((ing,i)=>`<div class="cook-v7-ing"><div class="cook-v7-wide"><b>${esc(ing.name||'INGREDIENT')}</b><div class="cook-v7-source">${esc((ing.source||'PLANNED').toUpperCase())}</div></div><label>ACTUAL AMOUNT<input data-v7-ing="${esc(c.id)}|${i}|actual" value="${esc(ing.actual||'')}" placeholder="only change if different"></label><div><button class="tinybtn" data-v7-change-product="${esc(c.id)}|${i}">CHANGE FROM INVENTORY</button><button class="tinybtn" data-v7-remove-ing="${esc(c.id)}|${i}">DIDN'T USE</button></div></div>`).join('');
+      return `<details class="cook-v7-component"><summary><span>${esc(c.meal.toUpperCase())} • ${esc(c.label.toUpperCase())}</span><span>${c.saved?'SAVED ✓':'NEEDS WEIGHT'}</span></summary><div class="cook-v7-component-body"><label class="cook-v7-check"><input type="checkbox" data-v7-planned="${esc(c.id)}" ${c.madeAsPlanned?'checked':''}><span><b>MADE AS LISTED</b> • CHECK IF NOTHING CHANGED</span></label><details class="cook-v7-group"><summary>CHANGED SOMETHING?</summary><div class="cook-v7-group-body"><p class="cook-v7-mini"><b>INVENTORY ONLY.</b> USE THIS ONLY IF YOU CHANGED AN AMOUNT, SWAPPED TO ANOTHER PRODUCT YOU OWN, LEFT SOMETHING OUT, OR ADDED SOMETHING FROM INVENTORY.</p>${changes}<div class="cook-v7-pillrow"><button class="tinybtn" data-v37-add-ing="${esc(c.id)}|inventory">+ ADD FROM INVENTORY</button></div></div></details><label><b>ACTUAL FINISHED WEIGHT (G)</b><input type="number" min="0" step="1" data-v7-weight="${esc(c.id)}" value="${esc(c.weight??'')}" placeholder="whole finished component"></label><div class="cook-v7-suggest"><b>MAKE ${targets} CONTAINER${targets===1?'':'S'}</b><br>${wt?`SUGGESTED ${esc(c.label)}: ${(wt/targets).toFixed(1)} G EACH`:'ENTER FINISHED WEIGHT → HUB CALCULATES SUGGESTED GRAMS'}<br><span class="cook-v7-mini">NORMAL FLOW: CHECK MADE AS LISTED → WEIGH FINISHED COMPONENT → SAVE. ACTUAL PACKED GRAMS COME NEXT.</span></div><div class="cook-v7-mini">${cm.known?`MACROS READY • ${macroLine(cm.macros)}`:'MACROS FINISH WHEN THE SAVED INVENTORY PRODUCT HAS COMPLETE NUTRITION.'}</div><button class="btn primary" data-v7-save-comp="${esc(c.id)}">${c.saved?'COMPONENT SAVED ✓':'SAVE COMPONENT + UPDATE INVENTORY'}</button></div></details>`;
+    }).join('');
+  };
+  v42ContainersStep=function(){
+    return `<section class="card soft"><h3>1 • COMPONENTS</h3><p class="muted"><b>NORMAL USE IS ONLY 2 THINGS:</b> CHECK <b>MADE AS LISTED</b> + ENTER THE <b>FINISHED WEIGHT</b>. THE HUB USES YOUR INVENTORY ITEMS/RECIPE AMOUNTS FOR MACROS AND DEDUCTS INGREDIENTS WHEN YOU SAVE. OPEN CHANGED SOMETHING ONLY WHEN REAL LIFE WAS DIFFERENT.</p>${v7Stage5()}</section><section class="card soft"><h3>2 • CONTAINERS</h3><p class="muted">THE HUB SUGGESTS THE SPLIT. WEIGH WHAT ACTUALLY LANDS IN EACH CONTAINER AND ENTER ONLY THOSE GRAMS. SAVE THE LABEL/LOCATION. ACTUAL PACKED GRAMS WIN.</p>${v7Stage6()}</section>`;
+  };
+
+  function v67PurchasedIntake(){
+    let purchased=purchasedGroceries(), pending=purchased.filter(x=>!state.mondayHaul?.[x.key]?.added);
+    if(!purchased.length)return `<section class="card soft"><h2>PURCHASES → INVENTORY</h2><p class="muted">WHILE SHOPPING, CHECK EACH GROCERY ITEM YOU ACTUALLY BOUGHT. YOUR PURCHASE ENTRY CARDS WILL APPEAR HERE AUTOMATICALLY — ON THIS SAME GROCERY PAGE.</p></section>`;
+    return `<section class="card monday-haul"><h2>PURCHASES → INVENTORY</h2><p class="muted"><b>NO RE-TYPING THE GROCERY LIST.</b> THE HUB ALREADY KNOWS WHAT YOU PLANNED TO BUY. FOR EACH CHECKED PURCHASE, ONLY CONFIRM WHAT YOU ACTUALLY BROUGHT HOME. PRODUCT NAME IS PRE-FILLED; UPC IS OPTIONAL.</p>${purchased.map(x=>{let h=state.mondayHaul?.[x.key]||{},loc=h.location||purchaseDefaultLocation(x.item);return `<details class="haul-item" ${h.added?'':'open'}><summary>${h.added?'✓ ':''}${esc(x.item)}</summary><div class="formgrid"><label class="wide">PRODUCT / BRAND<input data-haul-name="${esc(x.key)}" value="${esc(h.name||x.item.replace(/\s+[—-].*$/,''))}"></label><label>ACTUAL AMOUNT / PACKAGE<input data-haul-qty="${esc(x.key)}" value="${esc(h.qty||'')}" placeholder="e.g. 2 lb / 170 g / 1 bottle"></label><label>PUT IT IN<select data-haul-location="${esc(x.key)}">${['Fridge','Freezer','Pantry','Seasonings'].map(z=>`<option ${loc===z?'selected':''}>${z}</option>`).join('')}</select></label><label>BARCODE • OPTIONAL<input data-haul-upc="${esc(x.key)}" inputmode="numeric" value="${esc(h.upc||'')}" placeholder="optional"></label></div><div class="app-actions"><label class="btn scan-mini">SCAN BARCODE<input class="barcode-file" type="file" accept="image/*" capture="environment" data-haul-scan="${esc(x.key)}"></label><button class="btn primary" data-add-haul="${esc(x.key)}">${h.added?'IN INVENTORY ✓':'ADD TO INVENTORY'}</button></div></details>`}).join('')}<p class="muted">${pending.length?`${pending.length} CHECKED PURCHASE${pending.length===1?'':'S'} LEFT TO ENTER.`:'ALL CHECKED PURCHASES ARE IN INVENTORY ✓'}</p></section>`;
+  }
+
+  // Keep purchase intake inside the same Grocery destination opened from Monday TODAY.
+  const groceryV67Base=grocery;
+  grocery=function(){
+    let html=groceryV67Base();
+    if(DAYS[state.day]!=='Monday')return html;
+    // Older builds route users away after shopping. Replace that handoff with the inline, simple intake.
+    html=html.replace(/<section class="card soft after-home">[\s\S]*?<\/section>/g,'');
+    return html+v67PurchasedIntake();
+  };
+
+  MEAL.auditV67={status:'PERMANENT INVENTORY-FIRST + MONDAY GROCERY INTAKE • V67',rules:[
+    'COOKING CHANGES SUGGEST ONLY LIVE INVENTORY ITEMS',
+    'NORMAL COMPONENT ENTRY = MADE AS LISTED + FINISHED WEIGHT',
+    'COMPONENT SAVE UPDATES INGREDIENT INVENTORY ONCE',
+    'ACTUAL PACKED COMPONENT GRAMS DRIVE CONTAINER RECEIPTS',
+    'MONDAY TODAY → GROCERY OPENS SHOPPING AND PURCHASE-TO-INVENTORY IN ONE DESTINATION',
+    'CHECKED PURCHASES AUTO-APPEAR FOR EASY INVENTORY ENTRY',
+    'PURCHASE ENTRY REQUIRES ONLY ACTUAL PACKAGE/AMOUNT + STORAGE; PRODUCT IS PREFILLED; BARCODE OPTIONAL'
+  ]};
+  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-INVENTORY-GROCERY-V67';
+  save();
+  render();
+})();
+
+
+/* V68 SMART MINIMUM-ENTRY GROCERY → INVENTORY */
+(function(){
+  function v68Qty(x,h){return (h?.qty||groceryBuyUnit(x.item)||'').trim()}
+  function v68Name(x,h){return (h?.name||x.item.replace(/\s+[—-].*$/,'')).trim()}
+  function v68NutritionSummary(h){let n=h?.nutrition;if(!n)return h?.nutritionStatus||'HUB WILL MATCH NUTRITION AUTOMATICALLY';return `NUTRITION LINKED • ${Math.round(Number(n.calories)||0)} CAL • ${Number(n.protein)||0}P • ${Number(n.carbs)||0}C • ${Number(n.fat)||0}F • ${Number(n.fiber)||0} FIBER${Number.isFinite(Number(n.saturatedFat))?' • '+Number(n.saturatedFat)+' SAT FAT':''}`}
+  async function v68ResolveNutrition(name,upc){
+    let hit=null;
+    if(upc) hit=await nutritionLookupV90(upc);
+    if(!hit&&name) hit=await nutritionLookupV90(name);
+    if(hit?.nutrition){
+      // Preserve saturated fat whenever Open Food Facts provides it. Older lookup code did not expose it.
+      if(upc){try{let r=await fetch(`https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(upc)}.json`),d=await r.json(),n=d?.product?.nutriments||{};if(Number.isFinite(Number(n['saturated-fat_100g'])))hit.nutrition.saturatedFat=Number(n['saturated-fat_100g']);}catch(e){}}
+      return hit;
+    }
+    let g=genericNutritionV40(name);
+    if(g)return {name, nutrition:{...g.m,servingGrams:g.mode==='each'?(g.grams||1):100},source:'GENERIC NUTRITION'};
+    return null;
+  }
+  async function v68SavePurchase(key,mode){
+    let src=purchasedGroceries().find(x=>x.key===key);if(!src)return;
+    let h=state.mondayHaul[key]||(state.mondayHaul[key]={});
+    let name=mode==='planned'?v68Name(src,h):(document.querySelector(`[data-v68-name="${CSS.escape(key)}"]`)?.value||v68Name(src,h)).trim();
+    let qty=mode==='planned'?v68Qty(src,h):(document.querySelector(`[data-v68-qty="${CSS.escape(key)}"]`)?.value||v68Qty(src,h)).trim();
+    let loc=mode==='planned'?(h.location||purchaseDefaultLocation(src.item)):(document.querySelector(`[data-v68-location="${CSS.escape(key)}"]`)?.value||h.location||purchaseDefaultLocation(src.item));
+    let upc=(document.querySelector(`[data-v68-upc="${CSS.escape(key)}"]`)?.value||h.upc||state.groceryBarcodes?.[key]||'').trim();
+    if(!qty){showToast('ENTER ONLY THE ACTUAL PACKAGE / AMOUNT. EVERYTHING ELSE CAN STAY AUTOMATIC.','AMOUNT NEEDED');return}
+    h.name=name;h.qty=qty;h.location=loc;h.upc=upc;h.nutritionStatus='MATCHING NUTRITION…';save();render();
+    let hit=await v68ResolveNutrition(name,upc);
+    let manual={calories:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|calories"]`)?.value),protein:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|protein"]`)?.value),carbs:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|carbs"]`)?.value),fat:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|fat"]`)?.value),fiber:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|fiber"]`)?.value),saturatedFat:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|saturatedFat"]`)?.value),servingGrams:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|servingGrams"]`)?.value)};
+    let manualReady=['calories','protein','carbs','fat','fiber','servingGrams'].every(k=>Number.isFinite(manual[k])&&manual[k]>=0)&&manual.servingGrams>0;
+    if(!hit&&manualReady)hit={name,nutrition:manual,source:'MANUAL LABEL • FALLBACK'};
+    let price=Number(state.groceryPrices[groceryPriceKey(src.store,src.item)]??groceryEstimate(src.store,src.item))||0;
+    let rec={name:hit?.name||name,qty,upc,haulKey:key,source:'Grocery List',store:src.store,grocerySpec:src.item,plannedBuy:groceryBuyUnit(src.item),purchasePrice:price,purchasedDate:selectedKey(),addedAt:new Date().toISOString(),nutrition:hit?.nutrition||null,nutritionSource:hit?.source||'',nutritionComplete:!!hit?.nutrition,notes:[`PURCHASED • ${src.store}`,`ORIGINAL GROCERY SPEC: ${src.item}`,`ACTUAL: ${qty}`,upc?`UPC: ${upc}`:'',hit?.source?`NUTRITION: ${hit.source}`:'NUTRITION MATCH PENDING'].filter(Boolean).join(' • ')};
+    let existing=(state.inventory[loc]||[]).find(x=>x.haulKey===key);if(existing)Object.assign(existing,rec);else state.inventory[loc].push(rec);
+    Object.assign(h,{name:rec.name,qty,location:loc,upc,added:true,nutrition:hit?.nutrition||null,nutritionSource:hit?.source||'',nutritionStatus:hit?'NUTRITION LINKED ✓':'NUTRITION NOT MATCHED • OPEN FALLBACK ONLY IF THIS FOOD WILL BE USED FOR MACROS'});
+    save();render();showToast(hit?'PURCHASE SAVED + NUTRITION LINKED.':'PURCHASE SAVED. NUTRITION COULD NOT BE AUTO-MATCHED.','INVENTORY UPDATED');
+  }
+  function v68PurchasedIntake(){
+    let purchased=purchasedGroceries(),pending=purchased.filter(x=>!state.mondayHaul?.[x.key]?.added);
+    if(!purchased.length)return `<section class="card soft"><h2>PURCHASES → INVENTORY</h2><p class="muted">CHECK WHAT YOU BOUGHT ABOVE. THE HUB WILL BUILD THE INVENTORY ENTRY HERE.</p></section>`;
+    return `<section class="card monday-haul"><h2>PURCHASES → INVENTORY</h2><p class="muted"><b>FASTEST WAY:</b> IF YOU BOUGHT WHAT THE LIST SAYS, TAP <b>BOUGHT AS LISTED</b>. THE HUB USES THE PLANNED PACKAGE, CHOOSES THE STORAGE LOCATION, AND TRIES TO LINK NUTRITION FOR YOU. ONLY OPEN DETAILS WHEN SOMETHING WAS DIFFERENT.</p>${purchased.map(x=>{let h=state.mondayHaul?.[x.key]||{},loc=h.location||purchaseDefaultLocation(x.item),qty=v68Qty(x,h),name=v68Name(x,h);return `<details class="haul-item" ${h.added?'':'open'}><summary>${h.added?'✓ ':''}${esc(x.item)}</summary><div class="suggested-portions"><b>HUB ALREADY KNOWS</b><br>${esc(name)}<br><small>${esc(qty||'PACKAGE FROM GROCERY LIST')} • ${esc(loc)} • ${esc(x.store)}</small><br><small>${esc(v68NutritionSummary(h))}</small></div><div class="app-actions"><button class="btn primary" data-v68-quick-haul="${esc(x.key)}">${h.added?'SAVED ✓':'BOUGHT AS LISTED → INVENTORY'}</button><label class="btn scan-mini">SCAN BARCODE<input class="barcode-file" type="file" accept="image/*" capture="environment" data-v68-scan="${esc(x.key)}"></label></div><details class="cook-v7-group"><summary>DIFFERENT PRODUCT / SIZE?</summary><div class="cook-v7-group-body"><div class="formgrid"><label class="wide">PRODUCT / BRAND<input data-v68-name="${esc(x.key)}" value="${esc(name)}"></label><label>ACTUAL PACKAGE / AMOUNT<input data-v68-qty="${esc(x.key)}" value="${esc(qty)}" placeholder="e.g. 2 lb / 170 g / 1 bottle"></label><label>PUT IT IN<select data-v68-location="${esc(x.key)}">${['Fridge','Freezer','Pantry','Seasonings'].map(z=>`<option ${loc===z?'selected':''}>${z}</option>`).join('')}</select></label><label>UPC • OPTIONAL<input data-v68-upc="${esc(x.key)}" inputmode="numeric" value="${esc(h.upc||'')}"></label></div><button class="btn primary" data-v68-save-haul="${esc(x.key)}">SAVE DIFFERENT PURCHASE</button><details class="cook-v7-group"><summary>AUTO MATCH FAILED? • LABEL FALLBACK</summary><div class="cook-v7-group-body"><p class="cook-v7-mini">ONLY USE THIS IF BARCODE + PRODUCT MATCH BOTH FAIL. ENTER THE LABEL ONCE; COOKING REUSES IT.</p><div class="formgrid">${[['calories','CALORIES'],['protein','PROTEIN G'],['carbs','CARBS G'],['fat','FAT G'],['fiber','FIBER G'],['saturatedFat','SAT FAT G'],['servingGrams','SERVING GRAMS']].map(([k,l])=>`<label>${l}<input type="number" min="0" step=".1" data-v68-manual="${esc(x.key)}|${k}"></label>`).join('')}</div><button class="btn" data-v68-save-haul="${esc(x.key)}">SAVE LABEL + PURCHASE</button></div></details></div></details></details>`}).join('')}<p class="muted">${pending.length?`${pending.length} CHECKED PURCHASE${pending.length===1?'':'S'} LEFT.`:'ALL CHECKED PURCHASES ARE IN INVENTORY ✓'}</p></section>`;
+  }
+  const groceryV68Base=grocery;
+  grocery=function(){let html=groceryV68Base();if(DAYS[state.day]!=='Monday')return html;html=html.replace(/<section class="card monday-haul">[\s\S]*?<\/section>\s*$/,'');return html+window.v68PurchasedIntake()};
+
+  document.addEventListener('click',async e=>{let b=e.target.closest?.('[data-v68-quick-haul],[data-v68-save-haul]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();await v68SavePurchase(b.dataset.v68QuickHaul||b.dataset.v68SaveHaul,b.dataset.v68QuickHaul!==undefined?'planned':'different')},true);
+  document.addEventListener('change',async e=>{let f=e.target.closest?.('[data-v68-scan]');if(!f||!f.files?.[0])return;e.stopImmediatePropagation();let key=f.dataset.v68Scan,h=state.mondayHaul[key]||(state.mondayHaul[key]={});try{if(!('BarcodeDetector' in window))throw new Error('unsupported');let img=await createImageBitmap(f.files[0]),det=new BarcodeDetector({formats:['upc_a','upc_e','ean_13','ean_8']}),codes=await det.detect(img);if(!codes.length)throw new Error('not found');h.upc=codes[0].rawValue;let hit=await v68ResolveNutrition('',h.upc);if(hit){h.name=hit.name||h.name;h.nutrition=hit.nutrition;h.nutritionSource=hit.source;h.nutritionStatus='BARCODE + NUTRITION MATCHED ✓'}else h.nutritionStatus='BARCODE CAPTURED • PRODUCT MATCH NOT FOUND';save();render();showToast(hit?'BARCODE READ + NUTRITION MATCHED. TAP BOUGHT AS LISTED OR OPEN DETAILS IF SIZE DIFFERS.':'BARCODE SAVED. AUTO MATCH DID NOT FIND NUTRITION.','SMART SCAN')}catch(err){showToast('BARCODE COULD NOT BE READ HERE. YOU CAN STILL TAP BOUGHT AS LISTED; THE HUB WILL TRY THE PRODUCT NAME.','SMART SCAN')}},true);
+
+  MEAL.auditV68={status:'PERMANENT SMART MINIMUM-ENTRY GROCERY • V68',rules:[
+    'ONE-TAP BOUGHT AS LISTED IS THE DEFAULT GROCERY INTAKE',
+    'PLANNED PACKAGE + DEFAULT STORAGE ARE REUSED AUTOMATICALLY',
+    'BARCODE SCAN ATTEMPTS PRODUCT + NUTRITION MATCH AUTOMATICALLY',
+    'PRODUCT-NAME LOOKUP IS THE SECOND AUTOMATIC PATH',
+    'GENERIC NUTRITION IS USED FOR RECOGNIZED PRODUCE/RAW FOODS WHEN AVAILABLE',
+    'MANUAL LABEL ENTRY IS HIDDEN FALLBACK ONLY',
+    'INVENTORY STORES NUTRITION ONCE SO COOKING DOES NOT ASK AGAIN',
+    'SATURATED FAT IS PRESERVED WHEN THE PRODUCT SOURCE PROVIDES IT'
+  ]};
+  window.v68PurchasedIntake=v68PurchasedIntake;
+  window.groceryV68Base=groceryV68Base;
+  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-SMART-GROCERY-V68';save();render();
+})();
+
+
+/* V69 PERMANENT GROCERY → HOME → MONDAY PORTIONING FLOW
+   Product identity owns nutrition. A changed product NEVER inherits the planned product macros. */
+(()=>{
+  function v69AllHaulSaved(){const p=purchasedGroceries();return p.length>0&&p.every(x=>state.mondayHaul?.[x.key]?.added)}
+  function v69ProductIdentityChanged(src,h,name,upc){
+    const planned=(v68Name(src,{} )||'').trim().toLowerCase();
+    const actual=(name||'').trim().toLowerCase();
+    const prior=(h?.name||'').trim().toLowerCase();
+    return (!!actual&&actual!==planned)||(!!upc&&upc!==String(h?.upc||''))||(!!prior&&!!actual&&prior!==actual);
+  }
+  async function v69SavePurchase(key,mode){
+    let src=purchasedGroceries().find(x=>x.key===key);if(!src)return;
+    let h=state.mondayHaul[key]||(state.mondayHaul[key]={});
+    let name=mode==='planned'?v68Name(src,h):(document.querySelector(`[data-v68-name="${CSS.escape(key)}"]`)?.value||v68Name(src,h)).trim();
+    let qty=mode==='planned'?v68Qty(src,h):(document.querySelector(`[data-v68-qty="${CSS.escape(key)}"]`)?.value||v68Qty(src,h)).trim();
+    let loc=mode==='planned'?(h.location||purchaseDefaultLocation(src.item)):(document.querySelector(`[data-v68-location="${CSS.escape(key)}"]`)?.value||h.location||purchaseDefaultLocation(src.item));
+    let upc=(document.querySelector(`[data-v68-upc="${CSS.escape(key)}"]`)?.value||h.upc||state.groceryBarcodes?.[key]||'').trim();
+    if(!qty){showToast('ENTER THE ACTUAL PACKAGE / AMOUNT. THE HUB HANDLES THE REST.','AMOUNT NEEDED');return}
+    const changed=mode==='different'||v69ProductIdentityChanged(src,h,name,upc);
+    if(changed){h.nutrition=null;h.nutritionSource='';h.nutritionComplete=false;h.nutritionStatus='PRODUCT CHANGED • REMATCHING NUTRITION…'}
+    h.name=name;h.qty=qty;h.location=loc;h.upc=upc;save();render();
+    let hit=await v68ResolveNutrition(name,upc);
+    let manual={calories:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|calories"]`)?.value),protein:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|protein"]`)?.value),carbs:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|carbs"]`)?.value),fat:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|fat"]`)?.value),fiber:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|fiber"]`)?.value),saturatedFat:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|saturatedFat"]`)?.value),servingGrams:Number(document.querySelector(`[data-v68-manual="${CSS.escape(key)}|servingGrams"]`)?.value)};
+    let manualReady=['calories','protein','carbs','fat','fiber','servingGrams'].every(k=>Number.isFinite(manual[k])&&manual[k]>=0)&&manual.servingGrams>0;
+    if(!hit&&manualReady)hit={name,nutrition:manual,source:'MANUAL LABEL • FALLBACK'};
+    let price=Number(state.groceryPrices[groceryPriceKey(src.store,src.item)]??groceryEstimate(src.store,src.item))||0;
+    let rec={name:hit?.name||name,qty,upc,haulKey:key,source:'Grocery List',store:src.store,grocerySpec:src.item,plannedBuy:groceryBuyUnit(src.item),purchasePrice:price,purchasedDate:selectedKey(),addedAt:new Date().toISOString(),nutrition:hit?.nutrition||null,nutritionSource:hit?.source||'',nutritionComplete:!!hit?.nutrition,notes:[`PURCHASED • ${src.store}`,`ORIGINAL GROCERY SPEC: ${src.item}`,`ACTUAL PRODUCT: ${hit?.name||name}`,`ACTUAL: ${qty}`,upc?`UPC: ${upc}`:'',hit?.source?`NUTRITION: ${hit.source}`:'NUTRITION MATCH REQUIRED BEFORE MACRO USE'].filter(Boolean).join(' • ')};
+    ['Fridge','Freezer','Pantry','Seasonings'].forEach(c=>{state.inventory[c]=(state.inventory[c]||[]).filter(z=>z.haulKey!==key)});
+    state.inventory[loc].push(rec);
+    Object.assign(h,{name:rec.name,qty,location:loc,upc,added:true,nutrition:hit?.nutrition||null,nutritionSource:hit?.source||'',nutritionComplete:!!hit?.nutrition,nutritionStatus:hit?'CURRENT PRODUCT NUTRITION LINKED ✓':'CURRENT PRODUCT NOT MATCHED • MACROS WILL NOT USE THE OLD PRODUCT'});
+    save();render();showToast(hit?'PURCHASE SAVED • CURRENT PRODUCT MACROS LINKED.':'PURCHASE SAVED • CURRENT PRODUCT NEEDS A NUTRITION MATCH BEFORE MACRO USE.','INVENTORY UPDATED');
+  }
+  const v69OldIntake=window.v68PurchasedIntake;
+  window.v68PurchasedIntake=function(){
+    let html=v69OldIntake();
+    const p=purchasedGroceries(); if(!p.length)return html;
+    const done=v69AllHaulSaved();
+    const bridge=`<section class="card soft monday-home-bridge"><h2>${done?'HOME ✓ → MONDAY PORTIONING':'SHOP → HOME'}</h2><p class="muted">${done?'ALL CHECKED GROCERIES ARE IN INVENTORY. NEXT: PORTION ONLY THE RAW MEAT THAT NEEDS A MONDAY FRIDGE/FREEZER PORTION. NO RE-ENTERING PRODUCTS OR MACROS.':'WHEN YOU GET HOME, SAVE THE CHECKED PURCHASES ABOVE FIRST. MONDAY PORTIONING UNLOCKS AFTER THEY ARE IN INVENTORY.'}</p>${done?'<button class="btn primary" data-v69-open-portioning>START MONDAY PORTIONING</button>':''}</section>${done?`<div id="v69MondayPortioning">${mondayPortioningPanel()||'<section class="card soft"><h2>MONDAY PORTIONING</h2><p class="muted">NO RAW-MEAT PORTIONS ARE REQUIRED FROM TODAY’S PURCHASES.</p></section>'}</div>`:''}`;
+    return html+bridge;
+  };
+  // Re-wrap grocery after replacing intake so Monday always renders the newest intake + bridge.
+  const v69GroceryBase=window.groceryV68Base;
+  grocery=function(){let html=v69GroceryBase();if(DAYS[state.day]!=='Monday')return html;html=html.replace(/<section class="card monday-haul">[\s\S]*?<\/section>\s*$/,'');return html+v68PurchasedIntake()};
+  document.addEventListener('click',async e=>{
+    let b=e.target.closest?.('[data-v68-quick-haul],[data-v68-save-haul]');if(!b)return;
+    e.preventDefault();e.stopImmediatePropagation();
+    await v69SavePurchase(b.dataset.v68QuickHaul||b.dataset.v68SaveHaul,b.dataset.v68QuickHaul!==undefined?'planned':'different');
+  },true);
+  document.addEventListener('click',e=>{let b=e.target.closest?.('[data-v69-open-portioning]');if(!b)return;e.preventDefault();document.getElementById('v69MondayPortioning')?.scrollIntoView({behavior:'smooth',block:'start'})},true);
+  MEAL.auditV69={status:'PERMANENT PRODUCT-IDENTITY + HOME-TO-PORTIONING • V69',rules:[
+    'IF PRODUCT CHANGES, OLD PRODUCT NUTRITION IS CLEARED IMMEDIATELY',
+    'NEW PRODUCT MUST AUTO-MATCH / BARCODE-MATCH / FALLBACK-MATCH ITS OWN NUTRITION',
+    'CHANGED PACKAGE SIZE DOES NOT CHANGE PER-SERVING MACROS; CHANGED PRODUCT DOES',
+    'CHECKED PURCHASES FLOW GROCERY → HOME → INVENTORY → MONDAY PORTIONING',
+    'MONDAY PORTIONING APPEARS ONLY AFTER CHECKED PURCHASES ARE SAVED TO INVENTORY',
+    'PORTIONING DOES NOT ASK FOR PRODUCT OR MACROS AGAIN',
+    'RAW PORTION ACTUAL GRAMS + FRIDGE/FREEZER LOCATION ARE THE ONLY NORMAL PORTIONING INPUTS'
+  ]};
+  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-HOME-PORTIONING-V69';save();render();
+})();
+
+
+
+/* V70 FINAL TODAY WRAPPER — live date/time drives top date and commentary; all existing Today destinations remain untouched. */
+const todayBeforeV70=today;
+today=function(){
+ const n=syncTodayCalendarV70();
+ let html=todayBeforeV70();
+ const idx={Monday:0,Tuesday:1,Wednesday:2,Thursday:3,Friday:4,Saturday:5,Sunday:6}[n.weekday];
+ const isRealToday=(state.weekOffset||0)===0&&state.day===idx;
+ const topDate=isRealToday?new Date(n.key+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):fullSelectedDate();
+ html=html.replace(/(<section class="hero"><div class="eyebrow">TODAY<\/div><h1>)[\s\S]*?(<\/h1>)/,`$1${esc(topDate)}$2`);
+ return html;
+};
+window.__EMMELLI_LIVE_TIME_V70=Object.freeze({timeZone:'America/New_York',autoSelectRealDay:true,dateAtTop:true,timeAwareCommentary:true});
+window.__EMMELLI_BUILD='2026-10-07-PERFECT-USABLE-LOCKED-V70';
+
+
+/* FINAL MASTER AUDIT V71 • 2026-10-07
+   PAGE/PATH REVIEW: TODAY / FOOD / GYM / BUDGET / HISTORY / WISH LIST
+   CROSS-FLOW REVIEW: TODAY→GROCERY LIST→INVENTORY→MONDAY PORTIONING→TODAY; FOOD→COOKING→COMPONENTS→CONTAINERS→ACTUALS/HISTORY
+   INTEGRITY: SINGLE SCRIPT; JS SYNTAX PASS; CURRENT DATE/TIME + COMMENTARY; PERSISTENCE PATHS PRESERVED.
+   SURGICAL AUDIT MARKER ONLY — NO MATURE FEATURE REMOVALS.
+*/
+window.EMMELLI_FINAL_MASTER_AUDIT='2026-10-07-FINAL-AUDITED-V71';
+
+
+/* V72 FINAL LAB-ALIGNED CURRENT-WEEK OVERRIDE — evidence-based LDL plan, 2026-10-06 labs */
+(function(){
+  window.EMMELLI_LABS_202610={totalCholesterol:187,hdl:55,triglycerides:65,ldl:116,nonHdl:132,fastingGlucose:75,hemoglobin:13.0,creatinine:1.02,eGFR:80,bun:13};
+  window.EMMELLI_HEART_TARGETS={saturatedFatMaxG:13,fiberMinG:28,note:'LDL 116 / NON-HDL 132 • SUSTAINABLE LDL-CONSCIOUS PATTERN • ≤13 G SATURATED FAT WHEN FEASIBLE • ≥28 G FIBER • RED MEAT REDUCED, NOT BANNED'};
+  try{
+    if(typeof DAY_MACRO_PLAN==='object'&&DAY_MACRO_PLAN){
+      Object.assign(DAY_MACRO_PLAN,{
+        '2026-10-07':{status:'ACTUAL COOK WEIGHTS REQUIRED',note:'TARGET ~2,000 kcal • ≥135 P • 220–250 C • 55–70 F • ≥28 fiber • aim ≤13 g saturated fat. Use the already-owned beef in a smaller measured portion; black beans + avocado + rice carry volume/fiber. Alfredo stays creamy without heavy cream. Final totals come from exact products + actual weights.'},
+        '2026-10-08':{status:'ACTUALS REQUIRED',note:'Existing 600 g Helper is used rather than wasted. Balance the day with a BIG Chicken Caesar using measured Skinnygirl Caesar, Parmesan, croutons and avocado; avoid extra butter/cream. Aim ≤13 g saturated fat when feasible from actual labels.'},
+        '2026-10-09':{status:'ACTUAL PORTIONS REQUIRED',note:'Beef bowl + JPAN steak salad/rice use actual portions. Keep steak portion measured, use avocado/JPAN dressing for flavor, and avoid saturated-fat stacking. Aim ≥28 g fiber and ≤13 g saturated fat when feasible.'},
+        '2026-10-10':{status:'ACTUAL PORTIONS REQUIRED',note:'Pesto Chicken + Loaded Mexican Steak Bowl. Use beans/avocado/rice for filling volume; keep cheese/creamy sauce measured around the steak. Aim ≤13 g saturated fat when feasible.'},
+        '2026-10-11':{status:'ACTUAL PORTIONS REQUIRED',note:'Chicken Alfredo lunch + meat-light BIG JPAN Ginger Bowl/Salad dinner. Black beans, avocado, rice, salad and dressing keep dinner substantial without forcing another meat serving. Aim ≥28 g fiber and ≤13 g saturated fat when feasible.'},
+        '2026-10-12':{status:'NEXT COOK CYCLE STARTS',note:'Garlic-Lemon Steak Bites + Seasoned Rice lunch uses the final planned steak portion. New Monday dinner/cook cycle should follow the evidence-based LDL pattern: delicious + filling, unsaturated-fat forward, fiber-rich, red meat reduced not banned.'}
+      });
+    }
+    if(MEAL&&MEAL.recipes){
+      if(MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']) MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl'].weigh='WEIGH ACTUAL FINISHED COMPONENTS. USE A SMALLER MEASURED PORTION OF THE ALREADY-PURCHASED 80/20 BEEF; BUILD FILLING VOLUME WITH BLACK BEANS + RICE + AVOCADO + VEGETABLE. MEASURE CHEESE/CREAMY SAUCE SO SATURATED FAT DOES NOT STACK. ACTUAL PRODUCT NUTRITION + WEIGHTS CONTROL MACROS.';
+      if(MEAL.recipes['Chicken Alfredo']) MEAL.recipes['Chicken Alfredo'].weigh='WEIGH ACTUAL FINISHED COMPONENTS. KEEP IT CREAMY WITHOUT HEAVY CREAM; MEASURE PARMESAN AND USE THE CURRENT LOWER-SATURATED-FAT SAUCE BASE. ACTUAL PRODUCT NUTRITION + WEIGHTS CONTROL MACROS.';
+      if(MEAL.recipes['Chicken Caesar components']) MEAL.recipes['Chicken Caesar components'].weigh='WEIGH ACTUAL CHICKEN AND SALAD/TOPPING COMPONENTS. USE SKINNYGIRL CAESAR + MEASURED PARMESAN/CROUTONS/AVOCADO. KEEP IT DINNER-SIZED AND FILLING WITHOUT ADDING EXTRA SATURATED-FAT SOURCES.';
+    }
+  }catch(e){}
+  window.MEAL_LAB_AUDIT_V72={status:'FINAL LAB-ALIGNED CURRENT WEEK',labs:'TC 187 • HDL 55 • TG 65 • LDL 116 • NON-HDL 132',rules:['AIM ≤13 G SATURATED FAT/DAY WHEN FEASIBLE AT ~2,000 KCAL','≥28 G FIBER/DAY','REPLACE SATURATED FAT WITH UNSATURATED FAT WHERE PRACTICAL','RED MEAT REDUCED / LEANER WHEN PRACTICAL • NOT BANNED','NO KIDNEY OR DIABETES DIET INFERRED FROM THESE LABS','DELICIOUS + FILLING REMAINS HARD REQUIREMENT','ACTUAL PRODUCT IDENTITY + ACTUAL COOK/PACK WEIGHTS CONTROL MACROS','SAFE EXISTING FOOD IS USED/FROZEN, NOT WASTED']};
+  window.__EMMELLI_BUILD='2026-10-06-V75-REGRESSION-CONSOLIDATED';
+})();
+
+
+/* V76 LIVE ACTUALS + INVENTORY RECONCILIATION • WED 2026-10-07
+   Actual > planned. This migration is deliberately narrow/idempotent and preserves user edits outside today's known corrections. */
+(function applyV76LiveActuals(){
+  try{
+    const mark='v76|2026-10-07|live-actuals';
+    const removeInv=(rx)=>Object.keys(state.inventory||{}).forEach(cat=>{if(Array.isArray(state.inventory[cat])) state.inventory[cat]=state.inventory[cat].filter(x=>!rx.test(String(x.name||'')))});
+    const upsert=(cat,name,rec)=>{state.inventory[cat]=state.inventory[cat]||[];let x=state.inventory[cat].find(z=>String(z.name||'').toLowerCase()===name.toLowerCase());if(x)Object.assign(x,rec,{name});else state.inventory[cat].push({name,...rec})};
+
+    // Known live inventory corrections from the completed Wednesday cook. Unknown additions stay unknown.
+    removeInv(/^Goya black beans$|^Black beans$/i); upsert('Pantry','Goya black beans',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • final can used in Beef Bowl cook'});
+    removeInv(/Great Value minced garlic|mixed\/minced garlic jars|^minced garlic$/i); upsert('Fridge','Great Value minced garlic',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • jar finished during cooking • final extra garlic amount not weighed'});
+    removeInv(/^AP flour$|all-purpose flour/i); upsert('Pantry','AP flour',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • no flour used in Alfredo'});
+    removeInv(/^Frozen spinach$/i); upsert('Freezer','Frozen spinach',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • all 100 g available used in Alfredo'});
+    removeInv(/^Broccoli florets$/i); upsert('Freezer','Broccoli florets',{qty:'480 g total',notes:'WED 10/07 ACTUAL • 140 g open remainder + one unopened 340 g bag'});
+    removeInv(/^White onions?$|^Onions? — white$/i); upsert('Fridge','White onion',{qty:'2 whole + 64 g cut',notes:'WED 10/07 ACTUAL • one of three onions used; 64 g cut remainder from that onion'});
+    removeInv(/^Kraft Parmesan$|^Parmesan$/i); upsert('Fridge','Kraft Parmesan',{qty:'~20 g remaining',notes:'WED 10/07 ACTUAL • after 45 g used for Alfredo'});
+    removeInv(/^Fettuccine$/i); upsert('Pantry','Fettuccine',{qty:'~20 g dry remaining',notes:'WED 10/07 ACTUAL • after 150 g dry used for Alfredo'});
+    removeInv(/^Mild cheddar$|^Cheddar — mild$/i); upsert('Fridge','Mild cheddar',{qty:'~1/3 cup remaining',notes:'WED 10/07 USER ESTIMATE • 30 g used for Beef Bowls'});
+    removeInv(/^Mexican rice/i); upsert('Fridge','Mexican rice — homemade',{qty:'320 g',notes:'GIFT FROM MOTHER-IN-LAW • homemade • nutrition unresolved; do not invent macros',nutrition:null,nutritionComplete:false});
+
+    // Breakfast actual: one egg eaten. V75's latest authoritative pre-breakfast count was 6.
+    let eggs=(state.inventory.Fridge||[]).find(x=>/^Eggs$/i.test(String(x.name||''))); if(eggs&&String(eggs.qty)==='6') eggs.qty='5';
+
+    // Finished-food arithmetic: preserve every measured gram not packed; do not silently discard it.
+    removeInv(/^Wednesday cook — unallocated finished food$/i);
+    upsert('Fridge','Wednesday cook — unallocated finished food',{qty:'79 g total measured remainder',notes:'UNRESOLVED ACTUALS • 8 g beef mixture + 9 g cooked rice + 13 g beans + 8 g honey broccoli + 6 g sauce + 11 g cooked chicken + 24 g Alfredo pasta mixture. Resolve as eaten/tasted, reassigned, saved, or discarded; do not invent destination/macros.'});
+
+    // Physical current-week containers: exact packed weights are authoritative.
+    state.inventory.Containers=state.inventory.Containers||[];
+    const removeContainer=(rx)=>{state.inventory.Containers=state.inventory.Containers.filter(x=>!rx.test(String(x.name||'')))};
+    removeContainer(/Cilantro-Lime Beef.*10\/0?7|Cilantro-Lime Beef.*10\/0?9|Chicken Alfredo.*10\/0?7|Chicken Alfredo.*10\/11/i);
+    // Eaten containers belong in History, not live Container inventory.
+    state.inventory.Containers=state.inventory.Containers.filter(x=>x.id!=='actual-beef-20261007');
+    const container=(id,name,qty,storage,eat,meal,labelRows,components)=>({id,name,qty,storage,eat,meal,labelRows,components,created:'2026-10-07',actualPacked:true,nutritionComplete:false,notes:'ACTUAL PACKED WEIGHTS • nutrition receipt must use actual ingredient/product records; no invented raw weights'});
+    state.inventory.Containers.push(
+      container('actual-beef-20261009','CILANTRO-LIME BEEF BOWL • FRI 10/9 LUNCH','591 g','FRIDGE','FRI 10/9','LUNCH',['CILANTRO-LIME BEEF BOWL','FRI 10/9 — LUNCH','184G BEEF • 157G RICE • 95G BEANS • 100G BROCCOLI • 40G SAUCE • 15G CHEDDAR','FRIDGE'],{beefMixture:184,rice:157,beans:95,broccoli:100,sauce:40,cheddar:15}),
+      container('actual-alfredo-20261007','CHICKEN ALFREDO • WED 10/7 DINNER','464 g','FRIDGE','WED 10/7','DINNER',['CHICKEN ALFREDO','WED 10/7 — DINNER','167G CHICKEN • 297G PASTA MIXTURE','FRIDGE'],{chicken:167,pastaMixture:297}),
+      container('actual-alfredo-20261011','CHICKEN ALFREDO • SUN 10/11 LUNCH','464 g','FREEZER','SUN 10/11','LUNCH',['CHICKEN ALFREDO','SUN 10/11 — LUNCH','167G CHICKEN • 297G PASTA MIXTURE','HOME FREEZER','THAW SAT 10/10'],{chicken:167,pastaMixture:297})
+    );
+
+    // Actual Wednesday recipe/component receipts. Exact unweighed additions remain explicitly unresolved.
+    MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']={...(MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']||{}),sourceLabel:'WED 10/07 • ACTUAL COOKED + PACKED',ingredients:['Monday-preportioned 80/20 beef — exact raw bag weight not promoted to an actual unless recorded','3 g olive oil','60 g white onion','6 g minced garlic + additional final jar amount UNWEIGHED','2 g cumin','1 g paprika','2 g salt','1 g black pepper','lime/cilantro finish as actually used','100 g dry basmati rice • finished cooked rice 323 g','final can black beans • garlic/lime added • finished beans 203 g','200 g frozen broccoli + 30 g honey • finished 208 g','sauce: 50 g Daisy sour cream + 15 g Fairlife Whole Milk + 15 g lime + 5 g cilantro + 2 g minced garlic + 1 g salt • finished 86 g','30 g cheddar','NO AVOCADO • not ripe'],weigh:'ACTUAL FINISHED: beef mixture 376 g • rice 323 g • beans 203 g • honey broccoli 208 g • sauce 86 g • cheddar 30 g. TWO ACTUAL 591 g CONTAINERS: 184 g beef mixture + 157 g rice + 95 g beans + 100 g broccoli + 40 g sauce + 15 g cheddar EACH. Beef grease was NOT drained. Unknown raw beef bag weight / unweighed garlic-lime additions remain unresolved rather than guessed.'};
+    MEAL.recipes['Chicken Alfredo']={...(MEAL.recipes['Chicken Alfredo']||{}),sourceLabel:'WED 10/07 • ACTUAL COOKED + PACKED',ingredients:['Monday-preportioned chicken allocation • cooked chicken finished 345 g','3 g olive oil + seasonings as instructed','150 g dry fettuccine','100 g frozen spinach — ALL REMAINING USED','8 g butter','200 g Fairlife Whole Milk','80 g half-and-half','45 g Parmesan','garlic/seasonings as actually used','NO FLOUR','NO HEAVY CREAM'],weigh:'ACTUAL FINISHED: chicken 345 g • pasta + Alfredo sauce + spinach mixture 618 g. TWO ACTUAL 464 g CONTAINERS: 167 g chicken + 297 g pasta mixture EACH. Remaining finished grams are not silently assigned; preserve as unallocated unless physically accounted for.'};
+
+    // Today's real status: breakfast/lunch actual; gym fuel not eaten and must not be counted as actual.
+    if(MEAL.days?.['2026-10-07']) Object.assign(MEAL.days['2026-10-07'],{
+      breakfast:'ACTUAL EATEN • 1 Base Culture Honey Wheat Sourdough slice + 1 egg • avocado skipped (not ripe) • fruit/honey not yet confirmed eaten',
+      lunch:'ACTUAL EATEN • Cilantro-Lime Beef Bowl • 591 g total: 184 g beef mixture + 157 g rice + 95 g beans + 100 g honey broccoli + 40 g sauce + 15 g cheddar',
+      dinner:'PACKED • Chicken Alfredo • 464 g: 167 g chicken + 297 g pasta mixture',
+      pre:'NOT EATEN • gym not completed as of latest update • do not count automatically',post:'NOT EATEN • do not count automatically',
+      prep:'WEDNESDAY COOKING COMPLETE • actual finished + packed weights saved. Actual > planned.'
+    });
+    if(typeof DAY_MACRO_PLAN==='object'&&DAY_MACRO_PLAN) DAY_MACRO_PLAN['2026-10-07']={status:'LIVE ACTUALS • PARTIAL DAY',note:'Breakfast toast + egg and full 591 g Beef Bowl are eaten. Alfredo 464 g is packed for dinner. PRE/POST are NOT eaten and must not count unless later confirmed. Fruit/honey remains flexible. Do not manufacture an exact day total from an unsupported raw-beef weight.'};
+
+    // Sunday plan cannot consume black beans that are now OUT. Force an inventory-first correction rather than a phantom ingredient.
+    if(MEAL.days?.['2026-10-11']) MEAL.days['2026-10-11'].dinner='BIG JPAN Ginger Salad Bowl — INVENTORY-FIRST CORRECTION REQUIRED • black beans are OUT after Wed cook; do not display/count black beans unless repurchased. Use actual on-hand ingredients and actual dressing/rice/avocado amounts.';
+
+    state.foodHistory=state.foodHistory||[];
+    const addHist=(id,rec)=>{if(!state.foodHistory.some(x=>x.id===id))state.foodHistory.push({id,...rec})};
+    addHist('v76-breakfast-20261007',{date:'2026-10-07',type:'ACTUAL EATEN',meal:'BREAKFAST',item:'1 Base Culture Honey Wheat Sourdough slice + 1 egg',notes:'Avocado not ripe; fruit/honey not confirmed eaten'});
+    addHist('v76-lunch-20261007',{date:'2026-10-07',type:'ACTUAL EATEN',meal:'LUNCH',item:'Cilantro-Lime Beef Bowl',grams:591,components:{beefMixture:184,rice:157,beans:95,broccoli:100,sauce:40,cheddar:15}});
+    state.checks=state.checks||{};state.checks[mark]=true;
+    window.EMMELLI_V76_ACTUALS={date:'2026-10-07',inventoryReconciled:true,containersReconciled:true,actualBeefBowlEaten:true,gymFuelEaten:false,unknownsPreserved:['raw beef bag weight','final extra garlic/lime amounts','homemade Mexican rice nutrition']};
+    window.__EMMELLI_BUILD='2026-10-07-V76-LIVE-ACTUALS-AUDITED';
+    save();
+    if(typeof render==='function') render();
+  }catch(e){console.error('V76 live actual migration',e)}
+})();
+
+/* V75 REGRESSION CONSOLIDATION — fixes live in the owning TODAY renderer/router; no end-of-file behavior override. */
+window.__EMMELLI_PREVIOUS_BUILD='2026-10-06-V75-REGRESSION-CONSOLIDATED';
+window.__EMMELLI_BUILD='2026-10-07-V76-LIVE-ACTUALS-AUDITED';
+
+
+})();
 </script>
 </body>
 </html>
