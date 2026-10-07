@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-04-V36-TODAY-COOK-RECEIPT-AUDIT-2">
+<meta name="emmelli-current-build" content="2026-10-07-V80-UNIFIED-PRODUCT-BUILD">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -869,10 +869,15 @@ summary{border-radius:12px}
 @media(max-width:430px){.history-option-grid{grid-template-columns:1fr}.history-option{min-height:68px}.history-cal-weekdays,.history-calendar{gap:3px}.history-cal-day{border-radius:9px;font-size:11px}.history-jump{grid-template-columns:1fr 1fr}.history-glance-grid{grid-template-columns:1fr 1fr}}
 
 </style>
+<style id="v80-unified-product-style">
+.tile:disabled{opacity:.62;cursor:default;filter:saturate(.72);box-shadow:none}.tile:disabled:active{transform:none}
+.system-path{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0}.system-path span{font-size:10px;font-weight:850;border:1px solid var(--line);border-radius:999px;padding:5px 8px;background:#fff9fb;color:#876a73}
+</style>
+
 <meta name="emmelli-v70-live-date-time" content="America/New_York • auto-day • live-commentary • top-date">
 </head>
-<body data-build="2026-10-02-CLEAN-RUNTIME">
-<div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S WEEKLY HUB</h2><p style="margin:0">Starting Hub V11 — macro + rice rule audit…</p><p style="margin:8px 0 0;font-size:13px">Oct 5–11 audited meal plan loaded • rice allowed any day when batch-cooked/stored for freshness • Sunday included.</p></section></div>
+<body data-build="2026-10-07-V80-UNIFIED-PRODUCT-BUILD">
+<div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Food • Gym • Budget • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
 /* V41 LOCKED COOKING UX: TODAY'S COOKING always visible; only workflow dropdowns are GET EVERYTHING OUT / PREP + MEASURE / COOK EVERYTHING TOGETHER / CONTAINERS. Recipe source links are optional references; Hub instructions are self-contained. CONTAINERS owns component ingredient confirmation (including added ingredient source + nutrition identity + amount/unit + DURING COOKING/WHILE PORTIONING/AFTER COOKING), actual finished component weights, actual component grams per container, suggested containers, labels/storage, and save-to-Inventory. */
@@ -889,7 +894,7 @@ function budgetOccurrenceAmountV125(row){
   }catch(e){}
   return Math.round(Number(row.a||row.amount||0)*100)/100;
 }
-const CURRENT_BUILD="2026-10-04-V46-UNIFIED-CURRENT";
+const CURRENT_BUILD="2026-10-07-V80-UNIFIED-PRODUCT-BUILD";
 const GOALS_COMMENTARY_RULE_V15="ALL unfinished goals through the selected day surface in Today Commentary until completed; Important only affects emphasis.";
 const CURRENT_PAGE_CONTRACT_V14={today:"receipt-readiness routine faith goals school weigh-in food contextual",food:"today-food meal-plan inventory monday-grocery cook-days",gym:"day-plan run body-progress",budget:"income autopays emergency week-by-week",history:"year month week day",wish:"categories items totals"};
 const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
@@ -1325,7 +1330,7 @@ const SKEY="emmelliHubVISIBLEPROOF2026_09_30_v11";
 function base(){return{day:(new Date().getDay()+6)%7,route:"today",sub:null,routine:{},goals:[],water:{},weight:{},measure:{},studyNotes:{},studyResources:{},bible:{},run:{},gym:{},inventory:{Fridge:[
 {name:"Raspberries — older",qty:"~12 oz"},{name:"Blackberries — older",qty:"~1/4 cup"},{name:"Raspberries — newer",qty:"amount not supplied"},{name:"Blackberries — newer",qty:"6 oz"},{name:"Blackberries — newer partial",qty:"~4 oz"},{name:"Apples",qty:"2"},{name:"Red onion",qty:"remaining amount unknown after 60 g used",notes:"Prior amount was about 1/2 onion; 60 g used Monday."},{name:"Lemon",qty:"1"},{name:"Orange",qty:"1"},{name:"Eggs",qty:"6"},{name:"Philadelphia cream cheese",qty:"~5 tbsp"},{name:"Hummus",qty:"~4 tbsp"},{name:"Fairlife milk",qty:"GENERAL REMAINING AMOUNT UNRESOLVED",notes:"OCT 1 CURRENT TRUTH • PRE-MEASURED COBBLER FAIRLIFE CUP IS RESERVED PREP AND IS NOT GENERAL MILK INVENTORY."},{name:"Heavy cream",qty:"remaining amount unknown after 120 mL used",notes:"Monday cooking used 120 mL; original container volume was not supplied."},{name:"Mozzarella",qty:"~3/4 cup"},{name:"Honey ham",qty:"~15 slices"},{name:"Cabot sliced cheddar",qty:"3 slices"},{name:"Mild cheddar",qty:"8 oz"},{name:"Philadelphia cream cheese block",qty:">1/2 of 8 oz"},{name:"Sour cream",qty:"14 oz"},{name:"Butter",qty:"~178 g",notes:"OCT 1 LIVE COOK ACTUAL"},{name:"Laughing Cow",qty:"3 wedges"},{name:"McCormick brown gravy",qty:"~1 1/2 cups"},{name:"Kitchen Basics chicken stock — opened",qty:"0 — OUT",notes:"OCT 1 LIVE COOK ACTUAL • CHICKEN STOCK/BROTH USED UP"},{name:"Tomato paste — opened",qty:"~108 g remaining (approx.)",notes:"Prior amount was ~3/4 of a 6 oz can; 20 g used Monday."},{name:"Classico pesto — opened",qty:"nearly full 8.1 oz"},{name:"Dijon mustard",qty:"on hand"},{name:"Zero sugar ketchup",qty:"on hand"},{name:"Minced ginger",qty:"remaining amount unknown after 10 g used",notes:"10 g used Monday; starting quantity was not supplied."},{name:"Skinnygirl Caesar",qty:"on hand"},{name:"Yellow mustard",qty:"on hand"},{name:"Mixed fruit jam",qty:"on hand"},{name:"G Hughes sugar-free teriyaki",qty:"<1/2"},{name:"Bachan’s Original",qty:"full"},{name:"Liquid Aminos — partial",qty:"0 — EMPTY",notes:"OCT 1 LIVE COOK ACTUAL • PARTIAL BOTTLE EMPTIED"},{name:"Lime juice",qty:"~1/2"},{name:"Sun-dried tomatoes",qty:"remaining amount unknown after 40 g used",notes:"Prior amount was ~1/2 jar; jar size was not supplied."},{name:"Heinz sweet relish — check before use",qty:"on hand; Best By Jul 4, 2026"},{name:"La Legume celery",qty:"665 g prepared/cut",expires:"Estimated ~Oct 7, 2026",expiryType:"ESTIMATED USE WINDOW",useSoon:true,notes:"No printed date • weighed after cutting/prep 9/30/26"},{name:"Baby carrots",qty:"1 lb",expires:"Oct 17, 2026",expiryType:"PRINTED DATE",notes:"Brand recorded from haul as Cal-Organic Farms / voice confirmation"},{name:"Bananas",qty:"2",notes:"Purchased 9/30/26 • still partly green"},{name:"Rosemary-garlic loaf",qty:"1 loaf",expires:"Oct 3, 2026",expiryType:"SELL BY",useSoon:true,notes:"Packed Sep 28, 2026 • current bread; sourdough is out"}],
 Freezer:[{name:"Broccoli florets",qty:"~18 oz"},{name:"Super sweet corn",qty:"36 oz"},{name:"Seasoned Brussels sprouts",qty:"13.5 oz"},{name:"Filet steak",qty:"weight unknown"},{name:"Frozen spinach",qty:"~2 cups"},{name:"Bell & Evans ground chicken",qty:"1 x 1 lb"},{name:"Blue Bunny Salted Caramel Craze",qty:"46 fl oz"},{name:"Frozen mango",qty:"~2 cups"},{name:"Frozen berry mix",qty:"~8 cups"},{name:"Kirkland bacon",qty:"2 packs"},{name:"Frozen chicken",qty:"0 — OUT",notes:"OCT 2 LATEST USER CORRECTION • NO FROZEN RAW CHICKEN REMAINS."},{name:"Great Value frozen cauliflower",qty:"4 bags × ~340 g = ~1,360 g",expires:"May 11, 2028",expiryType:"BEST IF USED BY",notes:"All four bags share printed date"}],
-Pantry:[{name:"Limes",qty:"6"},{name:"Potatoes",qty:"0 — OUT",notes:"OCT 1 LIVE COOK ACTUAL"},{name:"Great Value Organic reduced-sodium chicken broth — existing",qty:"0 — OUT",notes:"OCT 1 LIVE COOK ACTUAL • CHICKEN STOCK/BROTH USED UP"},{name:"Great Value Organic reduced-sodium chicken broth — new",qty:"0 — OUT",expires:"Jul 20, 2027",expiryType:"PRINTED DATE",store:"Walmart",purchasedDate:"2026-09-30",notes:"OCT 1 LIVE COOK ACTUAL • CHICKEN STOCK/BROTH USED UP"},{name:"Great Value Organic beef broth",qty:"32 oz",expires:"Dec 25, 2027",expiryType:"PRINTED DATE",store:"Walmart",purchasedDate:"2026-09-30"},{name:"Royal basmati rice",qty:"20 lb",expires:"Estimated Mar 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"No printed best-by • this is Emmelli’s regular rice"},{name:"Snack Factory Pretzel Crisps — Apple Spice White Crème",qty:"113 g",expires:"Jan 23, 2027",expiryType:"PRINTED DATE"},{name:"Great Value raw honey",qty:"32 oz",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"No printed date found"},{name:"Chick-fil-A Sauce — individual",qty:"2 × 28 g = 56 g total",notes:"Use naturally with compatible sandwiches/chicken meals before opening/buying another similar sauce"},{name:"Sweetened condensed coconut milk — opened",qty:"~6 tbsp"},{name:"Worcestershire — partial",qty:"~1 tbsp"},{name:"Mayonnaise — partial",qty:"~2 tbsp"},{name:"Kirkland honey",qty:"~1 tbsp"},{name:"Fettuccine",qty:"~1 box"},{name:"Jumbo shells",qty:"amount unknown"},{name:"Penne",qty:"~1 1/2 cups"},{name:"Brown sugar",qty:"~4 cups"},{name:"AP flour",qty:"~1/4 cup LOOSE",notes:"OCT 1 CURRENT TRUTH • PREPARED COBBLER DRY MIX IS RESERVED PREP AND NOT INCLUDED IN LOOSE FLOUR",legacyQty:"~2 cups"},{name:"Cornstarch",qty:"remaining amount unknown after 10 g used",notes:"10 g used Monday; starting quantity was recorded approximately in cups."},{name:"Bread flour",qty:"~7 cups"},{name:"Powdered sugar",qty:"~2 cups"},{name:"White sugar",qty:"~4 tbsp"},{name:"Panko",qty:"remaining amount unknown after 30 g used",notes:"30 g used Monday; starting quantity was approximate."},{name:"Green lentils",qty:"16 oz"},{name:"Jiffy corn muffin mix",qty:"2 boxes"},{name:"Quaker Maple & Brown Sugar oatmeal",qty:"16"},{name:"Quaker PROTEIN Maple & Brown Sugar oatmeal",qty:"4"},{name:"Other instant oatmeal",qty:"7 assorted"},{name:"Nature Valley Protein granola",qty:"~3/4 bag"},{name:"Goldfish Pretzels",qty:"full"},{name:"BBQ Pringles",qty:"2.5 oz"},{name:"MadeGood Snickerdoodle",qty:"8"},{name:"Fruit snacks",qty:"21"},{name:"York Peppermint Patty cocoa",qty:"8"},{name:"Regular cocoa",qty:"4"},{name:"Whole almonds",qty:"16 oz"},{name:"Chia seeds",qty:"~1/3 of 32 oz"},{name:"Carb Counter street taco tortillas",qty:"14 unopened"},{name:"Goya black beans",qty:"3 x 439 g"},{name:"Chipotle peppers in adobo",qty:"199 g"},{name:"Dole pineapple tidbits",qty:"20 oz"},{name:"Dairy-free sweetened condensed milk",qty:"2"},{name:"Brookdale corned beef",qty:"12 oz"},{name:"Tomato paste — unopened",qty:"6 oz"},{name:"Bush’s baked beans",qty:"~454 g"},{name:"Old El Paso enchilada sauce",qty:"10 oz"},{name:"Cream-style corn",qty:"14.75 oz"},{name:"Pinto beans",qty:"~15.5 oz"},{name:"Cider vinegar",qty:"on hand"},{name:"Toasted sesame oil",qty:"~1/2"},{name:"Beef tallow",qty:"on hand"},{name:"Mirin",qty:"on hand"},{name:"Soy/all-purpose seasoning",qty:"~1 cup"},{name:"Ghee",qty:"on hand"},{name:"Concord lime juice",qty:"on hand"},{name:"Liquid smoke",qty:"on hand"},{name:"Thai peanut satay",qty:"on hand"},{name:"Pretty Thai peanut stir-fry",qty:"2"},{name:"Coconut gel",qty:"on hand"},{name:"Lea & Perrins Worcestershire",qty:"full"},{name:"Oyster sauce",qty:"full — fish conflict; verify before use"},{name:"Liquid Aminos",qty:"473 mL • FULL",notes:"OCT 1 LIVE COOK ACTUAL • FULL BACKUP REMAINS"},{name:"Balsamic vinegar",qty:"on hand"},{name:"Rice vinegar",qty:"~3/4"},{name:"Hoisin",qty:"full"}],
+Pantry:[{name:"Limes",qty:"6"},{name:"Potatoes",qty:"0 — OUT",notes:"OCT 1 LIVE COOK ACTUAL"},{name:"Great Value Organic reduced-sodium chicken broth — existing",qty:"0 — OUT",notes:"OCT 1 LIVE COOK ACTUAL • CHICKEN STOCK/BROTH USED UP"},{name:"Great Value Organic reduced-sodium chicken broth — new",qty:"0 — OUT",expires:"Jul 20, 2027",expiryType:"PRINTED DATE",store:"Walmart",purchasedDate:"2026-09-30",notes:"OCT 1 LIVE COOK ACTUAL • CHICKEN STOCK/BROTH USED UP"},{name:"Great Value Organic beef broth",qty:"32 oz",expires:"Dec 25, 2027",expiryType:"PRINTED DATE",store:"Walmart",purchasedDate:"2026-09-30"},{name:"Royal basmati rice",qty:"20 lb",expires:"Estimated Mar 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"No printed best-by • this is Emmelli’s regular rice"},{name:"Snack Factory Pretzel Crisps — Apple Spice White Crème",qty:"113 g",expires:"Jan 23, 2027",expiryType:"PRINTED DATE"},{name:"Great Value raw honey",qty:"32 oz",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"No printed date found"},{name:"Chick-fil-A Sauce — individual",qty:"2 × 28 g = 56 g total",notes:"Use naturally with compatible sandwiches/chicken meals before opening/buying another similar sauce"},{name:"Sweetened condensed coconut milk — opened",qty:"~6 tbsp"},{name:"Worcestershire — partial",qty:"~1 tbsp"},{name:"Mayonnaise — partial",qty:"~2 tbsp"},{name:"Kirkland honey",qty:"~1 tbsp"},{name:"Fettuccine",qty:"~1 box"},{name:"Jumbo shells",qty:"amount unknown"},{name:"Penne",qty:"~1 1/2 cups"},{name:"Brown sugar",qty:"~4 cups"},{name:"AP flour",qty:"~1/4 cup LOOSE",notes:"OCT 1 CURRENT TRUTH • PREPARED COBBLER DRY MIX IS RESERVED PREP AND NOT INCLUDED IN LOOSE FLOUR",legacyQty:"~2 cups"},{name:"Cornstarch",qty:"remaining amount unknown after 10 g used",notes:"10 g used Monday; starting quantity was recorded approximately in cups."},{name:"Bread flour",qty:"~7 cups"},{name:"Powdered sugar",qty:"~2 cups"},{name:"White sugar",qty:"~4 tbsp"},{name:"Panko",qty:"remaining amount unknown after 30 g used",notes:"30 g used Monday; starting quantity was approximate."},{name:"Green lentils",qty:"16 oz"},{name:"Jiffy corn muffin mix",qty:"2 boxes"},{name:"Quaker Maple & Brown Sugar oatmeal",qty:"16"},{name:"Quaker PROTEIN Maple & Brown Sugar oatmeal",qty:"4"},{name:"Other instant oatmeal",qty:"7 assorted"},{name:"Nature Valley Protein granola",qty:"~3/4 bag"},{name:"Goldfish Pretzels",qty:"full"},{name:"BBQ Pringles",qty:"2.5 oz"},{name:"MadeGood Snickerdoodle",qty:"8"},{name:"Fruit snacks",qty:"21"},{name:"York Peppermint Patty cocoa",qty:"8"},{name:"Regular cocoa",qty:"4"},{name:"Whole almonds",qty:"16 oz"},{name:"Chia seeds",qty:"~1/3 of 32 oz"},{name:"Carb Counter street taco tortillas",qty:"14 unopened"},{name:"Goya black beans",qty:"2 × 439 g cans • UNOPENED",notes:"WED 10/07 CURRENT TRUTH • 1 of original 3 cans cooked; 2 unopened remain"},{name:"Chipotle peppers in adobo",qty:"199 g"},{name:"Dole pineapple tidbits",qty:"20 oz"},{name:"Dairy-free sweetened condensed milk",qty:"2"},{name:"Brookdale corned beef",qty:"12 oz"},{name:"Tomato paste — unopened",qty:"6 oz"},{name:"Bush’s baked beans",qty:"~454 g"},{name:"Old El Paso enchilada sauce",qty:"10 oz"},{name:"Cream-style corn",qty:"14.75 oz"},{name:"Pinto beans",qty:"~15.5 oz"},{name:"Cider vinegar",qty:"on hand"},{name:"Toasted sesame oil",qty:"~1/2"},{name:"Beef tallow",qty:"on hand"},{name:"Mirin",qty:"on hand"},{name:"Soy/all-purpose seasoning",qty:"~1 cup"},{name:"Ghee",qty:"on hand"},{name:"Concord lime juice",qty:"on hand"},{name:"Liquid smoke",qty:"on hand"},{name:"Thai peanut satay",qty:"on hand"},{name:"Pretty Thai peanut stir-fry",qty:"2"},{name:"Coconut gel",qty:"on hand"},{name:"Lea & Perrins Worcestershire",qty:"full"},{name:"Oyster sauce",qty:"full — fish conflict; verify before use"},{name:"Liquid Aminos",qty:"473 mL • FULL",notes:"OCT 1 LIVE COOK ACTUAL • FULL BACKUP REMAINS"},{name:"Balsamic vinegar",qty:"on hand"},{name:"Rice vinegar",qty:"~3/4"},{name:"Hoisin",qty:"full"}],
 Seasonings:[{name:"Bay leaves",qty:"on hand"},{name:"Chili powder",qty:"on hand"},{name:"Dried cilantro",qty:"on hand"},{name:"Onion powder",qty:"on hand"},{name:"Oregano",qty:"on hand"},{name:"Paprika",qty:"on hand"},{name:"Poppy seed",qty:"on hand"},{name:"Taco seasoning",qty:"on hand"},{name:"Seasoned salt",qty:"on hand"},{name:"Sazón / Savory Crust",qty:"on hand"},{name:"Sea salt",qty:"on hand"},{name:"Himalayan pink salt",qty:"on hand"},{name:"Rosemary",qty:"on hand"},{name:"Pumpkin pie spice",qty:"on hand"},{name:"Poultry seasoning",qty:"on hand"},{name:"Thyme",qty:"on hand"},{name:"Turmeric",qty:"on hand"},{name:"White sesame",qty:"on hand"},{name:"Chicken bouillon",qty:"on hand"},{name:"Cumin",qty:"on hand"},{name:"Goya Sazón",qty:"12"},{name:"Caribbean jerk",qty:"on hand"},{name:"Hidden Valley Black Pepper Parmesan Ranch",qty:"2"},{name:"Chili seasoning",qty:"on hand"},{name:"Morton Nature’s Seasons",qty:"212 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW"},{name:"Cinnamon sugar",qty:"122 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"Brand not confirmed; keep generic until identified"},{name:"Baking powder",qty:"~460 g total across ~2 containers",expires:"Estimated Sep 30, 2027",expiryType:"ESTIMATED QUALITY WINDOW",notes:"Plenty on hand; includes new 230 g Great Value container"},{name:"Baking soda",qty:"0 — OUT",notes:"Separate ingredient from baking powder; restock only when needed"},{name:"Ground cloves",qty:"51 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"Brand not confirmed"},{name:"Italian seasoning",qty:"27 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"Brand not confirmed"},{name:"Great Value garlic powder",qty:"96 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW"},{name:"Garlic salt",qty:"85 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"Brand not confirmed"},{name:"Great Value black pepper",qty:"170 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW"},{name:"Ground ginger",qty:"42 g",expires:"Estimated Sep 30, 2028",expiryType:"ESTIMATED QUALITY WINDOW",notes:"Brand not confirmed"},{name:"Cream of tartar",qty:"on hand",notes:"Confirmed on hand; not a restock"},{name:"RESTOCK — lemon pepper",qty:"needed"},{name:"RESTOCK — Mexican seasoning (green cap)",qty:"needed"}],
 Containers:[]},actualFood:{},budget:{balance:2.63,balanceAsOf:"2026-09-28",expectedIncome:0,unplanned:[],buys:{},emergency:{},beautyByMonth:{}},wish:{},history:[],checks:{},routineV2:{},routineStatus:{},routineSnapshots:{},cookLog:{},cookDraft:{},foodHistory:[],gymLog:{},goalHistory:{},groceryPrices:{}}}
 function mergeCurrentStateDefaults(current,saved){
@@ -1623,7 +1628,7 @@ function today(){
    <button class="tile" data-sub="goals"><b>Goals</b><span>Daily goals • important reminders • water</span></button>
    <button class="tile" data-sub="school"><b>Study Today</b><span>${esc(STUDY[d])} • 30 min</span></button>
    <button class="tile" data-sub="weigh"><b>Daily Weigh-In</b><span>Feeds Body Progress + History</span></button>
-   <button class="tile" data-route="food" data-sub="todayfood"><b>What I Actually Ate</b><span>Meals at a Glance • actual food • macros</span></button>
+   <button class="tile" data-route="food" data-sub="todayfood"><b>Today’s Food</b><span>Plan • actual eaten • daily macro pass/fail</span></button>
    ${contextual}
  </div>
  <aside class="thaw-strip"><b>TONIGHT — FREEZER → FRIDGE</b><span>${esc(meal?.thaw||"Nothing needs to move tonight.")}</span></aside>
@@ -2008,7 +2013,7 @@ function gym(){
  let d=DAYS[state.day],k=selectedKey(),plan=GYM_PLAN[d];
  if(!plan){if(DAY_ACTIVITY[d]==="RUN"){let r=state.run[k];return hero("Gym + Run",d)+`<section class="comment-widget"><p>${r?.duration?`RUN SAVED • ${r.duration} MIN • INCLINE ${r.incline} • SPEED ${r.speed}`:"RUN DAY • ENTER INCLINE, SPEED, AND TIME AFTER YOU RUN."}</p></section><div class="grid"><button class="tile" data-sub="run"><b>RUN</b><span>Incline • speed • time</span></button><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>Weight • measurements • runs</span></button></div>`}if(DAY_ACTIVITY[d]==="REST")return hero("Gym",d)+`<section class="card"><p>REST / RECOVERY DAY.</p><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>Weight • measurements • runs</span></button></section>`;return hero("Gym",d)+`<section class="card"><p>ACTIVITY PLAN NEEDS ATTENTION.</p></section>`}
  let log=state.gymLog[k]||{},targets=state.gymTargets||{},allDone=plan.steps.every(ex=>log[ex.name]?.done);
- return hero("Gym",d)+`<section class="comment-widget"><p><b>${esc(plan.title)}</b> • 3 SETS MAX • 12 REPS MAX. ACTUALS START AT 0. USE THE TOP HEART TO FILL THE WHOLE WORKOUT AS PLANNED, THEN UNCHECK ANY SET YOU CHANGED AND TYPE WHAT YOU ACTUALLY DID.</p></section><section class="card"><div class="workout-master"><button class="heartbtn ${allDone?'on':''}" data-gym-all-planned aria-label="Did entire workout as planned"><span class="theme-heart"></span></button><div style="flex:1"><b>DID ENTIRE WORKOUT AS PLANNED</b><div class="muted">FILLS ALL ACTUAL SET BOXES WITH THE PLAN. UNCHECK A SET TO EDIT IT.</div></div>${allDone?'<span class="paid-tag">WORKOUT COMPLETE</span>':''}</div>${plan.steps.map((ex,ei)=>{let z=log[ex.name]||{},tk=d+"|"+ex.name,custom=targets[tk]||ex.sets;return `<div class="exercise-card ${z.done?'completed':''}"><div class="exercise-title"><span class="theme-heart"></span><div style="flex:1"><b>${esc(ex.name)}</b><div class="muted">REST ${esc(ex.rest)}${ex.assistance?" • LOWER ASSISTANCE = PROGRESS":""}</div></div></div>${custom.map((st,i)=>{let planned=z['p'+i]===true;return `<div class="setrow"><b>SET ${i+1}</b><input class="setplan" type="checkbox" data-gym-set-planned="${ei}|${i}" ${planned?'checked':''} aria-label="Set ${i+1} as planned"><label>ACTUAL ${ex.assistance?"ASSIST":"WEIGHT"}<input data-gym-field="${esc(ex.name)}|w${i}" value="${esc(z['w'+i]??'0')}" inputmode="decimal"></label><label>REPS<input type="number" min="0" max="12" data-gym-field="${esc(ex.name)}|r${i}" value="${esc(z['r'+i]??'0')}"></label><button class="btn set-ready" data-gym-up-weight="${ei}|${i}" title="Increase actual weight"><span class="theme-heart"></span></button></div><div class="price-est">PLAN • ${esc(st[0]||"CHOOSE WEIGHT")} × ${st[1]}</div>`}).join("")}</div>`}).join("")}<button class="btn primary" data-save-gym>SAVE WORKOUT</button></section><details class="info-accordion"><summary>15-MINUTE AB CIRCUIT</summary><div>${AB_MOVES.map((x,i)=>checkbox("ab|"+k+"|"+i,x)).join("")}</div></details><details class="info-accordion"><summary>TREADMILL</summary><div><p><b>30 MIN • SPEED 3.0 • INCLINE 5–6</b></p></div></details><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
+ return hero("Gym",d)+`<section class="comment-widget"><p><b>${esc(plan.title)}</b> • 3 SETS MAX • 12 REPS MAX. ACTUALS START AT 0. USE THE TOP HEART TO FILL THE WHOLE WORKOUT AS PLANNED, THEN UNCHECK ANY SET YOU CHANGED AND TYPE WHAT YOU ACTUALLY DID.</p></section><section class="card"><div class="workout-master"><button class="heartbtn ${allDone?'on':''}" data-gym-all-planned aria-label="Did entire workout as planned"><span class="theme-heart"></span></button><div style="flex:1"><b>DID ENTIRE WORKOUT AS PLANNED</b><div class="muted">FILLS ALL ACTUAL SET BOXES WITH THE PLAN. UNCHECK A SET TO EDIT IT.</div></div>${allDone?'<span class="paid-tag">WORKOUT COMPLETE</span>':''}</div>${plan.steps.map((ex,ei)=>{let z=log[ex.name]||{},tk=d+"|"+ex.name,custom=targets[tk]||ex.sets;return `<div class="exercise-card ${z.done?'completed':''}"><div class="exercise-title"><span class="theme-heart"></span><div style="flex:1"><b>${esc(ex.name)}</b><div class="muted">REST ${esc(ex.rest)}${ex.assistance?" • LOWER ASSISTANCE = PROGRESS":""}</div></div></div>${custom.map((st,i)=>{let planned=z['p'+i]===true;return `<div class="setrow"><b>SET ${i+1}</b><input class="setplan" type="checkbox" data-gym-set-planned="${ei}|${i}" ${planned?'checked':''} aria-label="Set ${i+1} as planned"><label>ACTUAL ${ex.assistance?"ASSIST":"WEIGHT"}<input data-gym-field="${esc(ex.name)}|w${i}" value="${esc(z['w'+i]??'0')}" inputmode="decimal"></label><label>REPS<input type="number" min="0" max="12" data-gym-field="${esc(ex.name)}|r${i}" value="${esc(z['r'+i]??'0')}"></label><button class="btn set-ready" data-gym-up-weight="${ei}|${i}" title="Increase actual weight"><span class="theme-heart"></span></button></div><div class="price-est">PLAN • ${esc(st[0]||"CHOOSE WEIGHT")} × ${st[1]}</div>`}).join("")}</div>`}).join("")}<button class="btn primary" data-save-gym>SAVE WORKOUT</button></section><details class="info-accordion"><summary>15-MINUTE AB CIRCUIT</summary><div>${AB_MOVES.map((x,i)=>checkbox("ab|"+k+"|"+i,x)).join("")}</div></details><details class="info-accordion"><summary>TREADMILL</summary><div><p><b>30 MIN • SPEED 3.0 • INCLINE ${d==="Wednesday"?"8":"5–6"}</b></p></div></details><button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MONDAY MEASUREMENTS + RUNS</span></button>`;
 }
 function body(){let dates=[...new Set([...Object.keys(state.weight),...Object.keys(state.measure),...Object.keys(state.run||{})])].filter(d=>validDateKey(d)&&(hasWeight(d)||hasMeasure(d)||hasRun(d))).sort().reverse().slice(0,12);return hero("Body Progress","Weight • Monday measurements • runs")+back("Gym")+`<section class="card"><h2>Progress History</h2>${dates.map(k=>{let m=state.measure[k]||{},r=state.run[k];return `<div class="taskcard"><b>${esc(k)}</b><p>${state.weight[k]!==""&&state.weight[k]!=null?`Weight: ${esc(state.weight[k])} lb`:""}${m.glutes!==""&&m.glutes!=null?` • Glutes: ${esc(m.glutes)}`:""}${m.waist!==""&&m.waist!=null?` • Waist: ${esc(m.waist)}`:""}${m.arms!==""&&m.arms!=null?` • Arms: ${esc(m.arms)}`:""}${r?.duration?`<br>Run: ${esc(r.duration)} min • incline ${esc(r.incline)} • speed ${esc(r.speed)}`:""}</p></div>`}).join("")||'<p class="muted">Save weigh-ins, Monday measurements, or runs to build progress.</p>'}</section>`}
 function autopayOverrideKey(x){return `${localDateKey(x.date)}|${encodeURIComponent(x.n)}|${Number(x.baseA??x.a).toFixed(2)}`}
@@ -2269,22 +2274,22 @@ function wish(){
  if(state.sub&&state.sub.startsWith("wish:"))return wishCat(state.sub.slice(5));
  let items=WISHCATS.map(c=>({c,n:(state.wish[c]||[]).length}));return hero("Wish List","Dream board")+`<section class="card"><h2>Categories</h2><div class="grid">${WISHCATS.map(c=>`<button class="tile" data-wish="${c}"><b>${c}</b><span>${(state.wish[c]||[]).length} saved</span></button>`).join("")}</div></section><section class="card"><h2>Wish List Mix</h2>${donutData(items,x=>x.c,x=>x.n)}</section>`
 }
-function wishCat(c){let arr=state.wish[c]||[],total=arr.reduce((a,x)=>a+Math.max(0,Number(x.price||0)),0);return hero(c,"Wish List")+back("Wish List")+`<section class="card">${arr.map((x,i)=>`<div class="checkrow"><input type="checkbox" data-wish-done="${c}|${i}" ${x.done?'checked':''}><span style="flex:1">${safeLink(x.link)?`<a href="${esc(safeLink(x.link))}" target="_blank" rel="noopener noreferrer">${esc(x.item)}</a>`:esc(x.item)}</span><b>${money(x.price)}</b><button class="btn" data-wish-edit="${c}|${i}">Edit</button><button class="btn" data-wish-del="${c}|${i}" aria-label="Remove wish item">×</button></div>`).join("")||'<p class="muted">Nothing here yet.</p>'}<div class="formgrid"><input id="wishItem" aria-label="Wish item" placeholder="Item"><input id="wishPrice" aria-label="Wish item price" type="number" min="0" step=".01" placeholder="Price"><input id="wishLink" aria-label="Wish item optional link" type="url" placeholder="Optional link"></div><button class="btn primary" data-wish-add="${c}">Add Item</button></section><section class="card soft"><div class="muted">${esc(c)} TOTAL</div><div class="metric money">${money(total)}</div></section>`}
+function wishCat(c){let arr=state.wish[c]||[],total=arr.reduce((a,x)=>a+Math.max(0,Number(x.price||0)),0);return hero(c,"Wish List")+back("Wish List")+`<section class="card">${arr.map((x,i)=>`<div class="checkrow"><input type="checkbox" data-wish-done="${c}|${i}" ${x.done?'checked':''}><span style="flex:1">${safeLink(x.link)?`<a href="${esc(safeLink(x.link))}" target="_blank" rel="noopener noreferrer">${esc(x.item)}</a>`:esc(x.item)}</span><b>${money(x.price)}</b><button class="btn" data-wish-edit="${c}|${i}">Edit</button><button class="btn" data-wish-budget="${c}|${i}">Plan Buy</button><button class="btn" data-wish-del="${c}|${i}" aria-label="Remove wish item">×</button></div>`).join("")||'<p class="muted">Nothing here yet.</p>'}<div class="formgrid"><input id="wishItem" aria-label="Wish item" placeholder="Item"><input id="wishPrice" aria-label="Wish item price" type="number" min="0" step=".01" placeholder="Price"><input id="wishLink" aria-label="Wish item optional link" type="url" placeholder="Optional link"></div><button class="btn primary" data-wish-add="${c}">Add Item</button></section><section class="card soft"><div class="muted">${esc(c)} TOTAL</div><div class="metric money">${money(total)}</div></section>`}
 function food(){
   if(state.sub==="todayfood") return todayFoodScreen();
   if(state.sub==="mealplan") return mealPlanScreen();
   if(state.sub==="inventory") return inventory();
   if(state.sub==="grocery") return grocery();
   if(state.sub==="cook") return cook();
-  const meal=todayMeal();
-  const canGrocery=DAYS[state.day]==="Monday";
-  const canCook=["Monday","Wednesday","Thursday"].includes(DAYS[state.day]);
-  return hero("Food",DAYS[state.day])+`<section class="card"><h2>Food</h2><div class="grid">
-    <button class="tile" data-sub="todayfood"><b>Today’s Food</b><span>Plan + What I Actually Ate + macro bars</span></button>
-    <button class="tile" data-sub="mealplan"><b>Meal Plan</b><span>Current weekly plan</span></button>
-    <button class="tile" data-sub="inventory"><b>Inventory</b><span>Fridge • Freezer • Deep Freezer • Pantry • Containers</span></button>
-    ${canGrocery?`<button class="tile" data-sub="grocery"><b>Grocery</b><span>Monday grocery list</span></button>`:""}
-    ${canCook?`<button class="tile" data-sub="cook"><b>Cooking</b><span>Cook • weigh • portion • store</span></button>`:""}
+  const day=DAYS[state.day],canGrocery=day==="Monday",canCook=["Monday","Wednesday","Thursday"].includes(day);
+  const groceryStatus=canGrocery?"SHOPPING DAY • OPEN LIST":"MONDAY SHOPPING • VIEW FROM MONDAY";
+  const cookStatus=canCook?"TODAY • COOK → WEIGH → PACK → STORE":"COOK DAYS • MON / WED / THU";
+  return hero("Food",day)+`<section class="comment-widget"><p><b>ONE FOOD SYSTEM.</b> PLAN → SHOP → INVENTORY → COOK → PACK → ACTUALLY EAT → HISTORY. Enter actual food once; later screens read the same record.</p></section><section class="card"><h2>Food Home</h2><div class="grid">
+    <button class="tile" data-sub="todayfood"><b>Today’s Food</b><span>Today’s plan • actual eaten • daily macro pass/fail</span></button>
+    <button class="tile" data-sub="mealplan"><b>Meal Plan</b><span>Monday–Sunday plan • each day must pass every macro target</span></button>
+    <button class="tile" data-sub="inventory"><b>Inventory</b><span>Ingredients + prepared containers by real storage location</span></button>
+    <button class="tile" ${canGrocery?'data-sub="grocery"':'disabled aria-disabled="true"'}><b>Grocery</b><span>${groceryStatus}</span></button>
+    <button class="tile" ${canCook?'data-sub="cook"':'disabled aria-disabled="true"'}><b>Cooking</b><span>${cookStatus}</span></button>
   </div></section>`;
 }
 function validateSelectedDayContext(){let d=DAYS[state.day],meal=(MEAL.days||{})[selectedKey()]||null;if(state.route==="today"&&state.sub==="measure"&&state.day!==0)state.sub=null;if(state.route==="today"&&state.sub==="reset"&&state.day!==6)state.sub=null;if(state.route==="food"&&state.sub==="grocery"&&state.day!==0)state.sub=null;if(state.route==="food"&&state.sub==="cook"&&!['Monday','Wednesday','Thursday'].includes(DAYS[state.day]))state.sub=null;if(state.route==="gym"&&state.sub==="run"&&DAY_ACTIVITY[d]!=="RUN")state.sub=null;}
@@ -5779,7 +5784,7 @@ historyDay=function(type,d){
 };
 
 window.__EMMELLI_FOOD_BUILD='V40-ACTUAL-EATING-CLOSED-LOOP';
-window.__EMMELLI_BUILD='V40-ACTUAL-EATING-CLOSED-LOOP-2026-10-03';
+/* legacy build marker consolidated into V80 */
 
 
 // V42 WHOLE-HUB CONNECTION FIXES — active Cooking flow + persistent goal commentary/history.
@@ -5956,7 +5961,7 @@ state.eatComponentSelectionV44=state.eatComponentSelectionV44||{};
 document.addEventListener('change',e=>{let el=e.target.closest?.('[data-v44-eat-component]');if(!el)return;e.stopImmediatePropagation();let [i,ci]=el.dataset.v44EatComponent.split('|').map(Number),c=state.inventory.Containers?.[i];if(!c)return;let key=containerKeyV40(c,i);state.eatComponentSelectionV44[key]=state.eatComponentSelectionV44[key]||{};state.eatComponentSelectionV44[key][ci]=!!el.checked;save();},true);
 document.addEventListener('click',e=>{let b=e.target.closest?.('[data-v44-log-components]');if(!b)return;e.stopImmediatePropagation();let i=+b.dataset.v44LogComponents,c=state.inventory.Containers?.[i];if(!c)return;let key=containerKeyV40(c,i),receipt=containerReceiptV40(c),sel=state.eatComponentSelectionV44?.[key]||{},picked=receipt.filter((_,ci)=>sel[ci]);if(!picked.length){showToast('CHECK AT LEAST ONE COMPONENT YOU ACTUALLY ATE.','WHAT I ACTUALLY ATE');return}let macros=emptyMacros(),known=true;picked.forEach(comp=>{let m=componentMacrosV44(c,comp);if(!m)known=false;else macros=addMacros(macros,m)});if(!known){showToast('COMPONENT NUTRITION IS INCOMPLETE. NOTHING WAS LOGGED.','NUTRITION REQUIRED');return}macros=roundMacros(macros);let grams=picked.reduce((n,x)=>n+Number(x.grams||0),0);let log={id:uid('food'),date:selectedKey(),type:'ATE CONTAINER',name:c.recipe||c.name||'Saved container',recipe:c.recipe,mealSlot:String(c.meal||'').toLowerCase(),amount:`${grams.toFixed(0)} g`,macros,componentReceiptV40:structuredClone(picked),containerSnapshotV40:null,containerBeforeV44:structuredClone(c),partialContainerV44:true};state.foodHistory.push(log);let remaining=receipt.filter((_,ci)=>!sel[ci]);if(!remaining.length){log.containerSnapshotV40=structuredClone(c);state.inventory.Containers.splice(i,1)}else{c.componentReceiptV40=structuredClone(remaining);c.components=Object.fromEntries(remaining.map(x=>[x.id,Number(x.grams||0)]));c.actualPackedGrams=remaining.reduce((n,x)=>n+Number(x.grams||0),0);let rm=emptyMacros(),ok=true;remaining.forEach(comp=>{let m=componentMacrosV44(c,comp);if(!m)ok=false;else rm=addMacros(rm,m)});if(ok)c.macros=roundMacros(rm);c.qty=`${c.actualPackedGrams.toFixed(0)} G • ${(c.storage||'').toUpperCase()}`;log.remainingContainerKeyV44=key}delete state.eatComponentSelectionV44[key];save();render();},true);
 
-window.__EMMELLI_BUILD='V45-RECENT-CORRECTIONS-GYM-AUDIT-2026-10-04';
+/* legacy build marker consolidated into V80 */
 window.__EMMELLI_FOOD_BUILD='V44-ACTUAL-COMPONENT-CHECKS';
 window.__EMMELLI_COOK_BUILD='V43-FOUR-DROPDOWNS-CONTAINERS-CLOSED-LOOP';
 
@@ -5998,7 +6003,7 @@ budgetMonth=function(y,m){return budgetMonthBeforeV46(y,m).replace(/Tuesday → 
 budgetWeek=function(y,m,w){return budgetWeekBeforeV46(y,m,w).replace(/Tuesday → Monday/gi,'Tuesday → Tuesday').replace(/TUESDAY PAYDAY CYCLE/g,'TUESDAY → TUESDAY')};
 
 // Goals are managed in Goals; Today commentary only reminds about unfinished goals.
-window.__EMMELLI_BUILD='V47-UNIFIED-SIX-DESTINATIONS-2026-10-04';
+/* legacy build marker consolidated into V80 */
 
 
 // V50 — locked six-destination reconciliation • 2026-10-04
@@ -6029,7 +6034,7 @@ function buyToolV50(y,m,parent){let id=`${y}-${m}`,monthName=new Date(y,m).toLoc
 const budgetToolBeforeV50=budgetTool;
 budgetTool=function(kind,y,m,parent){if(kind==='buy')return buyToolV50(y,m,parent);return budgetToolBeforeV50(kind,y,m,parent)};
 document.addEventListener('click',e=>{let b=e.target.closest?.('[data-v50-add-buy],[data-v50-del-buy]');if(!b)return;e.stopImmediatePropagation();if(b.dataset.v50AddBuy){let id=b.dataset.v50AddBuy,item=document.getElementById('buyItem')?.value.trim(),price=Number(document.getElementById('buyPrice')?.value),category=document.getElementById('buyCategory')?.value.trim()||'OTHER',link=document.getElementById('buyLink')?.value.trim()||'';if(!item||!Number.isFinite(price)){showToast('ENTER A TITLE AND PRICE.','THINGS TO BUY');return}(state.budget.buys[id]||(state.budget.buys[id]=[])).push({item,price,category,link});save();render();return}let [id,i]=b.dataset.v50DelBuy.split('|');state.budget.buys[id]?.splice(+i,1);save();render();},true);
-window.__EMMELLI_BUILD='V50-LOCKED-SIX-DESTINATIONS-2026-10-04';
+/* legacy build marker consolidated into V80 */
 
 // V50.1 — final locked cleanup after whole-file audit.
 const budgetToolBeforeV501=budgetTool;
@@ -6041,7 +6046,7 @@ budgetTool=function(kind,y,m,parent){
  const list=rows.map(x=>{let sk=skipKey(x),moved=!!em.skip[sk],rec=emergencyMoveRecV28(id,x),amt=effectiveAutopayAmount(x);return `<div class="autopay-row-v75"><div class="autopay-primary"><b>${esc(x.n)}</b><span>${x.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})} • ${money(amt)}</span><small>${moved?(rec?.newDate?`MOVED → ${new Date(rec.newDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}`:'MOVED • ADD NEW PAY DATE'):'ORIGINAL DATE'}</small></div>${moved?`<label class="actual-date">PAY ON <input type="date" data-v28-move-date="${encodeURIComponent(id)}|${encodeURIComponent(sk)}" value="${esc(rec?.newDate||'')}"></label>`:`<button class="btn" data-v29-move-occurrence="${encodeURIComponent(id)}|${encodeURIComponent(sk)}|${encodeURIComponent(x.n)}|${encodeURIComponent(String(amt))}|${encodeURIComponent(localDateKey(x.date))}|${encodeURIComponent(String(x.baseA??x.a))}|bill">MOVE FOR RENT</button>`}</div>`}).join('');
  return hero('EMERGENCY MONTH',monthName)+backMarkup+`<section class="card soft"><div class="muted">LIVE BALANCE</div><div class="metric money">${money(Number(state.budget.balance||0))}</div></section><section class="card"><div class="section-head"><div><h2>${esc(monthName.toUpperCase())} AUTOPAYS</h2><p>MOVE AN AUTOPAY TO LET THAT MONEY COUNT TOWARD RENT UNTIL THE NEW PAY DATE.</p></div></div>${list||'<p class="muted">NO UNPAID AUTOPAYS TO MOVE IN THIS RENT WINDOW.</p>'}</section>${emergencyMovedPanelV28(y,m)}`;
 };
-window.__EMMELLI_BUILD='V50.1-FINAL-LOCKED-AUDIT-2026-10-04';
+/* legacy build marker consolidated into V80 */
 
 // V49 ROUTINE CLOCK/NEXT/LATE-SHIFT LOCKED • 2026-10-04
 setInterval(()=>{if(state.route==="today"&&state.sub==="routine"&&selectedKey()===localDateKey()&&!uiSheet)render()},30000);
@@ -6059,7 +6064,7 @@ budgetTool=function(kind,y,m,parent){
   const list=rows.map(x=>{let sk=skipKey(x),moved=!!em.skip[sk],rec=emergencyMoveRecV28(id,x),amt=effectiveAutopayAmount(x);return `<div class="autopay-row-v75"><div class="autopay-primary"><b>${esc(x.n)}</b><span>${x.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})} • ${money(amt)}</span><small>${moved?(rec?.newDate?`MOVED → ${new Date(rec.newDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}`:'MOVED • ADD NEW PAY DATE'):'ORIGINAL DATE'}</small></div>${moved?`<label class="actual-date">PAY ON <input type="date" data-v28-move-date="${encodeURIComponent(id)}|${encodeURIComponent(sk)}" value="${esc(rec?.newDate||'')}"></label>`:`<button class="btn" data-v29-move-occurrence="${encodeURIComponent(id)}|${encodeURIComponent(sk)}|${encodeURIComponent(x.n)}|${encodeURIComponent(String(amt))}|${encodeURIComponent(localDateKey(x.date))}|${encodeURIComponent(String(x.baseA??x.a))}|bill">MOVE FOR RENT</button>`}</div>`}).join('');
   return hero('EMERGENCY MONTH',monthName)+backMarkup+`<section class="card soft"><div class="muted">LIVE BALANCE</div><div class="metric money">${money(Number(state.budget.balance||0))}</div></section><section class="card"><div class="section-head"><div><h2>${esc(monthName.toUpperCase())} AUTOPAYS</h2><p>MOVE AN AUTOPAY TO LET THAT MONEY COUNT TOWARD RENT UNTIL THE NEW PAY DATE.</p></div></div>${list||'<p class="muted">NO UNPAID AUTOPAYS TO MOVE IN THIS RENT WINDOW.</p>'}</section>${emergencyMovedPanelV28(y,m)}`;
 };
-window.__EMMELLI_BUILD='V52-FINAL-STATIC-AUDIT-2026-10-04';
+/* legacy build marker consolidated into V80 */
 
 
 
@@ -6193,7 +6198,7 @@ document.addEventListener('click',e=>{
   save();render();
 },true);
 
-window.__EMMELLI_BUILD='2026-10-04-MATURE-SURGICAL-RESTORE-FOOD-GYM-WISH';
+/* legacy build marker consolidated into V80 */
 
 
 
@@ -6275,12 +6280,12 @@ document.addEventListener('change',e=>{
  const y=e.target.closest?.('[data-history-year]'),m=e.target.closest?.('[data-history-month]');if(!y&&!m)return;e.stopImmediatePropagation();
  const p=(state.sub||'hist:complete:year').split(':'),type=p[1]||'complete',card=e.target.closest('.history-browser-card'),ys=card?.querySelector('[data-history-year]')?.value||historyMonthKeyV60().slice(0,4),ms=card?.querySelector('[data-history-month]')?.value||historyMonthKeyV60().slice(5);state.sub=`hist:${type}:week:${ys}-${ms}`;save();render();
 },true);
-window.__EMMELLI_BUILD='2026-10-06-HISTORY-CALENDAR-RECEIPTS';
+/* legacy build marker consolidated into V80 */
 
 
 
 
-window.__EMMELLI_BUILD='2026-10-06-HISTORY-CALENDAR-RECEIPTS';
+/* legacy build marker consolidated into V80 */
 
 // ===== V62 LOCKED ACTIVE MEAL PLAN • TUE 10/06 → MON 10/12 =====
 // Surgical data correction only: preserves mature Hub/UI/history/budget/gym systems.
@@ -6356,7 +6361,7 @@ window.__EMMELLI_BUILD='2026-10-06-HISTORY-CALENDAR-RECEIPTS';
   invSet(/cauliflower/i,'ACTUAL REMAINING FROM LIVE BAG/INVENTORY','Frozen cauliflower • 337 G USED MON → 319 G COOKED • packaging/tare is not food weight','Freezer');
 
   MEAL.auditV62={status:'LOCKED ACTIVE PLAN • TUE 10/06 → MON 10/12',rules:['EXISTING PESTO + HELPER LABELS DO NOT CHANGE','FILLING PORTIONS • PROTEIN FIRST • STARCH SECOND','WED COOK: KOREAN BEEF + CHICKEN ALFREDO','THU COOK: GARLIC-BUTTER STEAK BITES ONLY — DO NOT INVENT A SECOND RECIPE','WEIGH FINISHED COMPONENTS BEFORE NEW LABELS','SAFE LEFTOVERS ROLL FORWARD AND ARE USED BEFORE NEW GROCERIES','ACTUAL EATING/COOKING OVERRIDES PLANNED ESTIMATES','INVENTORY DEDUCTS ONLY WHEN ACTUALLY USED/EATEN/DISCARDED'],note:'Current approved plan. Projected macros are estimates until actual cooked weights/container macros are saved.'};
-  window.__EMMELLI_BUILD='2026-10-06-MOST-UPDATED-FULLY-CHECKED-V63';
+  /* legacy build marker consolidated into V80 */
   save();
 })();
 
@@ -6478,7 +6483,7 @@ window.__EMMELLI_MASTER='V73 • FINAL LAB-ALIGNED CLEAN MASTER';
   upsertInv('Simply Nature Pinto Beans','1 × ~15.5 oz can • HAVE','Confirmed inventory • no later deduction found','Pantry');
 
   MEAL.auditV64={status:'LOCKED ACTIVE LDL-CONSCIOUS PLAN • TUE 10/06 → MON 10/12',rules:['TUE 10/06 PESTO + 600 G HELPER CONFIRMED EATEN','NO SAME ENTRÉE BACK-TO-BACK','AVOCADO EGG TOAST ALWAYS INCLUDES 40 G AVOCADO + LIME JUICE + SALT','WED/FRI GYM PRE = 100 G BANANA + 20 G HONEY • POST = 1 ISO100','FILLING FOOD IS A HARD REQUIREMENT','RED MEAT ALLOWED BUT REDUCED / SPACED • LDL-CONSCIOUS SATURATED-FAT STACKING','USE BLACK/PINTO BEANS ALREADY OWNED','SKINNYGIRL CAESAR ALREADY OWNED','BUY TODAY: ROMAINE + JPAN GINGER DRESSING + CROUTONS + CILANTRO','979 G REMAINING HELPER STAYS FROZEN','ACTUAL COOKED WEIGHTS / PACKED GRAMS OVERRIDE ESTIMATES'],note:'Newest approved plan. Actual nutrition is calculated from exact labels + actual cooked/container weights; do not display invented precision.'};
-  window.__EMMELLI_BUILD='2026-10-06-LDL-MEAL-PLAN-LOCKED-V64';
+  /* legacy build marker consolidated into V80 */
   save();
 })();
 
@@ -6534,7 +6539,7 @@ mealPlanScreen=function(){
   // Keep the newest audit as the single current authority.
   MEAL.auditV62=MEAL.auditV64;
   MEAL.auditV65={...MEAL.auditV64,status:'PERMANENT LOCKED ACTIVE LDL-CONSCIOUS PLAN • TUE 10/06 → MON 10/12',rules:[...MEAL.auditV64.rules,'THU GARLIC-LEMON STEAK/RICE = 3 ACTUAL PORTIONS • FRI/SAT/MON','SUPERSEDED KOREAN BEEF / GARLIC-BUTTER STEAK / BROTH-BASE RECIPES REMOVED FROM ACTIVE PLAN','OLD PROJECTED MACROS ARE NOT CURRENT • ACTUAL LABELS + WEIGHTS DRIVE RECEIPTS'],note:'V65 permanent current-week authority. Historical logs remain intact; superseded planning data cannot override this plan.'};
-  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-LDL-LOCKED-V65';
+  /* legacy build marker consolidated into V80 */
   save();
 })();
 
@@ -6657,7 +6662,7 @@ render(); // final startup render after history redesign
     'THURSDAY STEAK/RICE MAKES 3 DESTINATIONS: FRI/SAT/MON',
     'STALE KOREAN-BEEF / OLD-HELPER COOK TIMELINES CANNOT DRIVE WED/THU'
   ],note:'Cooking audit prioritizes simple data entry while preserving exact inventory/macros/container receipts.'};
-  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-COOKING-AUDITED-V66';
+  /* legacy build marker consolidated into V80 */
   save();
 })();
 
@@ -6703,7 +6708,7 @@ render(); // final startup render after history redesign
     'CHECKED PURCHASES AUTO-APPEAR FOR EASY INVENTORY ENTRY',
     'PURCHASE ENTRY REQUIRES ONLY ACTUAL PACKAGE/AMOUNT + STORAGE; PRODUCT IS PREFILLED; BARCODE OPTIONAL'
   ]};
-  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-INVENTORY-GROCERY-V67';
+  /* legacy build marker consolidated into V80 */
   save();
   render();
 })();
@@ -6769,7 +6774,7 @@ render(); // final startup render after history redesign
   ]};
   window.v68PurchasedIntake=v68PurchasedIntake;
   window.groceryV68Base=groceryV68Base;
-  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-SMART-GROCERY-V68';save();render();
+  /* legacy build marker consolidated into V80 */save();render();
 })();
 
 
@@ -6831,7 +6836,7 @@ render(); // final startup render after history redesign
     'PORTIONING DOES NOT ASK FOR PRODUCT OR MACROS AGAIN',
     'RAW PORTION ACTUAL GRAMS + FRIDGE/FREEZER LOCATION ARE THE ONLY NORMAL PORTIONING INPUTS'
   ]};
-  window.__EMMELLI_BUILD='2026-10-06-PERMANENT-HOME-PORTIONING-V69';save();render();
+  /* legacy build marker consolidated into V80 */save();render();
 })();
 
 
@@ -6848,7 +6853,7 @@ today=function(){
  return html;
 };
 window.__EMMELLI_LIVE_TIME_V70=Object.freeze({timeZone:'America/New_York',autoSelectRealDay:true,dateAtTop:true,timeAwareCommentary:true});
-window.__EMMELLI_BUILD='2026-10-07-PERFECT-USABLE-LOCKED-V70';
+/* legacy build marker consolidated into V80 */
 
 
 /* FINAL MASTER AUDIT V71 • 2026-10-07
@@ -6882,7 +6887,7 @@ window.EMMELLI_FINAL_MASTER_AUDIT='2026-10-07-FINAL-AUDITED-V71';
     }
   }catch(e){}
   window.MEAL_LAB_AUDIT_V72={status:'FINAL LAB-ALIGNED CURRENT WEEK',labs:'TC 187 • HDL 55 • TG 65 • LDL 116 • NON-HDL 132',rules:['AIM ≤13 G SATURATED FAT/DAY WHEN FEASIBLE AT ~2,000 KCAL','≥28 G FIBER/DAY','REPLACE SATURATED FAT WITH UNSATURATED FAT WHERE PRACTICAL','RED MEAT REDUCED / LEANER WHEN PRACTICAL • NOT BANNED','NO KIDNEY OR DIABETES DIET INFERRED FROM THESE LABS','DELICIOUS + FILLING REMAINS HARD REQUIREMENT','ACTUAL PRODUCT IDENTITY + ACTUAL COOK/PACK WEIGHTS CONTROL MACROS','SAFE EXISTING FOOD IS USED/FROZEN, NOT WASTED']};
-  window.__EMMELLI_BUILD='2026-10-06-V75-REGRESSION-CONSOLIDATED';
+  /* legacy build marker consolidated into V80 */
 })();
 
 
@@ -6895,7 +6900,7 @@ window.EMMELLI_FINAL_MASTER_AUDIT='2026-10-07-FINAL-AUDITED-V71';
     const upsert=(cat,name,rec)=>{state.inventory[cat]=state.inventory[cat]||[];let x=state.inventory[cat].find(z=>String(z.name||'').toLowerCase()===name.toLowerCase());if(x)Object.assign(x,rec,{name});else state.inventory[cat].push({name,...rec})};
 
     // Known live inventory corrections from the completed Wednesday cook. Unknown additions stay unknown.
-    removeInv(/^Goya black beans$|^Black beans$/i); upsert('Pantry','Goya black beans',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • final can used in Beef Bowl cook'});
+    removeInv(/^Goya black beans$|^Black beans$/i); upsert('Pantry','Goya black beans',{qty:'2 × 439 g cans • UNOPENED',notes:'WED 10/07 ACTUAL • started with 3 cans; 1 can cooked into Wednesday bean component; 2 unopened cans remain'});
     removeInv(/Great Value minced garlic|mixed\/minced garlic jars|^minced garlic$/i); upsert('Fridge','Great Value minced garlic',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • jar finished during cooking • final extra garlic amount not weighed'});
     removeInv(/^AP flour$|all-purpose flour/i); upsert('Pantry','AP flour',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • no flour used in Alfredo'});
     removeInv(/^Frozen spinach$/i); upsert('Freezer','Frozen spinach',{qty:'0 — OUT',notes:'WED 10/07 ACTUAL • all 100 g available used in Alfredo'});
@@ -6927,7 +6932,7 @@ window.EMMELLI_FINAL_MASTER_AUDIT='2026-10-07-FINAL-AUDITED-V71';
     );
 
     // Actual Wednesday recipe/component receipts. Exact unweighed additions remain explicitly unresolved.
-    MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']={...(MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']||{}),sourceLabel:'WED 10/07 • ACTUAL COOKED + PACKED',ingredients:['Monday-preportioned 80/20 beef — exact raw bag weight not promoted to an actual unless recorded','3 g olive oil','60 g white onion','6 g minced garlic + additional final jar amount UNWEIGHED','2 g cumin','1 g paprika','2 g salt','1 g black pepper','lime/cilantro finish as actually used','100 g dry basmati rice • finished cooked rice 323 g','final can black beans • garlic/lime added • finished beans 203 g','200 g frozen broccoli + 30 g honey • finished 208 g','sauce: 50 g Daisy sour cream + 15 g Fairlife Whole Milk + 15 g lime + 5 g cilantro + 2 g minced garlic + 1 g salt • finished 86 g','30 g cheddar','NO AVOCADO • not ripe'],weigh:'ACTUAL FINISHED: beef mixture 376 g • rice 323 g • beans 203 g • honey broccoli 208 g • sauce 86 g • cheddar 30 g. TWO ACTUAL 591 g CONTAINERS: 184 g beef mixture + 157 g rice + 95 g beans + 100 g broccoli + 40 g sauce + 15 g cheddar EACH. Beef grease was NOT drained. Unknown raw beef bag weight / unweighed garlic-lime additions remain unresolved rather than guessed.'};
+    MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']={...(MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']||{}),sourceLabel:'WED 10/07 • ACTUAL COOKED + PACKED',ingredients:['Monday-preportioned 80/20 beef — exact raw bag weight not promoted to an actual unless recorded','3 g olive oil','60 g white onion','6 g minced garlic + additional final jar amount UNWEIGHED','2 g cumin','1 g paprika','2 g salt','1 g black pepper','lime/cilantro finish as actually used','100 g dry basmati rice • finished cooked rice 323 g','1 can Goya black beans • garlic/lime added • finished beans 203 g','200 g frozen broccoli + 30 g honey • finished 208 g','sauce: 50 g Daisy sour cream + 15 g Fairlife Whole Milk + 15 g lime + 5 g cilantro + 2 g minced garlic + 1 g salt • finished 86 g','30 g cheddar','NO AVOCADO • not ripe'],weigh:'ACTUAL FINISHED: beef mixture 376 g • rice 323 g • beans 203 g • honey broccoli 208 g • sauce 86 g • cheddar 30 g. TWO ACTUAL 591 g CONTAINERS: 184 g beef mixture + 157 g rice + 95 g beans + 100 g broccoli + 40 g sauce + 15 g cheddar EACH. Beef grease was NOT drained. Unknown raw beef bag weight / unweighed garlic-lime additions remain unresolved rather than guessed.'};
     MEAL.recipes['Chicken Alfredo']={...(MEAL.recipes['Chicken Alfredo']||{}),sourceLabel:'WED 10/07 • ACTUAL COOKED + PACKED',ingredients:['Monday-preportioned chicken allocation • cooked chicken finished 345 g','3 g olive oil + seasonings as instructed','150 g dry fettuccine','100 g frozen spinach — ALL REMAINING USED','8 g butter','200 g Fairlife Whole Milk','80 g half-and-half','45 g Parmesan','garlic/seasonings as actually used','NO FLOUR','NO HEAVY CREAM'],weigh:'ACTUAL FINISHED: chicken 345 g • pasta + Alfredo sauce + spinach mixture 618 g. TWO ACTUAL 464 g CONTAINERS: 167 g chicken + 297 g pasta mixture EACH. Remaining finished grams are not silently assigned; preserve as unallocated unless physically accounted for.'};
 
     // Today's real status: breakfast/lunch actual; gym fuel not eaten and must not be counted as actual.
@@ -6949,17 +6954,233 @@ window.EMMELLI_FINAL_MASTER_AUDIT='2026-10-07-FINAL-AUDITED-V71';
     addHist('v76-lunch-20261007',{date:'2026-10-07',type:'ACTUAL EATEN',meal:'LUNCH',item:'Cilantro-Lime Beef Bowl',grams:591,components:{beefMixture:184,rice:157,beans:95,broccoli:100,sauce:40,cheddar:15}});
     state.checks=state.checks||{};state.checks[mark]=true;
     window.EMMELLI_V76_ACTUALS={date:'2026-10-07',inventoryReconciled:true,containersReconciled:true,actualBeefBowlEaten:true,gymFuelEaten:false,unknownsPreserved:['raw beef bag weight','final extra garlic/lime amounts','homemade Mexican rice nutrition']};
-    window.__EMMELLI_BUILD='2026-10-07-V76-LIVE-ACTUALS-AUDITED';
+    /* legacy build marker consolidated into V80 */
     save();
     if(typeof render==='function') render();
   }catch(e){console.error('V76 live actual migration',e)}
 })();
 
+
+
+/* V77 MACRO-LOCKED REST-OF-WEEK + FRUIT/HONEY AUTOMATION • 2026-10-07
+   Planning estimates use known actual containers first. Actual cooked/product/container nutrition always supersedes estimates. */
+(function applyV77MacroLockedWeek(){
+  try{
+    const mark='v77|2026-10-07|macro-locked-week';
+    state.checks=state.checks||{};
+    state.inventory=state.inventory||{};
+    state.inventory.Pantry=state.inventory.Pantry||[];
+
+    // Permanent fruit + honey pairing automation.
+    window.EMMELLI_FRUIT_HONEY_RATIOS=Object.freeze({
+      blackberries:{fruitGrams:150,honeyGrams:25,honeyPerFruitGram:25/150},
+      raspberries:{fruitGrams:50,honeyGrams:20,honeyPerFruitGram:20/50}
+    });
+    window.emmelliHoneyForFruit=function(fruit,grams){
+      const key=String(fruit||'').toLowerCase();
+      const r=key.includes('rasp')?window.EMMELLI_FRUIT_HONEY_RATIOS.raspberries:window.EMMELLI_FRUIT_HONEY_RATIOS.blackberries;
+      return Math.round(Number(grams||0)*r.honeyPerFruitGram*10)/10;
+    };
+
+    // Correct live bean inventory: 3 cans before Wednesday, 1 can used Wednesday = 2 unopened cans remain.
+    for(const cat of Object.keys(state.inventory)) if(Array.isArray(state.inventory[cat])) state.inventory[cat]=state.inventory[cat].filter(x=>!/^Goya black beans$/i.test(String(x.name||'')));
+    state.inventory.Pantry.push({name:'Goya black beans',qty:'2 × 439 g cans • UNOPENED',notes:'CORRECTED WED 10/07 • started with 3 cans; 1 can was cooked into Wednesday bean component; 2 unopened cans remain'});
+
+    // Correct Wednesday recipe wording so the used can is not mislabeled as the final can.
+    if(MEAL.recipes?.['Cilantro-Lime Beef + Black Bean Rice Bowl']){
+      const r=MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl'];
+      r.ingredients=(r.ingredients||[]).map(x=>String(x).replace(/final can black beans/i,'1 can Goya black beans'));
+      r.weigh=String(r.weigh||'').replace(/black beans are OUT[^.]*\.?/ig,'');
+    }
+
+    // Reusable properly-prepared warm bean side: beans are cooked/seasoned, not dumped cold from the can.
+    MEAL.recipes=MEAL.recipes||{};
+    MEAL.recipes['Warm Black Bean + Pineapple Side']={
+      sourceLabel:'V77 • PROPERLY PREPARED WARM SIDE',
+      ingredients:['Goya black beans — actual amount from can','Chicken broth — actual measured amount','Cumin — actual measured amount','Seasonings — actual measured amount','Dole pineapple tidbits — drained and weighed'],
+      method:'Heat beans with measured chicken broth, cumin and seasonings until fully hot and seasoned. Use immersion blender to partially blend to the preferred creamy texture. Weigh the finished prepared bean component. Warm/fold in the drained pineapple portion at serving time so the pineapple stays distinct instead of becoming bean purée.',
+      weigh:'WEIGH FINISHED PREPARED BEANS AFTER BROTH/COOKING. For the planned side use 100 g finished prepared beans + 100 g drained pineapple. Actual broth/seasoning/product nutrition supersedes planning estimates.'
+    };
+
+    const D=MEAL.days;
+    D['2026-10-08']={
+      day:'THURSDAY',activity:'RUN/ABS + COOK',
+      breakfast:'Cream Cheese Raspberry Toast — 1 Base Culture Honey Wheat Sourdough slice + 35 g cream cheese + 55 g raspberries + 22 g honey + 1 ISO100',pre:'',post:'',
+      lunch:'Homemade Hamburger Helper — existing labeled 600 g Thursday container',
+      dinner:'BIG Chicken Caesar — 170 g cooked chicken + 150 g romaine + 30 g Skinnygirl Caesar + 15 g Parmesan + 15 g croutons + 40 g avocado • PLUS warm side: 100 g properly prepared black beans + 100 g drained pineapple',
+      snacks:'150 g blackberries + 25 g honey',
+      cook:['Chicken Caesar components','Garlic-Lemon Steak Bites + Seasoned Rice','Warm Black Bean + Pineapple Side — prepare beans properly; immersion-blend to preferred texture'],
+      prep:'MACRO-LOCKED STARTING PORTIONS. Keep Caesar dressing/croutons separate until eating. Thursday steak/rice cook supplies Fri dinner + Sat dinner + Mon lunch. Weigh actual finished steak/rice/beans before packing; actual values replace planning estimates.',
+      thaw:'Preserve the existing 600 g Helper label.'
+    };
+    D['2026-10-09']={
+      day:'FRIDAY',activity:'GYM',
+      breakfast:'1 Base Culture Honey Wheat Sourdough slice + 1 egg + 150 g blackberries + 25 g honey • NO avocado today because the fixed Beef Bowl already carries substantial fat',
+      pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',
+      lunch:'ACTUAL FIXED CONTAINER • Cilantro-Lime Beef Bowl — 591 g: 184 g beef mixture + 157 g rice + 95 g prepared beans + 100 g honey broccoli + 40 g sauce + 15 g cheddar',
+      dinner:'JPAN Ginger Steak Salad + Rice — 60 g cooked steak + 250 g romaine + 100 g cooked rice + 20 g JPAN ginger dressing • no avocado/croutons on this dinner',
+      snacks:'No additional snack is planned. Add food only from the live macro receipt if actual product/container nutrition creates a real shortfall.',cook:[],
+      prep:'FRIDAY IS BUILT AROUND THE ACTUAL 591 G BEEF BOWL. Do not resize or replace that container to force macros.',
+      thaw:'MOVE EXISTING LABELED SATURDAY CREAMY PESTO CHICKEN CONTAINER FREEZER → FRIDGE.'
+    };
+    D['2026-10-10']={
+      day:'SATURDAY',activity:'REST',
+      breakfast:'Protein Oatmeal — 1 Quaker Protein packet + 120 mL Fairlife + 50 g blackberries + 8.3 g honey + 15 g chia',pre:'',post:'',
+      lunch:'Creamy Pesto Chicken — EXISTING LABELED SECOND PORTION (~511 g main portion) + its saved cauliflower component • thawed Friday',
+      dinner:'Loaded Mexican Steak Bowl — 100 g cooked Garlic-Lemon Steak + 125 g cooked basmati rice + 100 g properly prepared black beans + 40 g avocado + 15 g cheddar + 20 g measured creamy sauce + cilantro/lime',
+      snacks:'150 g blackberries + 25 g honey + 1 ISO100',cook:[],prep:'NO COOKING. Existing Pesto is fixed; use Thursday actual steak/bean weights when available.',thaw:'Use Friday-thawed Pesto container.'
+    };
+    D['2026-10-11']={
+      day:'SUNDAY',activity:'REST',
+      breakfast:'Protein Oatmeal — 1 Quaker Protein packet + 120 mL Fairlife + 50 g blackberries + 8.3 g honey + 15 g chia',pre:'',post:'',
+      lunch:'ACTUAL FIXED CONTAINER • Chicken Alfredo — 464 g: 167 g chicken + 297 g Alfredo pasta mixture',
+      dinner:'BIG JPAN Ginger Bowl — 150 g romaine + 120 g properly prepared black beans + 150 g cooked basmati rice + 40 g avocado + 30 g JPAN ginger dressing + 20 g crunchy topping + 1 ISO100 • NO additional meat',
+      snacks:'15 g almonds + 50 g blackberries + 8.3 g honey',cook:[],prep:'NO COOKING. Sunday uses the remaining black-bean inventory correctly; beans are prepared/heated/seasoned, not served straight from the can.',thaw:'THAW SUNDAY ALFREDO SAT 10/10.'
+    };
+    D['2026-10-12']={
+      day:'MONDAY',activity:'GYM + NEW COOK CYCLE',
+      breakfast:'Cream Cheese Raspberry Toast — 1 Base Culture Honey Wheat Sourdough slice + 35 g cream cheese + 55 g raspberries + 22 g honey',
+      pre:'100 g banana + 20 g honey',post:'1 labeled serving Dymatize ISO100 Cocoa Pebbles',
+      lunch:'Garlic-Lemon Steak Bites + Seasoned Rice — 100 g cooked steak + 150 g cooked rice from Thursday cook',
+      dinner:'NEW COOK-CYCLE CHICKEN BOWL — 170 g cooked chicken + 118 g cooked rice + 120 g properly prepared black beans + 100 g drained pineapple + 40 g avocado + 15 g cheddar + 20 g measured creamy sauce + 10 g olive oil used across the meal',
+      snacks:'150 g blackberries + 25 g honey',
+      cook:['NEW MONDAY COOK CYCLE — first dinner is the macro-locked Chicken + Rice + Warm Black Bean/Pineapple Bowl; choose the second Monday recipe inventory-first'],
+      prep:'Monday dinner is now assigned instead of left as a blank macro hole. Record actual cooked/component weights; actual receipt supersedes this planning estimate.',thaw:'Use Thursday-labeled steak/rice portion safely thawed for lunch.'
+    };
+
+    // Rechecked planning totals. These are planning estimates, not fake actual receipts.
+    Object.assign(DAY_MACRO_PLAN,{
+      '2026-10-08':{calories:2032,protein:164,carbs:226,fat:56,fiber:36,note:'RECHECKED PLANNING ESTIMATE • known 600 g Helper is fixed; fruit/honey ratio locked; Thursday actual cook weights supersede this estimate.'},
+      '2026-10-09':{calories:1999,protein:137,carbs:224,fat:67,fiber:29,note:'RECHECKED PLANNING ESTIMATE • built around the ACTUAL fixed 591 g Beef Bowl; no avocado at breakfast and lighter steak salad keep fat in range.'},
+      '2026-10-10':{calories:2029,protein:150,carbs:221,fat:63,fiber:37,note:'RECHECKED PLANNING ESTIMATE • existing Pesto remains fixed; actual Thursday steak/bean component weights supersede estimate.'},
+      '2026-10-11':{calories:1993,protein:143,carbs:237,fat:55,fiber:38,note:'RECHECKED PLANNING ESTIMATE • ACTUAL 464 g Alfredo fixed; properly prepared beans + JPAN bowl + fruit/honey ratio complete the day.'},
+      '2026-10-12':{calories:2062,protein:138,carbs:250,fat:60,fiber:31,note:'RECHECKED PLANNING ESTIMATE • Monday dinner is assigned so the day is no longer an open macro hole. Actual new-cook weights supersede estimate.'}
+    });
+
+    // Audit guardrails: actual > planned, fruit ratios are not silently cut, and fixed containers stay fixed.
+    MEAL.auditV77={
+      status:'MACRO-LOCKED THU 10/08 → MON 10/12 • V77',
+      rules:[
+        'BLACKBERRIES + HONEY = 150 G : 25 G • SCALE PROPORTIONALLY',
+        'RASPBERRIES + HONEY = 50 G : 20 G • SCALE PROPORTIONALLY',
+        'FRUIT + HONEY IS ONE PLANNED UNIT • DO NOT CUT HONEY AFTERWARD TO PATCH A BAD DAY',
+        '2 UNOPENED GOYA BLACK-BEAN CANS REMAIN AFTER WEDNESDAY',
+        'BEANS ARE A PREPARED COMPONENT • HEAT WITH MEASURED BROTH/CUMIN/SEASONING AND IMMERSION-BLEND WHEN THAT TEXTURE IS PLANNED',
+        'FRIDAY 591 G BEEF BOWL IS FIXED ACTUAL FOOD • BUILD THE DAY AROUND IT',
+        'SUNDAY 464 G ALFREDO IS FIXED ACTUAL FOOD • BUILD THE DAY AROUND IT',
+        'ACTUAL COOKED / PACKED / EATEN VALUES ALWAYS OVERRIDE PLANNED ESTIMATES',
+        'DO NOT PROMOTE UNKNOWN PRODUCT OR HOMEMADE NUTRITION TO EXACT ACTUAL MACROS'
+      ]
+    };
+    state.checks[mark]=true;
+    /* legacy build marker consolidated into V80 */
+    save();
+    if(typeof render==='function')render();
+  }catch(e){console.error('V77 macro-locked week migration',e)}
+})();
+
 /* V75 REGRESSION CONSOLIDATION — fixes live in the owning TODAY renderer/router; no end-of-file behavior override. */
 window.__EMMELLI_PREVIOUS_BUILD='2026-10-06-V75-REGRESSION-CONSOLIDATED';
-window.__EMMELLI_BUILD='2026-10-07-V76-LIVE-ACTUALS-AUDITED';
+/* legacy build marker consolidated into V80 */
 
 
+})();
+
+
+/* V78 HARD DAILY MACRO PASS/FAIL GATE • 2026-10-07
+   A day is never called macro-locked unless ALL five daily goals pass simultaneously. */
+(function applyV78HardMacroGate(){
+  try{
+    window.EMMELLI_DAILY_MACRO_TARGETS=Object.freeze({calories:{target:2000,tolerance:100},proteinMin:135,carbsMin:220,carbsMax:250,fatMin:55,fatMax:70,fiberMin:28});
+    window.emmelliMacroAudit=function(m){
+      const t=window.EMMELLI_DAILY_MACRO_TARGETS;
+      const n=k=>Number(m?.[k]);
+      const checks={
+        calories:Number.isFinite(n('calories'))&&Math.abs(n('calories')-t.calories.target)<=t.calories.tolerance,
+        protein:Number.isFinite(n('protein'))&&n('protein')>=t.proteinMin,
+        carbs:Number.isFinite(n('carbs'))&&n('carbs')>=t.carbsMin&&n('carbs')<=t.carbsMax,
+        fat:Number.isFinite(n('fat'))&&n('fat')>=t.fatMin&&n('fat')<=t.fatMax,
+        fiber:Number.isFinite(n('fiber'))&&n('fiber')>=t.fiberMin
+      };
+      return {pass:Object.values(checks).every(Boolean),checks};
+    };
+    window.emmelliHoneyForFruit=function(fruit,grams){
+      const key=String(fruit||'').toLowerCase();
+      let r=null;
+      if(key.includes('blackber'))r=window.EMMELLI_FRUIT_HONEY_RATIOS?.blackberries;
+      else if(key.includes('rasp'))r=window.EMMELLI_FRUIT_HONEY_RATIOS?.raspberries;
+      if(!r)return null; // never invent a ratio for another fruit
+      return Math.round(Number(grams||0)*r.honeyPerFruitGram*10)/10;
+    };
+    const dates=['2026-10-08','2026-10-09','2026-10-10','2026-10-11','2026-10-12'];
+    const failures=[];
+    for(const d of dates){
+      const row=DAY_MACRO_PLAN?.[d];
+      const audit=window.emmelliMacroAudit(row);
+      if(row&&typeof row==='object'){
+        row.macroGate=audit.pass?'PASS • ALL 5 DAILY GOALS':'FAIL • REBALANCE BEFORE FINAL';
+        row.macroChecks=audit.checks;
+      }
+      if(!audit.pass)failures.push({date:d,checks:audit.checks,row});
+    }
+    MEAL.auditV78={
+      status:failures.length?'NOT FINAL • MACRO GATE FAILURE':'PASS • THU 10/08 → MON 10/12 ALL FIVE DAILY MACRO GOALS',
+      targets:'~2,000 kcal (planning gate 1,900–2,100) • ≥135 g protein • 220–250 g carbs • 55–70 g fat • ≥28 g fiber',
+      failures,
+      rule:'WEEKLY AVERAGES NEVER RESCUE A FAILING DAY. ACTUAL PRODUCT/COOK/PACK/EATEN DATA OVERRIDES ESTIMATES AND MUST BE RE-AUDITED.'
+    };
+    /* legacy build marker consolidated into V80 */
+    save();
+    if(typeof render==='function')render();
+  }catch(e){console.error('V78 hard macro gate',e)}
+})();
+
+
+/* V80 UNIFIED PRODUCT BRIDGES — cross-page actions write to the owning system once. */
+document.addEventListener("click",e=>{
+ const b=e.target.closest?.("[data-wish-budget]"); if(!b)return;
+ const [cat,raw]=b.dataset.wishBudget.split("|"),i=Number(raw),x=state.wish?.[cat]?.[i]; if(!x)return;
+ const now=new Date(),id=`${now.getFullYear()}-${now.getMonth()}`; state.budget.buys=state.budget.buys||{}; state.budget.buys[id]=state.budget.buys[id]||[];
+ const exists=state.budget.buys[id].some(q=>String(q.item||"").trim().toLowerCase()===String(x.item||"").trim().toLowerCase());
+ if(!exists)state.budget.buys[id].push({item:x.item,price:Math.max(0,Number(x.price||0)),source:"Wish List"});
+ save(); showToast(exists?"Already in this month’s Things to Buy.":"Added to this month’s Things to Buy.","Wish List → Budget");
+});
+
+/* V79 PAGE-BY-PAGE AUDIT CORRECTIONS • 2026-10-07
+   Removes stale executable bean-out state, keeps fruit ratio display exact, and restores day-specific treadmill incline. */
+(function applyV79PageAudit(){
+  try{
+    window.EMMELLI_PAGE_AUDIT_V79={
+      status:'PAGE-BY-PAGE STATIC/REGRESSION AUDIT CORRECTIONS APPLIED',
+      pages:['TODAY','FOOD','GYM','BUDGET','HISTORY','WISH LIST'],
+      fixes:['V76 bean inventory no longer marks the Wednesday can as final','50 g blackberry servings display 8.3 g honey from the locked 150:25 ratio','Wednesday treadmill displays incline 8; Monday/Friday display 5–6'],
+      macroGate:MEAL?.auditV78?.status||'CHECK V78'
+    };
+    /* legacy build marker consolidated into V80 */
+    if(typeof save==='function')save();
+    if(typeof render==='function')render();
+  }catch(e){console.error('V79 page audit',e)}
+})();
+</script>
+
+<script>
+/* V80 UNIFIED PRODUCT AUTHORITY • 2026-10-07
+   Page ownership: Today=command center; Food=food lifecycle; Gym=training; Budget=money; History=read-only receipts; Wish List=desire/planning.
+   Cross-page rule: summaries route to the owning system; they do not create parallel records.
+   Persistence rule: existing localStorage keys remain readable; V80 is additive/non-destructive. */
+(function(){
+ window.EMMELLI_PRODUCT_CONTRACT_V80=Object.freeze({
+   today:'command-center-only',
+   food:'plan-shop-inventory-cook-pack-eat-history',
+   gym:'plan-actual-progress-history',
+   budget:'balance-income-obligations-cashflow-projection',
+   history:'read-only-receipts',
+   wish:'desire-to-budget-bridge',
+   actualOverridesPlanned:true,
+   oneEntryOneAuthority:true
+ });
+ window.__EMMELLI_BUILD='2026-10-07-V80-UNIFIED-PRODUCT-BUILD';
+ document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
 })();
 </script>
 </body>
