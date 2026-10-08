@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-07-V80-UNIFIED-PRODUCT-BUILD">
+<meta name="emmelli-current-build" content="2026-10-08-V87-SCOPE-AND-ROUTE-REPAIR">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -878,8 +878,14 @@ summary{border-radius:12px}
 </style>
 
 <meta name="emmelli-v70-live-date-time" content="America/New_York • auto-day • live-commentary • top-date">
-</head>
-<body data-build="2026-10-07-V80-UNIFIED-PRODUCT-BUILD">
+<style id="v87-modal-layout">
+.sheet-backdrop{z-index:99999!important;align-items:center!important;padding:12px!important;padding-bottom:calc(12px + env(safe-area-inset-bottom))!important}
+.app-sheet{max-height:calc(100dvh - 36px - env(safe-area-inset-bottom))!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;min-height:0!important;padding-bottom:calc(20px + env(safe-area-inset-bottom))!important}
+.app-sheet .app-actions{position:sticky!important;bottom:0!important;background:#fff!important;z-index:2!important;padding:12px 0!important;margin-top:auto!important;flex-shrink:0!important}
+@media(max-width:560px){.sheet-backdrop{align-items:flex-end!important}.app-sheet{max-height:calc(100dvh - 25px - env(safe-area-inset-bottom))!important}}
+</style>
+<style id="v87-secondary-modal">.sheetback{z-index:99999!important;position:fixed!important;inset:0!important;padding:12px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(42,32,37,.3)!important}.sheetback>.sheet{max-height:calc(100dvh - 32px - env(safe-area-inset-bottom))!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;max-width:min(640px,100%)!important;width:100%!important}.sheetback .sheet-actions{position:sticky!important;bottom:0!important;background:white!important;padding:12px 0!important;z-index:10!important;flex-shrink:0!important}@media(max-width:600px){.sheetback{align-items:flex-end!important}}</style><style id="v87-modal-nav-block">body:has(.sheet-backdrop) nav.nav,body:has(.sheetback) nav.nav{visibility:hidden!important;pointer-events:none!important}</style></head>
+<body data-build="2026-10-08-V87-SCOPE-AND-ROUTE-REPAIR">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Food • Gym • Budget • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
@@ -897,7 +903,7 @@ function budgetOccurrenceAmountV125(row){
   }catch(e){}
   return Math.round(Number(row.a||row.amount||0)*100)/100;
 }
-const CURRENT_BUILD="2026-10-07-V80-UNIFIED-PRODUCT-BUILD";
+const CURRENT_BUILD="2026-10-08-V87-SCOPE-AND-ROUTE-REPAIR";
 const GOALS_COMMENTARY_RULE_V15="ALL unfinished goals through the selected day surface in Today Commentary until completed; Important only affects emphasis.";
 const CURRENT_PAGE_CONTRACT_V14={today:"receipt-readiness routine faith goals school weigh-in food contextual",food:"today-food meal-plan inventory monday-grocery cook-days",gym:"day-plan run body-progress",budget:"income autopays emergency week-by-week",history:"year month week day",wish:"categories items totals"};
 const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
@@ -1606,8 +1612,8 @@ function waterTracker(k){return `<div class="watertrack" aria-label="Five water 
 function today(){
  let d=DAYS[state.day], k=selectedKey(), rtl=timeline(d), done=rtl.filter(x=>x.t.done).length, total=rtl.length;
  let waterDone=[1,2,3,4,5].filter(i=>state.water[k+"|"+i]).length;
- let next=rtl.find(x=>!x.t.done), meal=todayMeal(), signals=[];
- if(next)signals.push(`NEXT: ${next.t.name} • ${fmt(next.st)}–${fmt(next.en)}.`);else signals.push("Routine is complete for this day.");
+ let nowMinute=new Date().getHours()*60+new Date().getMinutes(),viewingToday=k===localDateKey();let next=viewingToday?(rtl.find(x=>!x.t.done&&x.en>nowMinute)||rtl.find(x=>!x.t.done&&x.st>=nowMinute)):rtl.find(x=>!x.t.done), meal=todayMeal(), signals=[];
+ if(next)signals.push(`NEXT: ${next.t.name} • ${fmt(next.st)}–${fmt(next.en)}.`);else signals.push(viewingToday?"Today’s routine has ended. Next routine is tomorrow.":"Routine is complete for this day.");
  if(state.day===1||state.day===3){let r=state.run[k];signals.push(r?.duration?`RUN SAVED: ${r.duration} min • incline ${r.incline} • speed ${r.speed}.`:`RUN TODAY: enter incline, speed, and time when you finish.`)}
  if(meal?.cook?.length)signals.push(`COOKING TODAY: ${meal.cook.length} recipes.`);
  if(meal?.thaw&& !/^Nothing/i.test(meal.thaw))signals.push(`TONIGHT: ${meal.thaw}`);
@@ -1701,7 +1707,7 @@ function parseClock(v){let m=String(v||"").trim().match(/(\d{1,2}):(\d{2})\s*(AM
 function sheetMarkup(){
  if(!uiSheet)return "";
  let d=uiSheet.day||DAYS[state.day],a=rday(d).tasks;
- const shell=(title,subtitle,body,actions)=>`<div class="sheet-backdrop" data-sheet-close><section class="app-sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}" onclick="event.stopPropagation()"><div class="sheet-handle"></div><div class="sheet-head"><div><h2>${esc(title)}</h2><p class="muted">${esc(subtitle)}</p></div><button class="tinybtn" data-sheet-cancel aria-label="Close"><span class="icon-x" aria-hidden="true"></span></button></div>${body}<div class="app-actions"><button class="btn" data-sheet-cancel>Cancel</button>${actions}</div></section></div>`;
+ const shell=(title,subtitle,body,actions)=>`<div class="sheet-backdrop" data-sheet-close><section class="app-sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="sheet-handle"></div><div class="sheet-head"><div><h2>${esc(title)}</h2><p class="muted">${esc(subtitle)}</p></div><button class="tinybtn" data-sheet-cancel aria-label="Close"><span class="icon-x" aria-hidden="true"></span></button></div>${body}<div class="app-actions"><button class="btn" data-sheet-cancel>Cancel</button>${actions}</div></section></div>`;
  if(uiSheet.type==="errand"){
   let editing=Number.isInteger(uiSheet.index),x=editing?a[uiSheet.index]:null,meta=x?.errandMeta||{};
   let defaultAfter=editing?Math.max(0,uiSheet.index-1):Math.max(0,a.findIndex(t=>!t.done)-1);
@@ -1749,7 +1755,7 @@ function routine(){
   const isCare=x.t.id==="careM"||x.t.id==="careN";
   if(isCare){
    const done=(x.t.subtasks||[]).filter(q=>q.done).length,total=(x.t.subtasks||[]).length;
-   return `<details class="taskcard care-parent" data-care-parent="${x.t.id}"><summary class="care-parent-summary"><span class="care-check-wrap" onclick="event.stopPropagation()"><input class="taskcheck" type="checkbox" aria-label="${esc(x.t.name)} complete" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}></span><span class="care-summary-copy"><b>${esc(x.t.name)}</b><small>${fmt(x.st)}–${fmt(x.en)} • ${x.t.id==="careM"&&x.t.duration===0?"CHECKLIST":x.t.duration+" MIN"}</small></span><span class="care-summary-count">${done}/${total}</span><span class="care-chevron" aria-hidden="true"></span></summary><div class="care-dropdown-body"><div class="subtasks">${(x.t.subtasks||[]).map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${d}|${x.i}|${j}" ${q.done?"checked":""}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${d}|${x.i}|${j}" aria-label="Edit ${esc(q.name)}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${d}|${x.i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></div>`).join("")}</div><div class="routine-maintenance"><button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Care Item</button><span class="muted">${x.t.duration===0?"Checklist • no extra time block":"${x.t.duration}-minute daily anchor"}</span></div></div></details>`;
+   return `<details class="taskcard care-parent" data-care-parent="${x.t.id}"><summary class="care-parent-summary"><span class="care-check-wrap"><input class="taskcheck" type="checkbox" aria-label="${esc(x.t.name)} complete" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}></span><span class="care-summary-copy"><b>${esc(x.t.name)}</b><small>${fmt(x.st)}–${fmt(x.en)} • ${x.t.id==="careM"&&x.t.duration===0?"CHECKLIST":x.t.duration+" MIN"}</small></span><span class="care-summary-count">${done}/${total}</span><span class="care-chevron" aria-hidden="true"></span></summary><div class="care-dropdown-body"><div class="subtasks">${(x.t.subtasks||[]).map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${d}|${x.i}|${j}" ${q.done?"checked":""}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${d}|${x.i}|${j}" aria-label="Edit ${esc(q.name)}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${d}|${x.i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></div>`).join("")}</div><div class="routine-maintenance"><button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Care Item</button><span class="muted">${x.t.duration===0?"Checklist • no extra time block":"${x.t.duration}-minute daily anchor"}</span></div></div></details>`;
   }
   return `<div class="taskcard" id="routine-block-${x.i}"><div class="taskhead"><input class="taskcheck" type="checkbox" aria-label="${esc(x.t.name)} complete" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}><div class="task-title-copy"><b>${esc(x.t.name)}</b><div class="tasktime">${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration+" min"}</div>${x.t.errandMeta?`<div class="muted" style="margin-top:3px">Entered ${fmt(x.t.errandMeta.enteredStart)}–${fmt(x.t.errandMeta.enteredEnd)} • shifts every later block ${x.t.duration} min</div>`:""}</div><button class="tinybtn" data-rtask-edit="${d}|${x.i}">Edit</button></div>${(x.t.subtasks||[]).length?`<div class="subtasks">${x.t.subtasks.map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${d}|${x.i}|${j}" ${q.done?"checked":""}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn" data-rsub-edit="${d}|${x.i}|${j}">Edit</button><button class="tinybtn" data-rsub-del="${d}|${x.i}|${j}" aria-label="Remove subtask">×</button></div>`).join("")}</div>`:""}<div class="routine-maintenance"><button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Subtask</button><button class="tinybtn" data-rtask-del="${d}|${x.i}">Remove</button></div></div>`;
  }).join("");
@@ -2066,6 +2072,12 @@ function outstandingRowsForProjection(){
  Object.values(state.budget.outstandingByMonth||{}).flat().forEach(o=>{
   if(!validDateKeyRaw(o.carryDate)||!validDateKeyRaw(o.originalDate))return;
   let original=new Date(o.originalDate+"T12:00:00"),fake={n:o.name,a:Number(o.amount||0),date:original};if(state.checks[autopayKey(fake)])return;
+  // A moved original is already represented by emergencyMoves + its undated reserve; do not charge legacy outstanding again.
+  const movedAlready=Object.values(state.budget.emergencyMoves||{}).some(group=>Object.values(group||{}).some(r=>r?.action==='move'&&r.name===o.name&&r.originalDate===o.originalDate));
+  if(movedAlready)return;
+  // Oct 3 authoritative opening balance superseded the September 9 carry-forward projection.
+  // Preserve its historical record; do not silently add a second $200 to October's future obligations.
+  if(o.originalDate==='2026-09-09'&&o.name==='Car Insurance'&&String(state.budget.balanceAsOf||'')>='2026-10-03')return;
   let d=new Date(o.carryDate+"T12:00:00");if(d<=anchor){d=new Date(anchor);d.setDate(d.getDate()+1)}
   out.push({n:"Outstanding: "+o.name,a:Math.max(0,Number(o.amount||0)),d:d.getDate(),date:d,kind:"outstanding",outstanding:true,originalDate:o.originalDate,skipId:`OUT:${o.originalDate}:${o.name}`});
  });return out;
@@ -2527,8 +2539,8 @@ function restoreRoutineOpenDetails(snap){
 }
 routine=function(){
  let d=DAYS[state.day],rd=rday(d),tl=timeline(d),isToday=selectedKey()===localDateKey(),mins=isToday?new Date().getHours()*60+new Date().getMinutes():-1;let now=isToday?(tl.find(x=>mins>=x.st&&mins<x.en)||null):null;let checkedIndexes=tl.map((x,i)=>x.t.done?i:-1).filter(i=>i>=0),lastChecked=checkedIndexes.length?Math.max(...checkedIndexes):-1,nextItem=tl[lastChecked+1]||null;if(lastChecked<0)nextItem=tl[0]||null;let sections=routineSectionOrder(d,[...new Set(tl.map(x=>x.t.section))]),open=sections.includes(rd.open)?rd.open:sections[0],shown=tl.filter(x=>x.t.section===open),tabs=sections.map(x=>`<button class="sectionTab ${x===open?"on":""}" data-rsection="${esc(x)}">${esc(x)}</button>`).join("");
- let cards=shown.map(x=>{const isCare=x.t.id==="careM"||x.t.id==="careN";if(isCare){let actionable=(x.t.subtasks||[]).filter(q=>!careIsHeadingV84(q.name)),cnt=actionable.filter(q=>q.done).length,total=actionable.length;return `<details class="taskcard care-parent" data-care-parent="${x.t.id}"><summary class="care-parent-summary"><span class="care-check-wrap" onclick="event.stopPropagation()"><input class="taskcheck" type="checkbox" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}></span><span class="care-summary-copy"><b>${esc(x.t.name)}</b><small>${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration} MIN</small></span><span class="care-summary-count">${cnt}/${total}</span><span class="care-chevron"></span></summary><div class="care-dropdown-body">${careCategoryMarkup(x.t,d,x.i)}<div class="routine-maintenance"><button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Care Item</button></div></div></details>`}
- let subs=x.t.subtasks||[];if(subs.length){let dc=subs.filter(q=>q.done).length;return `<details class="taskcard"><summary class="care-parent-summary"><span class="care-check-wrap" onclick="event.stopPropagation()"><input class="taskcheck" type="checkbox" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}></span><span class="care-summary-copy"><b>${esc(x.t.name)}</b><small>${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration} MIN</small></span><span class="care-summary-count">${dc}/${subs.length}</span></summary><div class="care-dropdown-body"><div class="subtasks">${subs.map((q,j)=>`<div class="subrow"><input type="checkbox" data-rsub-check="${d}|${x.i}|${j}" ${q.done?"checked":""}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn" data-rsub-edit="${d}|${x.i}|${j}">Edit</button></div>`).join("")}</div></div></details>`}
+ let cards=shown.map(x=>{const isCare=x.t.id==="careM"||x.t.id==="careN";if(isCare){let actionable=(x.t.subtasks||[]).filter(q=>!careIsHeadingV84(q.name)),cnt=actionable.filter(q=>q.done).length,total=actionable.length;return `<details class="taskcard care-parent" data-care-parent="${x.t.id}"><summary class="care-parent-summary"><span class="care-check-wrap"><input class="taskcheck" type="checkbox" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}></span><span class="care-summary-copy"><b>${esc(x.t.name)}</b><small>${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration} MIN</small></span><span class="care-summary-count">${cnt}/${total}</span><span class="care-chevron"></span></summary><div class="care-dropdown-body">${careCategoryMarkup(x.t,d,x.i)}<div class="routine-maintenance"><button class="tinybtn" data-rsub-add="${d}|${x.i}">+ Care Item</button></div></div></details>`}
+ let subs=x.t.subtasks||[];if(subs.length){let dc=subs.filter(q=>q.done).length;return `<details class="taskcard"><summary class="care-parent-summary"><span class="care-check-wrap"><input class="taskcheck" type="checkbox" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}></span><span class="care-summary-copy"><b>${esc(x.t.name)}</b><small>${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration} MIN</small></span><span class="care-summary-count">${dc}/${subs.length}</span></summary><div class="care-dropdown-body"><div class="subtasks">${subs.map((q,j)=>`<div class="subrow"><input type="checkbox" data-rsub-check="${d}|${x.i}|${j}" ${q.done?"checked":""}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn" data-rsub-edit="${d}|${x.i}|${j}">Edit</button></div>`).join("")}</div></div></details>`}
  return `<div class="taskcard"><div class="taskhead"><input class="taskcheck" type="checkbox" data-rtask-check="${d}|${x.i}" ${x.t.done?"checked":""}><div class="task-title-copy"><b>${esc(x.t.name)}</b><div class="tasktime">${fmt(x.st)}–${fmt(x.en)} • ${x.t.duration} min</div></div><button class="tinybtn" data-rtask-edit="${d}|${x.i}">Edit</button></div></div>`}).join("");
  return hero("Routine",d)+back("Today")+`<section class="card" style="border:2px solid var(--accent);background:var(--soft)"><b>ROUTINE BUILD • SLEEP + 90-MIN COOKING</b><p style="margin:6px 0 0"><b>WEDNESDAY:</b> Wake 4:40 AM • Cooking 7:05–8:35 AM • Pack 2:15–2:20 PM • Drive to Work 2:20–3:00 PM<br><b>THURSDAY:</b> Wake 7:46 AM • Cooking 10:10–11:40 AM • Pack 2:15–2:20 PM • Drive to Work 2:20–3:00 PM</p></section><section class="card soft"><div class="nowgrid"><div class="nowbox routine-jump" ${now?`data-rjump="${now.i}"`:""}><span class="muted">NOW</span><b>${esc(isToday?(now?now.t.name:(mins<(tl[0]?.st??0)?"ROUTINE HAS NOT STARTED YET":"NO BLOCK SCHEDULED RIGHT NOW")):"NOW IS AVAILABLE FOR TODAY ONLY")}</b>${now?`<span class="tasktime">${fmt(now.st)}–${fmt(now.en)}</span>`:""}</div><div class="nowbox routine-jump" ${nextItem?`data-rjump="${nextItem.i}"`:""}><span class="muted">NEXT</span><b>${esc(nextItem?.t.name||"ROUTINE COMPLETE")}</b>${nextItem?`<span class="tasktime">${fmt(nextItem.st)}–${fmt(nextItem.en)}</span>`:""}</div></div><div class="comment-widget routine-commentary" style="margin-top:12px"><p>${esc(enhancedRoutineComment(d,tl))}</p></div><div class="app-actions"><button class="btn" data-woke-late="${d}">I WOKE UP LATE</button><button class="btn" data-add-errand="${d}">ADD AN ERRAND</button></div></section><section class="card"><div class="row between"><h2 style="margin:0">Routine Sections</h2><button class="btn" data-copy-routine>Copy Routine</button></div><div class="wake-time-strip"><span>WAKE TIME</span><b>${fmt(state.routineStarts[selectedKey()]??rd.start)}</b><small>DISPLAY ONLY</small></div><div class="sectionTabs">${tabs}</div>${cards||'<p class="muted">No blocks in this section.</p>'}</section>`
 }
@@ -3863,7 +3875,25 @@ routineStart=function(d){return ar14Clock(ACTUAL_ROUTINE_V14[d]?.start||'6:00 AM
 routineSectionOrder=function(d,sections){let order=(ACTUAL_ROUTINE_V14[d]?.sections||[]).map(x=>x[0]);return order.filter(x=>sections.includes(x)).concat(sections.filter(x=>!order.includes(x)))};
 initialRoutineDay=function(d){return ar14Build(d)};
 rday=function(d){let k=selectedKey();state.routineDates=state.routineDates||{};state.routineV2=state.routineV2||{};state.routineStatus=state.routineStatus||{};state.checks=state.checks||{};let ver='routineCanonical|2026-10-02|actualV14';if(!state.routineV2[d]?.actualRoutineV14||!state.checks[ver+'|'+d]){let fresh=ar14Build(d);ar14MapStatus(d,fresh);state.routineV2[d]=cloneRoutineDay(fresh);state.routineV2[d].actualRoutineV14=true;state.checks[ver+'|'+d]=true}if(!state.routineDates[k]||state.routineDates[k].day!==d||!state.routineDates[k].actualRoutineV14){let fresh={day:d,...cloneRoutineDay(state.routineV2[d]),actualRoutineV14:true};let old=state.routineDates[k];if(old&&Array.isArray(old.tasks)){let errands=old.tasks.filter(t=>String(t.id||'').startsWith('errand'));fresh.tasks.push(...errands)}state.routineDates[k]=fresh}let rd=state.routineDates[k];rd.start=routineStart(d);let st=state.routineStatus[k]||(state.routineStatus[k]={});rd.tasks.forEach(t=>{t.done=!!st[t.id];(t.subtasks||[]).forEach(q=>q.done=!!st[t.id+'|'+q.id])});return rd};
-function ar14GroupMarkup(t,d,i){let groups=[];(t.subtasks||[]).forEach((q,j)=>{let key=q.groupKey||'general',g=groups.find(x=>x.key===key);if(!g){g={key,label:q.groupLabel||'TASKS',items:[]};groups.push(g)}g.items.push({q,j})});return groups.map(g=>{let done=g.items.filter(z=>z.q.done).length,total=g.items.length,all=total>0&&done===total;return `<details class="care-category" data-care-category="${esc(t.id+'|'+g.key)}"><summary><span class="care-check-wrap" onclick="event.stopPropagation()"><input class="taskcheck category-taskcheck" type="checkbox" aria-label="${esc(g.label)} complete" data-care-group-check="${d}|${i}|${esc(g.key)}" ${all?'checked':''}></span><span>${esc(g.label)}</span><span class="category-count">${done}/${total}${all?' ✓':''}</span></summary><div class="subtasks">${g.items.map(({q,j})=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${d}|${i}|${j}" ${q.done?'checked':''}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${d}|${i}|${j}">Edit</button></div>`).join('')}</div></details>`}).join('')}
+// V87: preserve canonical routine while filling previously omitted on-duty hours.
+const routineWithAllSavedBlocksV87=rday;
+rday=function(d){
+ const rd=routineWithAllSavedBlocksV87(d);
+ const shiftMinutes={Tuesday:540,Wednesday:300,Thursday:300,Friday:330,Saturday:310,Sunday:210};
+ const gap=shiftMinutes[d];
+ if(!gap||!Array.isArray(rd.tasks))return rd;
+ const id='v87-on-duty-'+d;
+ if(rd.tasks.some(t=>t.id===id))return rd;
+ const target=d==='Friday'?'DRIVE TO GYM':'DRIVE HOME FROM WORK';
+ const i=rd.tasks.findIndex(t=>String(t.name||'').toUpperCase()===target);
+ if(i<0)return rd;
+ rd.tasks.splice(i,0,{id,name:'CONTINUE WORK SHIFT',duration:gap,section:'While at Work',done:false,subtasks:[]});
+ state.routineStatus=state.routineStatus||{};
+ save();
+ return rd;
+};
+
+function ar14GroupMarkup(t,d,i){let groups=[];(t.subtasks||[]).forEach((q,j)=>{let key=q.groupKey||'general',g=groups.find(x=>x.key===key);if(!g){g={key,label:q.groupLabel||'TASKS',items:[]};groups.push(g)}g.items.push({q,j})});return groups.map(g=>{let done=g.items.filter(z=>z.q.done).length,total=g.items.length,all=total>0&&done===total;return `<details class="care-category" data-care-category="${esc(t.id+'|'+g.key)}"><summary><span class="care-check-wrap"><input class="taskcheck category-taskcheck" type="checkbox" aria-label="${esc(g.label)} complete" data-care-group-check="${d}|${i}|${esc(g.key)}" ${all?'checked':''}></span><span>${esc(g.label)}</span><span class="category-count">${done}/${total}${all?' ✓':''}</span></summary><div class="subtasks">${g.items.map(({q,j})=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${d}|${i}|${j}" ${q.done?'checked':''}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${d}|${i}|${j}">Edit</button></div>`).join('')}</div></details>`}).join('')}
 careCategoryMarkup=function(t,d,i){return ar14GroupMarkup(t,d,i)};
 // Keep every title as one main block in the Routine fraction. Subtasks/categories never inflate the denominator.
 // Preserve open parent/category cards when any child is checked; checking a subtask must never collapse its block.
@@ -4569,7 +4599,7 @@ sheetMarkup=function(){
  if(uiSheet?.type==='invEdit'){
    let x=state.inventory[uiSheet.cat]?.[uiSheet.index];if(!x)return '';
    parseLegacyMeasureV26(x);const m=x.measure||{},v=Number.isFinite(Number(m.value))?m.value:'',u=m.unit||'g';
-   const shell=(title,sub,body,actions)=>`<div class="sheetback" data-sheet-close><div class="sheet" onclick="event.stopPropagation()"><div class="sheetbar"><div><h2>${esc(title)}</h2><p>${esc(sub||'')}</p></div><button class="closex" data-sheet-close aria-label="Close"><span class="icon-x" aria-hidden="true"></span></button></div>${body}<div class="sheet-actions">${actions}</div></div></div>`;
+   const shell=(title,sub,body,actions)=>`<div class="sheetback" data-sheet-close><div class="sheet"><div class="sheetbar"><div><h2>${esc(title)}</h2><p>${esc(sub||'')}</p></div><button class="closex" data-sheet-close aria-label="Close"><span class="icon-x" aria-hidden="true"></span></button></div>${body}<div class="sheet-actions">${actions}</div></div></div>`;
    return shell('Edit Inventory Item',uiSheet.cat,`<div class="sheet-grid"><label class="wide">ITEM<input id="v26InvName" value="${esc(x.name)}"></label><label>AMOUNT<input id="v26InvAmount" type="number" min="0" step="any" inputmode="decimal" value="${esc(v)}" placeholder="Enter measured amount"></label><label>UNIT<select id="v26InvUnit">${inventoryUnitOptionsV26(u)}</select></label><label class="wide">NOTES<input id="v26InvNotes" value="${esc(x.notes||'')}"></label></div><div class="sheet-note"><b>CURRENT STORED AMOUNT:</b> ${esc(inventoryMeasureTextV26(x))}${inventoryNormalizeTextV26(x)?` • ${esc(inventoryNormalizeTextV26(x))}`:''}<br>Set amount to 0 if the item is gone; it will be removed from live Inventory instead of kept as an OUT row.</div>`,`<button class="btn primary" data-v26-save-inv>Save Changes</button>`);
  }
  return sheetMarkupV26Previous();
@@ -4649,7 +4679,7 @@ budgetWeek=function(y,m,w){
 const sheetMarkupV27Previous=sheetMarkup;
 sheetMarkup=function(){
   if(uiSheet?.type==='groceryRunEdit'){
-    const shell=(title,sub,body,actions)=>`<div class="sheetback" data-sheet-close><div class="sheet" onclick="event.stopPropagation()"><div class="sheetbar"><div><h2>${esc(title)}</h2><p>${esc(sub||'')}</p></div><button class="closex" data-sheet-close aria-label="Close"><span class="icon-x" aria-hidden="true"></span></button></div>${body}<div class="sheet-actions">${actions}</div></div></div>`;
+    const shell=(title,sub,body,actions)=>`<div class="sheetback" data-sheet-close><div class="sheet"><div class="sheetbar"><div><h2>${esc(title)}</h2><p>${esc(sub||'')}</p></div><button class="closex" data-sheet-close aria-label="Close"><span class="icon-x" aria-hidden="true"></span></button></div>${body}<div class="sheet-actions">${actions}</div></div></div>`;
     return shell('Edit Grocery Run','This paycheck week only.',`<div class="sheet-grid"><label class="wide">Expected grocery run<input id="v27GroceryRunAmount" type="number" min="0" step=".01" inputmode="decimal" value="${Number(uiSheet.amount||0).toFixed(2)}"></label><label class="wide">Optional note<input id="v27GroceryRunNote" value="${esc(uiSheet.note||'')}" placeholder="e.g. Detwiler’s + Walmart"></label></div><div class="sheet-note">This tracks the grocery portion of the existing $100 Household / Produce envelope. It does not create a second expense.</div>`,`<button class="btn primary" data-v27-save-grocery-run>Save Grocery Run</button>`);
   }
   return sheetMarkupV27Previous();
@@ -5574,7 +5604,7 @@ function unplannedChartV37(arr){
 const budgetToolBeforeV37=budgetTool;
 budgetTool=function(kind,y,m,parent='budget'){
  if(kind!=='unplanned')return budgetToolBeforeV37(kind,y,m,parent);
- const id=`${y}-${m+1}`,arr=state.budget.unplannedByMonth[id]||[],total=arr.reduce((a,x)=>a+Math.max(0,Number(x.amount)||0),0),backLabel=parent==='month'?new Date(y,m).toLocaleString('en',{month:'long'}):'Budget';
+ const id=`${y}-${m+1}`,arr=state.budget.unplannedByMonth[id]||[],total=arr.reduce((a,x)=>a+Math.max(0,Number(x.amount)||0),0),backLabel=parent==='month'?new Date(y,m).toLocaleString('en',{month:'long'}):'Budget',backMarkup=parent==='month'?`<button class="btn back" data-budget-return="month:${y}:${m}">‹ BACK TO MONTH</button>`:back('Budget');
  return hero('Unplanned Spending',new Date(y,m).toLocaleString('en',{month:'long',year:'numeric'}))+backMarkup+`<section class="card soft"><div class="budget-glance"><div class="mini-stat"><small>LIVE BALANCE</small><b>${money(Number(state.budget.balance)||0)}</b></div><div class="mini-stat"><small>UNPLANNED SPENT</small><b>${money(total)}</b></div><div class="mini-stat"><small>ENTRIES</small><b>${arr.length}</b></div></div><p class="muted">Every saved purchase immediately changes Live Balance. Editing applies only the difference; deleting returns the purchase amount. The chart groups actual dollars by category.</p></section><section class="card"><h2>SPENDING BY CATEGORY</h2>${unplannedChartV37(arr)}</section><section class="card"><h2>ADD UNPLANNED PURCHASE</h2><div class="formgrid"><input id="unplannedMerchantV37" placeholder="WHERE DID YOU GET IT?"><input id="unplannedAmountV37" type="number" min="0" step=".01" placeholder="PRICE"><input id="unplannedCategoryV37" list="unplannedCategoriesV37" placeholder="CATEGORY"><datalist id="unplannedCategoriesV37">${UNPLANNED_CATEGORIES_V37.map(x=>`<option value="${esc(x)}">`).join('')}</datalist><input id="unplannedDateV37" type="date" value="${esc(selectedKey())}"></div><button class="btn primary" data-v37-add-unplanned="${id}">ADD PURCHASE + UPDATE LIVE BALANCE</button></section><section class="card"><h2>PURCHASES</h2>${arr.map((u,i)=>`<div class="checkrow budget-week-row"><span style="flex:1"><b>${esc(u.item||u.merchant||'Purchase')}</b><small>${esc(u.category||'Other')} • ${esc(unplannedDateV37(id,u))}</small></span><b>−${money(u.amount)}</b><button class="tinybtn" data-v37-edit-unplanned="${id}|${i}">EDIT</button><button class="tinybtn" data-v37-delete-unplanned="${id}|${i}">DELETE</button></div>`).join('')||'<p class="muted">No unplanned purchases yet.</p>'}</section>`;
 };
 function applyUnplannedBalanceDeltaV37(delta){state.budget.balance=Math.round((Number(state.budget.balance||0)+Number(delta||0))*100)/100;state.budget.balanceAsOf=localDateKey();}
@@ -5925,6 +5955,8 @@ historyDay=function(type,d){
 function macroRowsV44(){
   const round=n=>Math.round((Number(n)||0)*10)/10;
   const k=selectedKey(),p=plannedMacroV21(k),a=foodLogMacrosV21(k);
+  const logged=(state.foodHistory||[]).filter(x=>String(x.date||'').slice(0,10)===k&&['ATE','ATE CONTAINER'].includes(x.type));
+  const unresolved=logged.filter(x=>!x.macros||!['calories','protein','carbs','fat','fiber'].every(q=>Number.isFinite(Number(x.macros[q]))));
   const cfg={
     calories:{label:'CALORIES',unit:'KCAL',min:2000,max:2000},
     protein:{label:'PROTEIN',unit:'G',min:135,max:135},
@@ -5934,8 +5966,8 @@ function macroRowsV44(){
   };
   return `<section class="card macro-v44"><div class="section-head"><div><h2>DAILY MACROS</h2><small>PLANNED • ACTUAL • WHAT'S LEFT</small></div></div><div class="macro-v44-list">${Object.entries(cfg).map(([q,c])=>{
     let av=Number(a[q]||0),pv=p?Number(p[q]||0):null,target=c.max||c.min,fill=Math.min(100,target?av/target*100:0),left=Math.max(0,c.min-av),status=av<c.min?`${round(left)} ${c.unit} LEFT`:av<=c.max?'IN RANGE':`${round(av-c.max)} ${c.unit} OVER`;
-    return `<div class="macro-v44-row"><div class="macro-v44-head"><b>${c.label}</b><span>ACTUAL <strong>${round(av)} ${c.unit}</strong> • ${p?`PLANNED ${round(pv)} ${c.unit}`:'PLANNED —'}</span></div><div class="macro-v44-track"><span style="width:${fill}%"></span></div><div class="macro-v44-foot"><span>TARGET ${c.min===c.max?c.min:`${c.min}–${c.max}`} ${c.unit}</span><b>${status}</b></div></div>`;
-  }).join('')}</div>${p?'':'<p class="muted macro-v44-note">NO COMPLETE PLANNED-DAY MACRO RECEIPT IS SAVED FOR THIS DATE. ACTUAL FOOD STILL TRACKS NORMALLY.</p>'}</section>`;
+    return `<div class="macro-v44-row"><div class="macro-v44-head"><b>${c.label}</b><span>${unresolved.length?'VERIFIED <strong>'+(av?round(av)+' '+c.unit:'—')+'</strong> (partial)':'ACTUAL <strong>'+round(av)+' '+c.unit+'</strong>'} • ${p?`PLANNED ${round(pv)} ${c.unit}`:'PLANNED —'}</span></div><div class="macro-v44-track"><span style="width:${fill}%"></span></div><div class="macro-v44-foot"><span>TARGET ${c.min===c.max?c.min:`${c.min}–${c.max}`} ${c.unit}</span><b>${unresolved.length?'NUTRITION PENDING':status}</b></div></div>`;
+  }).join('')}</div>${unresolved.length?`<p class="muted macro-v44-note">${unresolved.length} logged food item(s) still lack verified nutrition. Full actual totals and remaining targets cannot be calculated yet; displayed values include known nutrition only.</p>`:''}${p?'':'<p class="muted macro-v44-note">NO COMPLETE PLANNED-DAY MACRO RECEIPT IS SAVED FOR THIS DATE. ACTUAL FOOD STILL TRACKS NORMALLY.</p>'}</section>`;
 }
 
 function componentMacrosV44(c,comp){
@@ -5966,7 +5998,7 @@ document.addEventListener('change',e=>{let el=e.target.closest?.('[data-v44-eat-
 document.addEventListener('click',e=>{let b=e.target.closest?.('[data-v44-log-components]');if(!b)return;e.stopImmediatePropagation();let i=+b.dataset.v44LogComponents,c=state.inventory.Containers?.[i];if(!c)return;let key=containerKeyV40(c,i),receipt=containerReceiptV40(c),sel=state.eatComponentSelectionV44?.[key]||{},picked=receipt.filter((_,ci)=>sel[ci]);if(!picked.length){showToast('CHECK AT LEAST ONE COMPONENT YOU ACTUALLY ATE.','WHAT I ACTUALLY ATE');return}let macros=emptyMacros(),known=true;picked.forEach(comp=>{let m=componentMacrosV44(c,comp);if(!m)known=false;else macros=addMacros(macros,m)});if(!known){showToast('COMPONENT NUTRITION IS INCOMPLETE. NOTHING WAS LOGGED.','NUTRITION REQUIRED');return}macros=roundMacros(macros);let grams=picked.reduce((n,x)=>n+Number(x.grams||0),0);let log={id:uid('food'),date:selectedKey(),type:'ATE CONTAINER',name:c.recipe||c.name||'Saved container',recipe:c.recipe,mealSlot:String(c.meal||'').toLowerCase(),amount:`${grams.toFixed(0)} g`,macros,componentReceiptV40:structuredClone(picked),containerSnapshotV40:null,containerBeforeV44:structuredClone(c),partialContainerV44:true};state.foodHistory.push(log);let remaining=receipt.filter((_,ci)=>!sel[ci]);if(!remaining.length){log.containerSnapshotV40=structuredClone(c);state.inventory.Containers.splice(i,1)}else{c.componentReceiptV40=structuredClone(remaining);c.components=Object.fromEntries(remaining.map(x=>[x.id,Number(x.grams||0)]));c.actualPackedGrams=remaining.reduce((n,x)=>n+Number(x.grams||0),0);let rm=emptyMacros(),ok=true;remaining.forEach(comp=>{let m=componentMacrosV44(c,comp);if(!m)ok=false;else rm=addMacros(rm,m)});if(ok)c.macros=roundMacros(rm);c.qty=`${c.actualPackedGrams.toFixed(0)} G • ${(c.storage||'').toUpperCase()}`;log.remainingContainerKeyV44=key}delete state.eatComponentSelectionV44[key];save();render();},true);
 
 /* legacy build marker consolidated into V80 */
-window.__EMMELLI_FOOD_BUILD='V44-ACTUAL-COMPONENT-CHECKS';
+window.__EMMELLI_FOOD_BUILD='V87-RECEIPTS-AND-CHECKLIST';
 window.__EMMELLI_COOK_BUILD='V43-FOUR-DROPDOWNS-CONTAINERS-CLOSED-LOOP';
 
 render();
@@ -6001,7 +6033,7 @@ const historyDayBeforeV46=historyDay;
 historyDay=function(type,d){if(type==='complete')return compactHistoryReceiptV46(d);return historyDayBeforeV46(type,d)};
 
 // Paycheck view requested as Tuesday → Tuesday.
-budgetWeekRangesV31=function(y,m){const out=[],last=new Date(y,m+1,0,12).getDate();for(let d=1;d<=last;d++){const dt=new Date(y,m,d,12);if(dt.getDay()!==3)continue;const end=new Date(dt);end.setDate(dt.getDate()+7);out.push({start:dt,end,payday:new Date(dt)});}return out;};
+budgetWeekRangesV31=function(y,m){const out=[],last=new Date(y,m+1,0,12).getDate();for(let d=1;d<=last;d++){const dt=new Date(y,m,d,12);if(dt.getDay()!==3)continue;const end=new Date(dt);end.setDate(dt.getDate()+6);out.push({start:dt,end,payday:new Date(dt)});}return out;};
 const budgetMonthBeforeV46=budgetMonth,budgetWeekBeforeV46=budgetWeek;
 budgetMonth=function(y,m){return budgetMonthBeforeV46(y,m).replace(/Tuesday → Monday/gi,'Tuesday → Tuesday').replace(/WED→TUE/g,'TUE→TUE')};
 budgetWeek=function(y,m,w){return budgetWeekBeforeV46(y,m,w).replace(/Tuesday → Monday|Tuesday → Tuesday|TUESDAY → TUESDAY/gi,'Wednesday → Tuesday')};
@@ -6052,8 +6084,8 @@ const budgetToolBeforeV501=budgetTool;
 budgetTool=function(kind,y,m,parent){
  if(kind==='buy')return buyToolV50(y,m,parent);
  if(kind!=='emergency')return budgetToolBeforeV501(kind,y,m,parent);
- const c=emergencyCycleV28(y,m),id=c.id,monthName=new Date(y,m).toLocaleString('en',{month:'long',year:'numeric'}),backMarkup=parent==='month'?`<button class="btn back" data-budget-return="month:${y}:${m}">‹ ${esc(monthName)}</button>`:back('BUDGET'),em=state.budget.emergency[id]||(state.budget.emergency[id]={on:true,skip:{}});em.skip=em.skip||{};
- const rows=emergencyEligibleRowsV28?emergencyEligibleRowsV28(c):[];
+ const c=emergencyCycleV130(y,m),id=c.id,monthName=new Date(y,m).toLocaleString('en',{month:'long',year:'numeric'}),backMarkup=parent==='month'?`<button class="btn back" data-budget-return="month:${y}:${m}">‹ ${esc(monthName)}</button>`:back('BUDGET'),em=state.budget.emergency[id]||(state.budget.emergency[id]={on:true,skip:{}});em.skip=em.skip||{};
+ const rows=emergencyRowsV130(y,m);
  const list=rows.map(x=>{let sk=skipKey(x),moved=!!em.skip[sk],rec=emergencyMoveRecV28(id,x),amt=effectiveAutopayAmount(x);return `<div class="autopay-row-v75"><div class="autopay-primary"><b>${esc(x.n)}</b><span>${x.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})} • ${money(amt)}</span><small>${moved?(rec?.newDate?`MOVED → ${new Date(rec.newDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}`:'MOVED • ADD NEW PAY DATE'):'ORIGINAL DATE'}</small></div>${moved?`<label class="actual-date">PAY ON <input type="date" data-v28-move-date="${encodeURIComponent(id)}|${encodeURIComponent(sk)}" value="${esc(rec?.newDate||'')}"></label>`:`<button class="btn" data-v29-move-occurrence="${encodeURIComponent(id)}|${encodeURIComponent(sk)}|${encodeURIComponent(x.n)}|${encodeURIComponent(String(amt))}|${encodeURIComponent(localDateKey(x.date))}|${encodeURIComponent(String(x.baseA??x.a))}|bill">MOVE FOR RENT</button>`}</div>`}).join('');
  return hero('EMERGENCY MONTH',monthName)+backMarkup+`<section class="card soft"><div class="muted">LIVE BALANCE</div><div class="metric money">${money(Number(state.budget.balance||0))}</div></section><section class="card"><div class="section-head"><div><h2>${esc(monthName.toUpperCase())} AUTOPAYS</h2><p>MOVE AN AUTOPAY TO LET THAT MONEY COUNT TOWARD RENT UNTIL THE NEW PAY DATE.</p></div></div>${list||'<p class="muted">NO UNPAID AUTOPAYS TO MOVE IN THIS RENT WINDOW.</p>'}</section>${emergencyMovedPanelV28(y,m)}`;
 };
@@ -6070,8 +6102,8 @@ setInterval(()=>{if(state.route==="today"&&state.sub==="routine"&&selectedKey()=
 const budgetToolBeforeV51=budgetTool;
 budgetTool=function(kind,y,m,parent){
   if(kind!=='emergency')return budgetToolBeforeV51(kind,y,m,parent);
-  const c=emergencyCycleV28(y,m),id=c.id,monthName=new Date(y,m).toLocaleString('en',{month:'long',year:'numeric'}),backMarkup=parent==='month'?`<button class="btn back" data-budget-return="month:${y}:${m}">‹ ${esc(monthName)}</button>`:back('BUDGET'),em=state.budget.emergency[id]||(state.budget.emergency[id]={on:true,skip:{}});em.skip=em.skip||{};
-  const rows=emergencyEligibleRowsV28?emergencyEligibleRowsV28(c):[];
+  const c=emergencyCycleV130(y,m),id=c.id,monthName=new Date(y,m).toLocaleString('en',{month:'long',year:'numeric'}),backMarkup=parent==='month'?`<button class="btn back" data-budget-return="month:${y}:${m}">‹ ${esc(monthName)}</button>`:back('BUDGET'),em=state.budget.emergency[id]||(state.budget.emergency[id]={on:true,skip:{}});em.skip=em.skip||{};
+  const rows=emergencyRowsV130(y,m);
   const list=rows.map(x=>{let sk=skipKey(x),moved=!!em.skip[sk],rec=emergencyMoveRecV28(id,x),amt=effectiveAutopayAmount(x);return `<div class="autopay-row-v75"><div class="autopay-primary"><b>${esc(x.n)}</b><span>${x.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})} • ${money(amt)}</span><small>${moved?(rec?.newDate?`MOVED → ${new Date(rec.newDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}`:'MOVED • ADD NEW PAY DATE'):'ORIGINAL DATE'}</small></div>${moved?`<label class="actual-date">PAY ON <input type="date" data-v28-move-date="${encodeURIComponent(id)}|${encodeURIComponent(sk)}" value="${esc(rec?.newDate||'')}"></label>`:`<button class="btn" data-v29-move-occurrence="${encodeURIComponent(id)}|${encodeURIComponent(sk)}|${encodeURIComponent(x.n)}|${encodeURIComponent(String(amt))}|${encodeURIComponent(localDateKey(x.date))}|${encodeURIComponent(String(x.baseA??x.a))}|bill">MOVE FOR RENT</button>`}</div>`}).join('');
   return hero('EMERGENCY MONTH',monthName)+backMarkup+`<section class="card soft"><div class="muted">LIVE BALANCE</div><div class="metric money">${money(Number(state.budget.balance||0))}</div></section><section class="card"><div class="section-head"><div><h2>${esc(monthName.toUpperCase())} AUTOPAYS</h2><p>MOVE AN AUTOPAY TO LET THAT MONEY COUNT TOWARD RENT UNTIL THE NEW PAY DATE.</p></div></div>${list||'<p class="muted">NO UNPAID AUTOPAYS TO MOVE IN THIS RENT WINDOW.</p>'}</section>${emergencyMovedPanelV28(y,m)}`;
 };
@@ -6218,6 +6250,21 @@ document.addEventListener('click',e=>{
 function historyLabelV60(type){return ({complete:'ALL HISTORY',routine:'ROUTINE HISTORY',food:'FOOD HISTORY',gym:'GYM / WORKOUT HISTORY',body:'BODY PROGRESS HISTORY',goals:'GOALS HISTORY',bible:'BIBLE + FAITH HISTORY',school:'STUDY HISTORY',cooking:'COOKING HISTORY',water:'WATER / DAILY HEALTH HISTORY'})[type]||'HISTORY'}
 function historyMonthKeyV60(){return selectedKey().slice(0,7)}
 function historyCalendarV60(type,monthKey){
+  // A week is the only path into individual days. This prevents a month-wide day grid
+  // from masquerading as the required Year → Month → Week → Day navigation.
+  const selection=String(state.sub||'').split(':');
+  if(selection[2]==='days'){
+    const [chosenMonth,weekKey]=String(selection.slice(3).join(':')).split('|');
+    if(/^\d{4}-\d{2}-\d{2}$/.test(weekKey)){
+      const firstDay=new Date(weekKey+'T12:00:00'),known=new Set(histDates(type));
+      const cards=Array.from({length:7},(_,i)=>{
+        const dt=new Date(firstDay);dt.setDate(firstDay.getDate()+i);const key=localDateKey(dt),has=known.has(key);
+        return `<button class="history-recent-row" data-history-date="${key}" ${has?'':'disabled'}><span><b>${dt.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}).toUpperCase()}</b><small>${has?historySummaryV60(type,key):'NO SAVED ENTRY'}</small></span><strong>${has?'›':'—'}</strong></button>`;
+      }).join('');
+      const lastDay=new Date(firstDay);lastDay.setDate(firstDay.getDate()+6);
+      return `<section class="card history-browser-card"><button class="btn back" data-history-back-calendar="${type}|${chosenMonth}">‹ CHOOSE ANOTHER WEEK</button><h2>${firstDay.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${lastDay.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</h2>${cards}</section>`;
+    }
+  }
   if(!/^\d{4}-\d{2}$/.test(monthKey||''))monthKey=historyMonthKeyV60();
   const [y,m]=monthKey.split('-').map(Number), first=new Date(y,m-1,1,12), last=new Date(y,m,0,12), dates=histDates(type), saved=new Set(dates), monthDates=dates.filter(d=>d.startsWith(monthKey+'-'));
   const start=(first.getDay()+6)%7, cells=[];
@@ -6265,13 +6312,24 @@ historyDrill=function(){
  const parts=state.sub?.split(':')||[],type=parts[1]||'complete',level=parts[2]||'year',val=parts.slice(3).join(':'),title=historyLabelV60(type);
  if(level==='day'){
    const d=val,month=d.slice(0,7);
-   return hero(title,new Date(d+'T12:00:00').toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric',year:'numeric'}).toUpperCase())+`<button class="btn back" data-history-back-calendar="${type}|${month}">‹ BACK TO CALENDAR</button>`+(type==='complete'?allHistoryReceiptV60(d):`<section class="card history-category-day"><div class="row between"><h2>${title}</h2><span class="paid-tag">${historySummaryV60(type,d)}</span></div>${historyDay(type,d)}</section>`);
+   return hero(title,new Date(d+'T12:00:00').toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric',year:'numeric'}).toUpperCase())+`<button class="btn back" data-history-back-calendar="${type}|${month}">‹ BACK TO WEEKS</button>`+(type==='complete'?allHistoryReceiptV60(d):`<section class="card history-category-day"><div class="row between"><h2>${title}</h2><span class="paid-tag">${historySummaryV60(type,d)}</span></div>${historyDay(type,d)}</section>`);
  }
  let month=historyMonthKeyV60();
  if(level==='week'&&/^\d{4}-\d{2}$/.test(val))month=val;
  else if(level==='month'&&/^\d{4}$/.test(val))month=val+'-'+historyMonthKeyV60().slice(5);
  else if(level==='days'){const q=val.split('|');if(/^\d{4}-\d{2}$/.test(q[0]))month=q[0]}
- return hero(title,'CHOOSE A DATE')+back('HISTORY')+historyCalendarV60(type,month);
+  if(level!=='days'){
+    const [yy,mm]=month.split('-').map(Number), last=new Date(yy,mm,0).getDate();let weeks=[];
+    for(let d=1;d<=last;d++){
+      const start=new Date(yy,mm-1,d,12);if(start.getDay()!==3)continue;
+      const end=new Date(start);end.setDate(end.getDate()+6);
+      weeks.push(`<button class="tile" data-v87-history-week="${type}|${month}|${localDateKey(start)}"><b>WEEK ${weeks.length+1}</b><span>${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span></button>`);
+    }
+    const yrs=[...new Set([...histDates(type).map(d=>d.slice(0,4)),String(yy)])].sort().reverse();
+    const monthOpts=Array.from({length:12},(_,i)=>`<option value="${String(i+1).padStart(2,'0')}" ${i+1===mm?'selected':''}>${new Date(yy,i,1).toLocaleString('en',{month:'long'})}</option>`).join('');
+    return hero(title,'CHOOSE YEAR, MONTH, THEN WEEK')+back('HISTORY')+`<section class="card history-browser-card"><div class="history-jump"><label>YEAR<select data-history-year>${yrs.map(v=>`<option value="${v}" ${v===String(yy)?'selected':''}>${v}</option>`).join('')}</select></label><label>MONTH<select data-history-month>${monthOpts}</select></label></div><div class="tiles">${weeks.join('')||'<p>No weeks available.</p>'}</div></section>`;
+  }
+  return hero(title,'CHOOSE A DATE')+back('HISTORY')+historyCalendarV60(type,month);
 };
 history=function(){
  if(state.sub?.startsWith('hist:'))return historyDrill();
@@ -6279,6 +6337,7 @@ history=function(){
  return hero('HISTORY','EVERY HISTORY TYPE IN ONE PLACE')+`<section class="card history-options-card"><div class="history-option-grid">${cats.map(([t,l,s])=>`<button class="history-option" data-hist="${t}"><span><b>${l}</b><small>${s}</small></span><strong>›</strong></button>`).join('')}</div></section>`;
 };
 document.addEventListener('click',e=>{
+ const weekBtn=e.target.closest?.('[data-v87-history-week]');if(weekBtn){e.preventDefault();e.stopImmediatePropagation();const [t,month,dd]=weekBtn.dataset.v87HistoryWeek.split('|');state.sub=`hist:${t}:days:${month}|${dd}`;save();render();return;}
  const shift=e.target.closest?.('[data-history-month-shift]'), date=e.target.closest?.('[data-history-date]'), backCal=e.target.closest?.('[data-history-back-calendar]');
  if(!shift&&!date&&!backCal)return;
  e.stopImmediatePropagation();
@@ -6447,7 +6506,7 @@ window.__EMMELLI_MASTER='V73 • FINAL LAB-ALIGNED CLEAN MASTER';
     if(hasTueActual(rx))return;
     let i=(state.inventory?.Containers||[]).findIndex(c=>rx.test(String(c.recipe||c.name||''))&&(String(c.eat||c.plannedDate||'').slice(0,10)==='2026-10-06'||rx.test(label)));
     let c=i>=0?state.inventory.Containers[i]:null;
-    let log={id:'locked-actual-20261006-'+label.toLowerCase().replace(/[^a-z0-9]+/g,'-'),date:'2026-10-06',type:'ATE CONTAINER',name:label,recipe:c?.recipe||label,mealSlot:rx.test('Helper')?'lunch':'breakfast',amount:amount||'',macros:c?.macros?structuredClone(c.macros):null,componentReceiptV40:c?containerReceiptV40(c):[],containerSnapshotV40:c?structuredClone(c):null,lockedUserConfirmed:true};
+    let log={id:'locked-actual-20261006-'+label.toLowerCase().replace(/[^a-z0-9]+/g,'-'),date:'2026-10-06',type:'ATE CONTAINER',name:label,recipe:c?.recipe||label,mealSlot:/hamburger helper/i.test(label)?'lunch':'breakfast',amount:amount||'',macros:c?.macros?structuredClone(c.macros):null,componentReceiptV40:c?containerReceiptV40(c):[],containerSnapshotV40:c?structuredClone(c):null,lockedUserConfirmed:true};
     state.foodHistory.push(log);
     if(i>=0)state.inventory.Containers.splice(i,1);
   }
@@ -6943,15 +7002,15 @@ window.EMMELLI_FINAL_MASTER_AUDIT='2026-10-07-FINAL-AUDITED-V71';
     );
 
     // Actual Wednesday recipe/component receipts. Exact unweighed additions remain explicitly unresolved.
-    MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']={...(MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']||{}),sourceLabel:'WED 10/07 • ACTUAL COOKED + PACKED',ingredients:['Monday-preportioned 80/20 beef — exact raw bag weight not promoted to an actual unless recorded','3 g olive oil','60 g white onion','6 g minced garlic + additional final jar amount UNWEIGHED','2 g cumin','1 g paprika','2 g salt','1 g black pepper','lime/cilantro finish as actually used','100 g dry basmati rice • finished cooked rice 323 g','1 can Goya black beans • garlic/lime added • finished beans 203 g','200 g frozen broccoli + 30 g honey • finished 208 g','sauce: 50 g Daisy sour cream + 15 g Fairlife Whole Milk + 15 g lime + 5 g cilantro + 2 g minced garlic + 1 g salt • finished 86 g','30 g cheddar','NO AVOCADO • not ripe'],weigh:'ACTUAL FINISHED: beef mixture 376 g • rice 323 g • beans 203 g • honey broccoli 208 g • sauce 86 g • cheddar 30 g. TWO ACTUAL 591 g CONTAINERS: 184 g beef mixture + 157 g rice + 95 g beans + 100 g broccoli + 40 g sauce + 15 g cheddar EACH. Beef grease was NOT drained. Unknown raw beef bag weight / unweighed garlic-lime additions remain unresolved rather than guessed.'};
-    MEAL.recipes['Chicken Alfredo']={...(MEAL.recipes['Chicken Alfredo']||{}),sourceLabel:'WED 10/07 • ACTUAL COOKED + PACKED',ingredients:['Monday-preportioned chicken allocation • cooked chicken finished 345 g','3 g olive oil + seasonings as instructed','150 g dry fettuccine','100 g frozen spinach — ALL REMAINING USED','8 g butter','200 g Fairlife Whole Milk','80 g half-and-half','45 g Parmesan','garlic/seasonings as actually used','NO FLOUR','NO HEAVY CREAM'],weigh:'ACTUAL FINISHED: chicken 345 g • pasta + Alfredo sauce + spinach mixture 618 g. TWO ACTUAL 464 g CONTAINERS: 167 g chicken + 297 g pasta mixture EACH. Remaining finished grams are not silently assigned; preserve as unallocated unless physically accounted for.'};
+    MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']={...(MEAL.recipes['Cilantro-Lime Beef + Black Bean Rice Bowl']||{}),sourceLabel:'WED 10/07 • PHYSICAL PORTIONS REPORTED • HUB COMPONENT FORM NOT YET SAVED',ingredients:['Monday-preportioned 80/20 beef — exact raw bag weight not promoted to an actual unless recorded','3 g olive oil','60 g white onion','6 g minced garlic + additional final jar amount UNWEIGHED','2 g cumin','1 g paprika','2 g salt','1 g black pepper','lime/cilantro finish as actually used','100 g dry basmati rice • finished cooked rice 323 g','1 can Goya black beans • garlic/lime added • finished beans 203 g','200 g frozen broccoli + 30 g honey • finished 208 g','sauce: 50 g Daisy sour cream + 15 g Fairlife Whole Milk + 15 g lime + 5 g cilantro + 2 g minced garlic + 1 g salt • finished 86 g','30 g cheddar','NO AVOCADO • not ripe'],weigh:'ACTUAL FINISHED: beef mixture 376 g • rice 323 g • beans 203 g • honey broccoli 208 g • sauce 86 g • cheddar 30 g. TWO ACTUAL 591 g CONTAINERS: 184 g beef mixture + 157 g rice + 95 g beans + 100 g broccoli + 40 g sauce + 15 g cheddar EACH. Beef grease was NOT drained. Unknown raw beef bag weight / unweighed garlic-lime additions remain unresolved rather than guessed.'};
+    MEAL.recipes['Chicken Alfredo']={...(MEAL.recipes['Chicken Alfredo']||{}),sourceLabel:'WED 10/07 • PHYSICAL PORTIONS REPORTED • HUB COMPONENT FORM NOT YET SAVED',ingredients:['Monday-preportioned chicken allocation • cooked chicken finished 345 g','3 g olive oil + seasonings as instructed','150 g dry fettuccine','100 g frozen spinach — ALL REMAINING USED','8 g butter','200 g Fairlife Whole Milk','80 g half-and-half','45 g Parmesan','garlic/seasonings as actually used','NO FLOUR','NO HEAVY CREAM'],weigh:'ACTUAL FINISHED: chicken 345 g • pasta + Alfredo sauce + spinach mixture 618 g. TWO ACTUAL 464 g CONTAINERS: 167 g chicken + 297 g pasta mixture EACH. Remaining finished grams are not silently assigned; preserve as unallocated unless physically accounted for.'};
 
     // Today's real status: breakfast/lunch actual; gym fuel not eaten and must not be counted as actual.
     if(MEAL.days?.['2026-10-07']) Object.assign(MEAL.days['2026-10-07'],{
-      breakfast:'ACTUAL EATEN • 1 Base Culture Honey Wheat Sourdough slice + 1 egg • avocado skipped (not ripe) • fruit/honey not yet confirmed eaten',
-      lunch:'ACTUAL EATEN • Cilantro-Lime Beef Bowl • 591 g total: 184 g beef mixture + 157 g rice + 95 g beans + 100 g honey broccoli + 40 g sauce + 15 g cheddar',
-      dinner:'PACKED • Chicken Alfredo • 464 g: 167 g chicken + 297 g pasta mixture',
-      pre:'NOT EATEN • gym not completed as of latest update • do not count automatically',post:'NOT EATEN • do not count automatically',
+      breakfast:'1 Base Culture Honey Wheat Sourdough slice + 1 egg',
+      lunch:'Cilantro-Lime Beef Bowl — 591 g: 184 g beef + 157 g rice + 95 g beans + 100 g honey broccoli + 40 g sauce + 15 g cheddar',
+      dinner:'Chicken Alfredo — 464 g: 167 g chicken + 297 g pasta mixture',
+      pre:'',post:'',snacks:'',
       prep:'WEDNESDAY COOKING COMPLETE • actual finished + packed weights saved. Actual > planned.'
     });
     if(typeof DAY_MACRO_PLAN==='object'&&DAY_MACRO_PLAN) DAY_MACRO_PLAN['2026-10-07']={status:'LIVE ACTUALS • PARTIAL DAY',note:'Breakfast toast + egg and full 591 g Beef Bowl are eaten. Alfredo 464 g is packed for dinner. PRE/POST are NOT eaten and must not count unless later confirmed. Fruit/honey remains flexible. Do not manufacture an exact day total from an unsupported raw-beef weight.'};
@@ -7095,9 +7154,6 @@ window.__EMMELLI_PREVIOUS_BUILD='2026-10-06-V75-REGRESSION-CONSOLIDATED';
 /* legacy build marker consolidated into V80 */
 
 
-})();
-
-
 /* V78 HARD DAILY MACRO PASS/FAIL GATE • 2026-10-07
    A day is never called macro-locked unless ALL five daily goals pass simultaneously. */
 (function applyV78HardMacroGate(){
@@ -7173,9 +7229,14 @@ document.addEventListener("click",e=>{
     if(typeof render==='function')render();
   }catch(e){console.error('V79 page audit',e)}
 })();
-</script>
 
-<script>
+/* IN-SCOPE UNIFIED CORRECTIONS V87 */
+// V87: correct known migration's meal destinations without changing genuine user-entered entries.
+try {for(const x of state.foodHistory||[]){
+ if(String(x.date||'').slice(0,10)==='2026-10-06'&&/hamburger helper/i.test(x.name||x.recipe||'')&&String(x.mealSlot||'').toLowerCase()==='breakfast'&&/v7[0-9]|import|migration/i.test(String(x.id||'')+' '+String(x.source||'')))x.mealSlot='lunch';
+ }}catch(e){console.error('Historical meal destination QA',e)}
+
+
 /* V81 SIMPLE FOOD + UNIFIED PRODUCT AUTHORITY • 2026-10-07
    Page ownership: Today=command center; Food=food lifecycle; Gym=training; Budget=money; History=read-only receipts; Wish List=desire/planning.
    Cross-page rule: summaries route to the owning system; they do not create parallel records.
@@ -7194,20 +7255,8 @@ document.addEventListener("click",e=>{
  window.__EMMELLI_BUILD='2026-10-07-V84-AUDIT-CORRECTIONS';
  document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
 })();
-</script>
-\n<style id="v82-unified-page-contract-css">
-/* V82 — root pages stay concise; working detail lives one level deeper. */
-.food-home-v82 .tiles,.root-grid-v82{grid-template-columns:repeat(2,minmax(0,1fr))}
-.food-home-v82 .tile{min-height:82px}.food-home-v82 .tile span{font-size:12px}
-.today-food-v82 .simple-actual-card{margin-top:10px}.today-food-v82 .simple-meal-group{padding:9px 0;border-bottom:1px solid var(--line)}
-.today-food-v82 .simple-meal-group:last-child{border-bottom:0}.today-food-v82 .simple-meal-title{font-size:11px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin-bottom:5px}
-.today-food-v82 .simple-food-check{padding:7px 4px;min-height:38px}.today-food-v82 .simple-add-food{margin-top:5px}
-.today-food-v82 .meal-glance{padding:13px}.today-food-v82 .meal-tiles{gap:6px}.today-food-v82 .meal-tile{padding:9px 10px}.today-food-v82 .meal-tile p{font-size:11px;line-height:1.35;margin:3px 0 0}
-.today-food-v82 .actual-log{display:none!important}.today-food-v82 .simple-add-panel{margin-top:8px}.today-food-v82 .simple-add-panel>details:not([open]){padding:0}
-.root-note-v82{font-size:12px;color:var(--muted);margin:8px 0 0}
-@media(max-width:430px){.food-home-v82 .tile{min-height:74px;padding:11px}.food-home-v82 .tile b{font-size:15px}}
-</style>
-<script id="v82-unified-page-contract-js">
+
+
 /* V82 PERFECTED PAGE CONTRACT • recovered from prior approved Hub decisions + Oct 7 updates. */
 (function(){
   window.__EMMELLI_BUILD='2026-10-07-V82-PERFECTED-PAGE-CONTRACT';
@@ -7255,7 +7304,7 @@ document.addEventListener("click",e=>{
   function fruitTextV82(s){
     return String(s||'')
       .replace(/50 g blackberries\s*\+\s*8 g honey/gi,'50 g blackberries + 8.3 g honey')
-      .replace(/fruit\s*\+\s*honey/gi,'fruit + honey — exact grams required');
+      .replace(/fruit\s*\+\s*honey/gi,'fruit/honey not yet confirmed; add measured fruit + honey when eaten');
   }
   function todaysFoodV82(){
     const d=todayMeal();
@@ -7296,7 +7345,7 @@ document.addEventListener("click",e=>{
 })();
 /* V83 AUDIT: canonical actual-food checklist; preserve historical receipts and reversible checks. */
 (function(){
- window.__EMMELLI_BUILD='2026-10-08-V86-SOURCE-CORRECTIONS';
+ window.__EMMELLI_BUILD='2026-10-08-V87-SCOPE-AND-ROUTE-REPAIR';
  document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
  const previousCards=actualMealCardsV44;
  const slots=['breakfast','pre','post','lunch','dinner','snacks'];
@@ -7312,11 +7361,18 @@ document.addEventListener("click",e=>{
      const used=new Set();let rows='';
      if(cs.length){rows+=cs.map(({c,i})=>{const name=c.recipe||c.name||'Saved container';let x=recorded.find(z=>z.type==='ATE CONTAINER'&&z.name===name);if(x)used.add(x.id);return `<label class="simple-food-check"><input type="checkbox" data-v83-container="${i}" ${x?'checked':''}><span>${esc(name)} <small>${esc(c.qty||'')}</small></span></label>`}).join('')}
      else if(parts.length){rows+=parts.map((part,pi)=>{const x=logFor(slot,part);if(x)used.add(x.id);return `<label class="simple-food-check"><input type="checkbox" data-v83-part="${esc(slot)}|${pi}" ${x?'checked':''}><span>${esc(fruitLabel(part))}</span></label>`}).join('')}
+     // Every planned meal needs a visible checkable row even when its saved container is not yet found.
+     if(!rows && d[slot] && !recorded.length){
+       const planned=String(d[slot]).replace(/^\s*(ACTUAL(?:\s+EATEN)?|PACKED|NOT EATEN)\s*[•—:-]\s*/i,'').trim();
+       if(planned && !/^(no |nothing |not eaten|not logged)/i.test(planned))rows+=`<label class="simple-food-check"><input type="checkbox" data-v87-planned="${esc(slot)}"><span>${esc(fruitLabel(planned))}</span></label>`;
+     }
      rows+=recorded.filter(x=>!used.has(x.id)).map(x=>`<label class="simple-food-check"><input type="checkbox" checked data-v83-undo="${esc(x.id)}"><span>${esc(fruitLabel(x.name||'Food'))}${x.amount&&!String(x.name||'').includes(String(x.amount))?' · '+esc(x.amount):''}</span></label>`).join('');
      return `<div class="simple-meal-group"><div class="simple-meal-title">${title}</div>${rows}<button class="simple-add-food" data-v80-open-add="${slot}">+ Add Food</button></div>`;
    }).join('')}</section>`;
  };
  document.addEventListener('click',e=>{
+  const v87=e.target.closest?.('[data-v87-planned]');
+  if(v87){e.preventDefault();e.stopImmediatePropagation();const slot=v87.dataset.v87Planned,planned=String(todayMeal()?.[slot]||'').trim();if(!planned)return;const old=slotLogs(slot).find(x=>x.plannedFallbackV87);if(old){const h=document.createElement('button');h.dataset.v40DeleteLog=old.id;h.hidden=true;document.body.append(h);h.click();h.remove();return;}state.foodHistory.push({id:uid('food'),date:selectedKey(),type:'ATE',name:planned,mealSlot:slot,amount:'',macros:null,source:'Nutrition pending • confirm container receipt',plannedFallbackV87:true});save();render();return;}
   const q=e.target.closest?.('[data-v83-part],[data-v83-container],[data-v83-undo]');if(!q)return;
   e.preventDefault();e.stopImmediatePropagation();
   if(q.dataset.v83Undo){const x=logs().find(z=>String(z.id)===q.dataset.v83Undo);if(x){const h=document.createElement('button');h.dataset.v40DeleteLog=x.id;h.hidden=true;document.body.append(h);h.click();h.remove();}return}
@@ -7331,5 +7387,22 @@ document.addEventListener("click",e=>{
  food=function(){return oldFood()};
  try{document.body.dataset.build=window.__EMMELLI_BUILD;render()}catch(e){console.error('V83 checklist render',e)}
 })();
-</script>\n</body>
+
+})();
+</script>
+
+
+\n<style id="v82-unified-page-contract-css">
+/* V82 — root pages stay concise; working detail lives one level deeper. */
+.food-home-v82 .tiles,.root-grid-v82{grid-template-columns:repeat(2,minmax(0,1fr))}
+.food-home-v82 .tile{min-height:82px}.food-home-v82 .tile span{font-size:12px}
+.today-food-v82 .simple-actual-card{margin-top:10px}.today-food-v82 .simple-meal-group{padding:9px 0;border-bottom:1px solid var(--line)}
+.today-food-v82 .simple-meal-group:last-child{border-bottom:0}.today-food-v82 .simple-meal-title{font-size:11px;font-weight:900;color:var(--pink);letter-spacing:.06em;margin-bottom:5px}
+.today-food-v82 .simple-food-check{padding:7px 4px;min-height:38px}.today-food-v82 .simple-add-food{margin-top:5px}
+.today-food-v82 .meal-glance{padding:13px}.today-food-v82 .meal-tiles{gap:6px}.today-food-v82 .meal-tile{padding:9px 10px}.today-food-v82 .meal-tile p{font-size:11px;line-height:1.35;margin:3px 0 0}
+.today-food-v82 .actual-log{display:none!important}.today-food-v82 .simple-add-panel{margin-top:8px}.today-food-v82 .simple-add-panel>details:not([open]){padding:0}
+.root-note-v82{font-size:12px;color:var(--muted);margin:8px 0 0}
+@media(max-width:430px){.food-home-v82 .tile{min-height:74px;padding:11px}.food-home-v82 .tile b{font-size:15px}}
+</style>
+\n</body>
 </html>
