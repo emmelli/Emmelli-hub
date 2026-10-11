@@ -1466,7 +1466,7 @@ function sanitizeNestedState(){
  Object.keys(state.measure).forEach(k=>{if(!validDateKeyRaw(k)||!obj(state.measure[k])){delete state.measure[k];return}Object.keys(state.measure[k]).forEach(f=>{let v=state.measure[k][f];state.measure[k][f]=v===""?"":(num(v)?Math.max(0,Number(v)):"")})});
  Object.keys(state.studyNotes).forEach(k=>{if(!validDateKeyRaw(k)||typeof state.studyNotes[k]!=="string")delete state.studyNotes[k]});
  Object.keys(state.studyResources).forEach(k=>{if(!validDateKeyRaw(k)||typeof state.studyResources[k]!=="string")delete state.studyResources[k];else state.studyResources[k]=state.studyResources[k].trim();if(state.studyResources[k]==="")delete state.studyResources[k]});
- Object.keys(state.bible).forEach(k=>{let b=state.bible[k];if(!validDateKeyRaw(k)||!obj(b)||!Array.isArray(b.entries)){delete state.bible[k];return}b.entries=b.entries.slice(0,4).map(x=>String(x||""));if(!b.entries.some(v=>v.trim()))delete state.bible[k];});
+ Object.keys(state.bible).forEach(k=>{let b=state.bible[k];if(!validDateKeyRaw(k)||!obj(b)){delete state.bible[k];return}b.entries=Array.isArray(b.entries)?b.entries.slice(0,4).map(x=>String(x||"")):[];b.done=Array.isArray(b.done)?b.done.slice(0,4).map(Boolean):[];b.psalms=obj(b.psalms)?b.psalms:{};let hasFaithText=b.entries.some(v=>v.trim()),hasFaithChecks=b.done.some(Boolean),hasPsalmChecks=Object.values(b.psalms).some(Boolean);if(!hasFaithText&&!hasFaithChecks&&!hasPsalmChecks)delete state.bible[k];});
  Object.keys(state.actualFood).forEach(k=>{let a=state.actualFood[k];if(!validDateKeyRaw(k)||!obj(a)){delete state.actualFood[k];return}Object.keys(a).forEach(f=>{let v=a[f];a[f]=v===""?"":(num(v)?Math.max(0,Number(v)):"")})});
  Object.keys(state.run).forEach(k=>{let r=state.run[k];if(!validDateKeyRaw(k)||!obj(r)){delete state.run[k];return}["incline","speed","duration"].forEach(f=>r[f]=num(r[f])?Math.max(0,Number(r[f])):0)});
  Object.keys(state.gymLog).forEach(k=>{let g=state.gymLog[k];if(!validDateKeyRaw(k)||!obj(g)){delete state.gymLog[k];return}Object.keys(g).forEach(n=>{if(!obj(g[n]))delete g[n]})});
@@ -4018,7 +4018,7 @@ function ar14SyncGroup(d,i,gkey,checked){let x=rday(d).tasks[+i],k=selectedKey()
 document.addEventListener('click',e=>{let t=e.target;if(!(t instanceof HTMLInputElement)||t.type!=='checkbox')return;if(t.dataset.careGroupCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,g]=t.dataset.careGroupCheck.split('|');ar14SyncGroup(d,+i,g,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rtaskCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i]=t.dataset.rtaskCheck.split('|');ar14SyncParent(d,+i,!!t.checked,true);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rsubCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,j]=t.dataset.rsubCheck.split('|');ar14SyncChild(d,+i,+j,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}},true);
 // Migrate selected-date routine now and force a clean render with the authoritative schedule.
 DAYS.forEach(d=>{let fresh=ar14Build(d);state.routineV2[d]=cloneRoutineDay(fresh);state.routineV2[d].actualRoutineV14=true;state.checks['routineCanonical|2026-10-02|actualV14|'+d]=true});
-Object.keys(state.routineDates||{}).forEach(k=>{let idx=(new Date(k+'T12:00:00').getDay()+6)%7,d=DAYS[idx],fresh={day:d,...cloneRoutineDay(state.routineV2[d]),actualRoutineV14:true},old=state.routineDates[k],st=state.routineStatus[k]||(state.routineStatus[k]={}),nextStatus={};if(old&&Array.isArray(old.tasks)){fresh.tasks.forEach(nt=>{let ot=old.tasks.find(x=>x.name===nt.name&&x.section===nt.section)||old.tasks.find(x=>x.name===nt.name);if(!ot)return;if(st[ot.id]!==undefined)nextStatus[nt.id]=!!st[ot.id];(nt.subtasks||[]).forEach(ns=>{let os=(ot.subtasks||[]).find(x=>x.name===ns.name);if(os&&st[ot.id+'|'+os.id]!==undefined)nextStatus[nt.id+'|'+ns.id]=!!st[ot.id+'|'+os.id]})});let errands=old.tasks.filter(t=>String(t.id||'').startsWith('errand'));fresh.tasks.push(...errands);errands.forEach(er=>{if(st[er.id]!==undefined)nextStatus[er.id]=!!st[er.id];(er.subtasks||[]).forEach(q=>{if(st[er.id+'|'+q.id]!==undefined)nextStatus[er.id+'|'+q.id]=!!st[er.id+'|'+q.id]})})}state.routineStatus[k]=nextStatus;state.routineDates[k]=fresh});
+Object.keys(state.routineDates||{}).forEach(k=>{let idx=(new Date(k+'T12:00:00').getDay()+6)%7,d=DAYS[idx],fresh={day:d,...cloneRoutineDay(state.routineV2[d]),actualRoutineV14:true},old=state.routineDates[k],st=state.routineStatus[k]||(state.routineStatus[k]={}),nextStatus={...st};if(old&&Array.isArray(old.tasks)){fresh.tasks.forEach(nt=>{let ot=old.tasks.find(x=>x.name===nt.name&&x.section===nt.section)||old.tasks.find(x=>x.name===nt.name);if(!ot)return;if(st[ot.id]!==undefined)nextStatus[nt.id]=!!st[ot.id];(nt.subtasks||[]).forEach(ns=>{let os=(ot.subtasks||[]).find(x=>x.name===ns.name);if(os&&st[ot.id+'|'+os.id]!==undefined)nextStatus[nt.id+'|'+ns.id]=!!st[ot.id+'|'+os.id]})});let errands=old.tasks.filter(t=>String(t.id||'').startsWith('errand'));fresh.tasks.push(...errands);errands.forEach(er=>{if(st[er.id]!==undefined)nextStatus[er.id]=!!st[er.id];(er.subtasks||[]).forEach(q=>{if(st[er.id+'|'+q.id]!==undefined)nextStatus[er.id+'|'+q.id]=!!st[er.id+'|'+q.id]})})}state.routineStatus[k]=nextStatus;state.routineDates[k]=fresh});
 state.checks['routineSource|2026-10-02|userExactPaste']=true;
 save();render();
 
@@ -7779,8 +7779,247 @@ window.EMMELLI_NUTRITION_SYSTEM_V92=v92NutritionSystem();
 window.__EMMELLI_BUILD='2026-10-09-V92-TRANSACTION-INTEGRITY';
 document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
 
+/* FINAL DAILY-USE POLISH — bounded changes requested by Emmelli.
+   The saved-data key and all unrelated pages/data remain unchanged. */
+function dailyActivityGoalLabel(day){
+  if(day==='Monday'||day==='Wednesday'||day==='Friday')return 'GYM / WALK';
+  if(day==='Tuesday'||day==='Thursday')return 'JUST WALK';
+  return 'REST DAY';
+}
+function removeAccidentalEmphasisGoal(){
+  const exact='important / extra emphasis';
+  for(const [date,list] of Object.entries(state.goalsByDate||{})){
+    if(!Array.isArray(list))continue;
+    for(let i=list.length-1;i>=0;i--){
+      if(String(list[i]?.text||'').trim().toLowerCase()!==exact)continue;
+      list.splice(i,1);
+      const old=state.goalHistory?.[date]||{},next={};
+      for(const [key,value] of Object.entries(old)){
+        const n=Number(key);if(n<i)next[n]=value;else if(n>i)next[n-1]=value;
+      }
+      if(Object.keys(next).length)state.goalHistory[date]=next;else delete state.goalHistory[date];
+    }
+    if(!list.length)delete state.goalsByDate[date];
+  }
+}
+if(!state.checks['cleanup|accidentalEmphasisGoal']){
+  removeAccidentalEmphasisGoal();
+  state.checks['cleanup|accidentalEmphasisGoal']=true;
+  save();
+}
+
+// Remove only the injected tomorrow preview; keep the actual Routine unchanged.
+const routineBeforeDailyPolish=routine;
+routine=function(){
+  return routineBeforeDailyPolish().replace(/<section class="card soft routine-tomorrow">[\s\S]*?<\/section>/,'');
+};
+
+// Daily goals and user-entered goals live together. Carried goals retain their
+// original date, so Edit and Remove always update the correct saved record.
+goals=function(){
+  const k=selectedKey(),open=openGoalsThroughSelectedDayV42(k),activity=dailyActivityGoalLabel(DAYS[state.day]);
+  const row=g=>{const done=!!state.goalHistory?.[g.date]?.[g.index]?.done;return `<div class="checkrow"><label style="display:flex;align-items:center;gap:10px;flex:1"><input type="checkbox" data-goal-done="${g.index}" data-goal-date="${esc(g.date)}" ${done?'checked':''}><span><b>${esc(g.text)}</b>${g.important?' <small>• IMPORTANT</small>':''}${g.date!==k?` <small>• CARRIED FROM ${esc(g.date)}</small>`:''}</span></label><button class="btn" data-final-goal-edit="${esc(g.date)}|${g.index}">EDIT</button><button class="btn danger" data-final-goal-remove="${esc(g.date)}|${g.index}">REMOVE</button></div>`};
+  return hero('Goals',DAYS[state.day])+back('Today')+
+    `<section class="card"><h2>DAILY GOALS</h2>${checkbox(`daily|${k}|vitamins`,'VITAMINS')}${checkbox(`daily|${k}|creatine`,'CREATINE')}${checkbox(`daily|${k}|activity`,activity)}</section>`+
+    `<section class="card"><h2>ENTERED GOALS</h2>${open.map(row).join('')||'<p class="muted">No entered goals yet.</p>'}</section>`+
+    `<section class="card"><h2>ADD TODAY’S GOAL</h2><div class="formgrid"><input id="goalText" aria-label="New goal" placeholder="Add a goal"><label class="checkrow"><input id="goalImportant" type="checkbox"><span>Important / extra emphasis</span></label></div><button class="btn primary" data-add-goal>ADD GOAL</button></section>`+
+    `<section class="card"><h2>WATER</h2>${waterTracker(k)}</section>`;
+};
+document.addEventListener('click',e=>{
+  const edit=e.target.closest?.('[data-final-goal-edit]'),remove=e.target.closest?.('[data-final-goal-remove]');
+  if(!edit&&!remove)return;
+  e.preventDefault();e.stopImmediatePropagation();
+  const raw=(edit?.dataset.finalGoalEdit||remove?.dataset.finalGoalRemove||''),cut=raw.lastIndexOf('|'),key=raw.slice(0,cut),index=Number(raw.slice(cut+1)),goal=goalsForDate(key)?.[index];
+  if(!goal)return;
+  if(edit){uiSheet={type:'goalEdit',key,index};render();return}
+  askConfirm('Remove Goal?',`Remove “${goal.text}” from ${key}?`,{kind:'goalRemove',key,index},'Remove Goal');
+},true);
+
+// Include the day's activity choice in the same completion receipt as the other daily goals.
+const dayReceiptStatusBeforeDailyPolish=dayReceiptStatus;
+dayReceiptStatus=function(){
+  const receipt=dayReceiptStatusBeforeDailyPolish(),k=selectedKey(),section=receipt.sections.find(x=>x.name==='Daily Health');
+  if(section){section.total+=1;if(state.checks[`daily|${k}|activity`])section.done+=1;else section.missing.push(dailyActivityGoalLabel(DAYS[state.day]));}
+  receipt.done=receipt.sections.filter(x=>x.done===x.total).length;
+  receipt.total=receipt.sections.length;
+  receipt.missing=receipt.sections.flatMap(x=>x.missing.map(m=>`${x.name} → ${m}`));
+  receipt.pct=receipt.total?Math.round(receipt.done/receipt.total*100):100;
+  return receipt;
+};
+
+// Gym sections remain visibly open after checkoffs and action-button rerenders.
+const gymBeforeDailyPolish=gym;
+gym=function(){
+  return gymBeforeDailyPolish().replace(/<details class="workout-section-drop">/g,'<details class="workout-section-drop" open>');
+};
+
+function liveGreeting(){
+  const n=hubNowPartsV70(),m=n.minutes;
+  const words=m<720?'GOOD MORNING':m<1020?'GOOD AFTERNOON':'GOOD EVENING';
+  return `${words}, EMMELLI • ${n.time}`;
+}
+
+// Today: live greeting + direct Psalms access. Remove only the Sunday shortcut
+// because the complete Sunday reset already remains inside Sunday's Routine.
+const todayBeforeDailyPolish=today;
+today=function(){
+  let html=todayBeforeDailyPolish();
+  html=html.replace(/<button class="tile" data-sub="reset"><b>SUNDAY RESET<\/b><span>HOME \+ WEEK RESET<\/span><\/button>/i,'');
+  html=html.replace(/(<section class="tile today-commentary-tile"[\s\S]*?<span>)([\s\S]*?)(<\/span><\/section>)/,(_,a,b,c)=>a+b.replace(/\s*OPEN GOAL:[\s\S]*$/i,'')+c);
+  const greeting=`<section class="today-greeting" aria-label="Current greeting">${esc(liveGreeting())}</section>`;
+  html=html.replace(/(<section class="hero"[\s\S]*?<\/section>)/,`$1${greeting}`);
+  const psalms=`<button class="tile daily-psalms-tile" data-sub="faith"><b>DAILY PSALMS</b><span>PSALM 23 • PSALM 51 • PSALM 91</span></button>`;
+  html=html.replace(/(<button class="tile" data-sub="routine"[\s\S]*?<\/button>)/,`$1${psalms}`);
+  return html;
+};
+
+/* FINAL GYM SCHEDULING + WEEK-FIRST HISTORY
+   One original workout may be skipped or moved. A moved workout keeps its own
+   actuals so it never collides with a workout already scheduled on the target day. */
+function gymScheduleV94(){
+  if(!state.gymScheduleV94||Array.isArray(state.gymScheduleV94)||typeof state.gymScheduleV94!=='object')state.gymScheduleV94={};
+  const s=state.gymScheduleV94;
+  if(!s.sources||Array.isArray(s.sources)||typeof s.sources!=='object')s.sources={};
+  if(!s.moves||Array.isArray(s.moves)||typeof s.moves!=='object')s.moves={};
+  return s;
+}
+function gymMovesOnV94(date){return Object.values(gymScheduleV94().moves).filter(x=>x&&x.active&&x.targetDate===date&&GYM_PLAN[x.sourceDay])}
+function dateLabelV94(date){return new Date(date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+function movedWorkoutProgressV94(move){
+  const plan=GYM_PLAN[move.sourceDay],log=move.log||{},strength=plan.steps.filter(ex=>{let z=log.strength?.[ex.name]||{},sets=state.gymTargets?.[move.sourceDay+'|'+ex.name]||ex.sets;return sets.every((_,i)=>z['p'+i]===true||Number(z['r'+i]||0)>0)}).length;
+  const abs=AB_WORKOUT_V36.filter((_,i)=>log.abs?.['done'+i]).length,tm=log.treadmill?.done?1:0;
+  return {done:strength+abs+tm,total:plan.steps.length+AB_WORKOUT_V36.length+1,strength,abs,tm};
+}
+function movedWorkoutMarkupV94(move){
+  const plan=GYM_PLAN[move.sourceDay],log=move.log||(move.log={strength:{},abs:{},treadmill:{}});log.strength=log.strength||{};log.abs=log.abs||{};log.treadmill=log.treadmill||{};
+  const p=movedWorkoutProgressV94(move),source=dateLabelV94(move.sourceDate);
+  const strength=plan.steps.map((ex,ei)=>{const z=log.strength[ex.name]||{},sets=state.gymTargets?.[move.sourceDay+'|'+ex.name]||ex.sets,done=sets.every((_,i)=>z['p'+i]===true||Number(z['r'+i]||0)>0),undo=!!move.undo?.[ex.name];return `<div class="exercise-card ${done?'completed':''}"><div class="exercise-title"><span class="theme-heart"></span><div style="flex:1"><b>${esc(ex.name)}</b><div class="muted">MOVED ${esc(move.sourceDay.toUpperCase())} WORKOUT • REST ${esc(ex.rest)}</div></div></div>${sets.map((st,i)=>`<div class="setrow"><b>SET ${i+1}</b><input class="setplan" type="checkbox" data-moved-gym-set="${esc(move.sourceDate)}|${ei}|${i}" ${z['p'+i]===true?'checked':''} aria-label="${esc(ex.name)} moved set ${i+1} complete"><label>ACTUAL ${ex.assistance?'ASSIST':'WEIGHT'}<input data-moved-gym-field="${esc(move.sourceDate)}|${ei}|w${i}" value="${esc(z['w'+i]??'0')}" inputmode="decimal"></label><label>REPS<input type="number" min="0" max="12" data-moved-gym-field="${esc(move.sourceDate)}|${ei}|r${i}" value="${esc(z['r'+i]??'0')}"></label></div><div class="price-est">CURRENT BASE • ${esc(st[0]||'CHOOSE WEIGHT')} × ${st[1]}</div>`).join('')}<div class="exercise-actions"><button class="btn exercise-action" data-moved-gym-planned="${esc(move.sourceDate)}|${ei}">DID THIS AS PLANNED</button><button class="btn exercise-action" data-moved-gym-ready="${esc(move.sourceDate)}|${ei}">READY TO MOVE UP</button><button class="btn exercise-action" data-moved-gym-undo="${esc(move.sourceDate)}|${ei}" ${undo?'':'disabled'}>UNDO</button></div></div>`}).join('');
+  const tm=log.treadmill,abs=AB_WORKOUT_V36.map((m,i)=>`<label class="checkrow"><input type="checkbox" data-moved-gym-abs="${esc(move.sourceDate)}|${i}" ${log.abs['done'+i]?'checked':''}><span>${esc(m.name)} • ${esc(m.reps)}${i===0?' TOTAL • BODYWEIGHT FOR NOW':''}</span></label>`).join('');
+  return `<section class="card moved-workout-card"><div class="row between"><div><small>MOVED WORKOUT • SEPARATE RECEIPT</small><h2>${esc(plan.title)}</h2><p class="muted">MOVED FROM ${esc(source.toUpperCase())}</p></div><span class="paid-tag">${p.done}/${p.total}</span></div><details class="workout-section-drop" open><summary><span>STRENGTH<small>${esc(plan.title)}</small></span></summary><div class="workout-section-body"><section class="card">${strength}</section></div></details><details class="workout-section-drop" open><summary><span>TREADMILL<small>30 MIN • ACTUALS + COMPLETE</small></span></summary><div class="workout-section-body"><section class="card treadmill-workout-v36"><label class="treadmill-complete"><input type="checkbox" data-moved-gym-treadmill="${esc(move.sourceDate)}" ${tm.done?'checked':''}> COMPLETE</label><div class="treadmill-grid"><label>INCLINE<input type="number" min="0" step=".1" data-moved-gym-tm-field="${esc(move.sourceDate)}|incline" value="${esc(tm.incline??'')}"></label><label>SPEED<input type="number" min="0" step=".1" data-moved-gym-tm-field="${esc(move.sourceDate)}|speed" value="${esc(tm.speed??'')}"></label><label>TIME (MINUTES)<input type="number" min="0" step="1" data-moved-gym-tm-field="${esc(move.sourceDate)}|duration" value="${esc(tm.duration??'')}"></label></div></section></div></details><details class="workout-section-drop" open><summary><span>ABS<small>15-MINUTE VIDEO • 6 MOVES</small></span></summary><div class="workout-section-body"><section class="card">${abs}</section></div></details><button class="btn primary workout-save" data-save-moved-gym="${esc(move.sourceDate)}">${move.savedAt?'MOVED WORKOUT SAVED • SAVE AGAIN':'SAVE MOVED WORKOUT TO HISTORY'}</button></section>`;
+}
+function gymMoveChoicesV94(sourceDate){
+  const src=new Date(sourceDate+'T12:00:00'),mon=new Date(src);mon.setDate(src.getDate()-((src.getDay()+6)%7));
+  return Array.from({length:14},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);const key=localDateKey(d);if(key===sourceDate)return '';return `<button class="btn gym-move-choice" data-gym-move-to="${key}"><b>${d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()}</b><span>${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span></button>`}).join('');
+}
+const sheetMarkupBeforeGymScheduleV94=sheetMarkup;
+sheetMarkup=function(){
+  if(uiSheet?.type!=='moveGymDay')return sheetMarkupBeforeGymScheduleV94();
+  return `<div class="sheet-backdrop"><section class="sheet" role="dialog" aria-modal="true" aria-label="Move Gym Day"><div class="sheet-handle"></div><div class="row between"><div><small>MOVE GYM DAY</small><h2>${esc(uiSheet.sourceDay.toUpperCase())} WORKOUT</h2></div><button class="tinybtn" data-gym-move-cancel aria-label="Close">×</button></div><p class="muted">CHOOSE A DAY. IF THAT DAY ALREADY HAS A WORKOUT, BOTH WILL STAY CLEANLY SEPARATED.</p><div class="gym-move-grid">${gymMoveChoicesV94(uiSheet.sourceDate)}</div><label class="wide">OR CHOOSE ANY DATE<input id="gymMoveCustomDate" type="date" min="${esc(uiSheet.sourceDate)}"></label><button class="btn primary" data-gym-move-custom>MOVE TO THIS DATE</button></section></div>`;
+};
+function applyGymMoveV94(sourceDate,targetDate){
+  if(!validDateKeyRaw(sourceDate)||!validDateKeyRaw(targetDate)||sourceDate===targetDate){showToast('CHOOSE A DIFFERENT DATE.','MOVE GYM DAY');return false}
+  const src=new Date(sourceDate+'T12:00:00'),sourceDay=DAYS[(src.getDay()+6)%7];if(!GYM_PLAN[sourceDay])return false;
+  const s=gymScheduleV94(),prior=s.moves[sourceDate]||{};s.sources[sourceDate]={status:'moved',sourceDay,targetDate,updatedAt:new Date().toISOString()};s.moves[sourceDate]={...prior,sourceDate,sourceDay,targetDate,active:true,movedAt:prior.movedAt||new Date().toISOString(),log:prior.log||{strength:{},abs:{},treadmill:{}},undo:prior.undo||{}};save();return true;
+}
+const gymBeforeScheduleV94=gym;
+gym=function(){
+  if(state.sub==='body')return gymBeforeScheduleV94();
+  const k=selectedKey(),d=DAYS[state.day],schedule=gymScheduleV94(),source=schedule.sources[k],moved=gymMovesOnV94(k);
+  let html;
+  if(source?.status==='skipped')html=hero('GYM',d)+`<section class="card gym-day-status"><span class="paid-tag">SKIPPED</span><h2>${esc((GYM_PLAN[d]?.title||'GYM DAY').toUpperCase())}</h2><p>This workout is marked skipped for ${esc(dateLabelV94(k))}.</p><button class="btn primary" data-gym-restore="${k}">RESTORE GYM DAY</button></section>`;
+  else if(source?.status==='moved')html=hero('GYM',d)+`<section class="card gym-day-status"><span class="paid-tag">MOVED</span><h2>${esc((GYM_PLAN[d]?.title||'GYM DAY').toUpperCase())}</h2><p>MOVED TO ${esc(dateLabelV94(source.targetDate).toUpperCase())}.</p><div class="app-actions"><button class="btn primary" data-gym-change-move="${k}">CHANGE MOVED DAY</button><button class="btn" data-gym-restore="${k}">RESTORE ORIGINAL DAY</button></div></section>`;
+  else html=gymBeforeScheduleV94();
+  if(moved.length)html+=`<section class="moved-workouts-wrap"><div class="moved-divider"><span>ADDED TO THIS DAY</span></div>${moved.map(movedWorkoutMarkupV94).join('')}</section>`;
+  if(GYM_PLAN[d]&&(!source||source.status==='scheduled'||!source.status))html+=`<section class="card gym-day-actions"><h2>CHANGE THIS GYM DAY</h2><p class="muted">ONLY THIS DATE CHANGES. YOUR WORKOUT PLAN AND PROGRESSION STAY SAVED.</p><div class="gym-day-action-grid"><button class="btn" data-gym-skip="${k}">SKIP GYM DAY</button><button class="btn primary" data-gym-move="${k}">MOVE GYM DAY</button></div></section>`;
+  if((source?.status==='skipped'||source?.status==='moved')&&!html.includes('BODY PROGRESS'))html+=`<button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT + MEASUREMENTS + WORKOUT HISTORY</span></button>`;
+  return html;
+};
+const todayBeforeGymScheduleV94=today;
+today=function(){
+  let html=todayBeforeGymScheduleV94(),moved=gymMovesOnV94(selectedKey());if(!moved.length)return html;
+  const original=!!GYM_PLAN[DAYS[state.day]]&&gymScheduleV94().sources[selectedKey()]?.status!=='moved'&&gymScheduleV94().sources[selectedKey()]?.status!=='skipped';
+  const tile=`<button class="tile moved-gym-today" data-route="gym"><b>${original?'GYM TODAY • '+(moved.length+1)+' WORKOUTS':'MOVED GYM DAY'}</b><span>${moved.map(x=>GYM_PLAN[x.sourceDay]?.title||x.sourceDay).join(' • ')}</span></button>`;
+  return html.replace(/(<button class="tile" data-sub="routine"[\s\S]*?<\/button>)/,`$1${tile}`);
+};
+function movedReadyTargetsV94(day,ex,sets){
+  const cur=sets.map(st=>[String(st[0]??'').trim(),Number(st[1]||0)]);if(cur.some(st=>!st[0]))return null;
+  const key=day+'|'+ex.name,stage=Number(state.gymMoveStageV50?.[key]||0)%3,idx=[2,1,0][stage],out=cur.map(x=>[x[0],x[1]]),b=bumpGymLoadV33(cur[idx][0],ex);if(b==null)return null;out[idx]=[b,cur[idx][1]];return out;
+}
+document.addEventListener('input',e=>{
+  const f=e.target.closest?.('[data-moved-gym-field],[data-moved-gym-tm-field]');if(!f)return;
+  const [source,a,b]=String(f.dataset.movedGymField||f.dataset.movedGymTmField).split('|'),move=gymScheduleV94().moves[source];if(!move)return;
+  move.log=move.log||{strength:{},abs:{},treadmill:{}};
+  if(f.dataset.movedGymField){const ex=GYM_PLAN[move.sourceDay]?.steps[+a];if(!ex)return;const z=(move.log.strength||(move.log.strength={}))[ex.name]||((move.log.strength)[ex.name]={});z[b]=b.startsWith('r')?String(Math.max(0,Math.min(12,Number(f.value)||0))):String(f.value||'').trim();z['p'+b.slice(1)]=false;z.done=false}
+  else{move.log.treadmill=move.log.treadmill||{};move.log.treadmill[a]=f.value===''?'':Math.max(0,Number(f.value)||0);move.log.treadmill.done=false}
+  move.savedAt=null;save();
+},true);
+document.addEventListener('click',e=>{
+  const b=e.target.closest?.('[data-gym-skip],[data-gym-move],[data-gym-change-move],[data-gym-restore],[data-gym-move-to],[data-gym-move-custom],[data-gym-move-cancel],[data-moved-gym-set],[data-moved-gym-planned],[data-moved-gym-ready],[data-moved-gym-undo],[data-moved-gym-abs],[data-moved-gym-treadmill],[data-save-moved-gym]');if(!b)return;
+  e.preventDefault();e.stopImmediatePropagation();const schedule=gymScheduleV94();
+  if(b.dataset.gymSkip){const k=b.dataset.gymSkip,d=DAYS[(new Date(k+'T12:00:00').getDay()+6)%7];schedule.sources[k]={status:'skipped',sourceDay:d,updatedAt:new Date().toISOString()};if(schedule.moves[k])schedule.moves[k].active=false;save();render();showToast('THIS DATE IS MARKED SKIPPED. YOU CAN RESTORE IT ANYTIME.','GYM DAY SKIPPED');return}
+  if(b.dataset.gymMove||b.dataset.gymChangeMove){const sourceDate=b.dataset.gymMove||b.dataset.gymChangeMove,src=new Date(sourceDate+'T12:00:00');uiSheet={type:'moveGymDay',sourceDate,sourceDay:DAYS[(src.getDay()+6)%7]};render();return}
+  if(b.dataset.gymRestore){const k=b.dataset.gymRestore;schedule.sources[k]={...(schedule.sources[k]||{}),status:'scheduled',updatedAt:new Date().toISOString()};if(schedule.moves[k])schedule.moves[k].active=false;save();render();showToast('THE WORKOUT IS BACK ON ITS ORIGINAL DAY.','GYM DAY RESTORED');return}
+  if(b.hasAttribute('data-gym-move-cancel')){uiSheet=null;render();return}
+  if(b.dataset.gymMoveTo||b.hasAttribute('data-gym-move-custom')){const target=b.dataset.gymMoveTo||document.getElementById('gymMoveCustomDate')?.value;if(applyGymMoveV94(uiSheet.sourceDate,target)){uiSheet=null;render();showToast('THE WORKOUT WAS ADDED TO THE NEW DAY AS ITS OWN SEPARATE WORKOUT.','GYM DAY MOVED')}return}
+  const raw=b.dataset.movedGymSet||b.dataset.movedGymPlanned||b.dataset.movedGymReady||b.dataset.movedGymUndo||b.dataset.movedGymAbs||b.dataset.movedGymTreadmill||b.dataset.saveMovedGym,[source,eiRaw,siRaw]=String(raw).split('|'),move=schedule.moves[source];if(!move)return;move.log=move.log||{strength:{},abs:{},treadmill:{}};const plan=GYM_PLAN[move.sourceDay];
+  if(b.dataset.movedGymSet){const ex=plan.steps[+eiRaw],sets=state.gymTargets?.[move.sourceDay+'|'+ex.name]||ex.sets,z=(move.log.strength||(move.log.strength={}))[ex.name]||((move.log.strength)[ex.name]={}),si=+siRaw;if(b.checked){z['w'+si]=String(sets[si][0]||0);z['r'+si]=String(sets[si][1]||0);z['p'+si]=true}else{z['w'+si]='0';z['r'+si]='0';z['p'+si]=false}z.done=sets.every((_,i)=>z['p'+i]===true||Number(z['r'+i]||0)>0);move.savedAt=null;save();render();return}
+  if(b.dataset.movedGymAbs){move.log.abs=move.log.abs||{};move.log.abs['done'+eiRaw]=!!b.checked;move.savedAt=null;save();return}
+  if(b.dataset.movedGymTreadmill){const t=move.log.treadmill||(move.log.treadmill={});if(b.checked&&['incline','speed','duration'].some(k=>t[k]===''||t[k]==null)){b.checked=false;showToast('ENTER INCLINE, SPEED, AND TIME FIRST.','TREADMILL ACTUALS');return}t.done=!!b.checked;move.savedAt=null;save();return}
+  if(b.dataset.saveMovedGym){move.savedAt=new Date().toISOString();save();render();showToast('MOVED WORKOUT SAVED TO THIS DAY’S HISTORY.','WORKOUT SAVED');return}
+  const ex=plan.steps[+eiRaw],sets=(state.gymTargets?.[move.sourceDay+'|'+ex.name]||ex.sets).map(x=>[String(x[0]??''),Number(x[1]||0)]),z=(move.log.strength||(move.log.strength={}))[ex.name]||((move.log.strength)[ex.name]={});move.undo=move.undo||{};
+  if(b.dataset.movedGymPlanned){move.undo[ex.name]={log:structuredClone(z),target:structuredClone(sets)};sets.forEach((st,i)=>{z['w'+i]=st[0];z['r'+i]=String(st[1]);z['p'+i]=true});z.done=true;move.savedAt=null;save();render();return}
+  if(b.dataset.movedGymUndo){const u=move.undo[ex.name];if(!u)return;move.log.strength[ex.name]=structuredClone(u.log||{});state.gymTargets[move.sourceDay+'|'+ex.name]=structuredClone(u.target||ex.sets);delete move.undo[ex.name];move.savedAt=null;save();render();return}
+  if(b.dataset.movedGymReady){const current=sets.map((st,i)=>[st[0]||String(z['w'+i]||''),st[1]]),next=movedReadyTargetsV94(move.sourceDay,ex,current);if(!next){showToast('ENTER THE REAL STARTING WEIGHTS FIRST. THE HUB WILL NOT GUESS.','READY TO MOVE UP');return}move.undo[ex.name]={log:structuredClone(z),target:structuredClone(sets)};next.forEach((st,i)=>{z['w'+i]=st[0];z['r'+i]=String(st[1]);z['p'+i]=true});z.done=true;state.gymTargets[move.sourceDay+'|'+ex.name]=structuredClone(next);state.gymMoveStageV50=state.gymMoveStageV50||{};state.gymMoveStageV50[move.sourceDay+'|'+ex.name]=(Number(state.gymMoveStageV50[move.sourceDay+'|'+ex.name]||0)+1)%3;move.savedAt=null;save();render();showToast('THE NEXT BASE WAS SAVED FOR THE ORIGINAL WORKOUT DAY.','READY TO MOVE UP ✓');return}
+},true);
+
+function weekStartV94(date){const d=new Date(date+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));return localDateKey(d)}
+function gymReceiptTextV94(d){
+  const out=[],source=gymScheduleV94().sources[d];if(source?.status==='skipped')out.push(`${GYM_PLAN[source.sourceDay]?.title||source.sourceDay}: SKIPPED`);if(source?.status==='moved')out.push(`${GYM_PLAN[source.sourceDay]?.title||source.sourceDay}: MOVED TO ${source.targetDate}`);
+  if(state.gymSaved?.[d]){out.push('ORIGINAL WORKOUT SAVED');for(const [name,z] of Object.entries(state.gymLog?.[d]||{})){const sets=[0,1,2].map(i=>z?.['p'+i]||Number(z?.['r'+i]||0)>0?`S${i+1} ${z['w'+i]||0} × ${z['r'+i]||0}`:'').filter(Boolean);if(sets.length)out.push(`${name}: ${sets.join(' • ')}`)}const s=state.gymSavedDetails?.[d];if(s?.treadmill?.done)out.push(`Treadmill: incline ${s.treadmill.incline} • speed ${s.treadmill.speed} • ${s.treadmill.duration} min`);const abs=absHistoryHtmlV45(s);if(abs)out.push(`Abs: ${abs.replace(/<br>/g,' • ')}`)}
+  for(const m of gymMovesOnV94(d)){out.push(`MOVED ${m.sourceDay.toUpperCase()} • ${GYM_PLAN[m.sourceDay]?.title||''}${m.savedAt?' • SAVED':' • IN PROGRESS'}`);for(const [name,z] of Object.entries(m.log?.strength||{})){const sets=[0,1,2].map(i=>z?.['p'+i]||Number(z?.['r'+i]||0)>0?`S${i+1} ${z['w'+i]||0} × ${z['r'+i]||0}`:'').filter(Boolean);if(sets.length)out.push(`${name}: ${sets.join(' • ')}`)}if(m.log?.treadmill?.done)out.push(`Treadmill: incline ${m.log.treadmill.incline} • speed ${m.log.treadmill.speed} • ${m.log.treadmill.duration} min`)}
+  if(hasRun(d)){const r=state.run[d];out.push(`Run/Walk: incline ${r.incline} • speed ${r.speed} • ${r.duration} min`)}return out;
+}
+const histDatesBeforeWeekFirstV94=histDates;
+histDates=function(type){
+  if(type==='gym'){const set=new Set(histDatesBeforeWeekFirstV94('gym'));for(const [d,x] of Object.entries(gymScheduleV94().sources))if(x?.status&&x.status!=='scheduled')set.add(d);for(const x of Object.values(gymScheduleV94().moves))if(x?.active&&x.targetDate)set.add(x.targetDate);return [...set].filter(validDateKey).sort()}
+  if(type==='body')return [...new Set([...histDatesBeforeWeekFirstV94('body'),...histDates('gym')])].filter(validDateKey).sort();
+  if(type==='complete'){const set=new Set();for(const t of ['routine','gym','body','goals','bible','school','water'])for(const d of histDates(t))set.add(d);return [...set].sort()}
+  return histDatesBeforeWeekFirstV94(type);
+};
+function historyDayLinesV94(type,d){
+  const lines=[];
+  if(type==='complete'||type==='routine'){let snap=state.routineSnapshots?.[d],idx=(new Date(d+'T12:00:00').getDay()+6)%7,tasks=snap?.tasks||state.routineV2?.[DAYS[idx]]?.tasks||[],rs=state.routineStatus?.[d]||{},done=tasks.filter(t=>snap?t.done:rs[t.id]);lines.push(`Routine: ${done.length}/${tasks.length||0}${done.length?' • '+done.map(t=>t.name).join(', '):''}`)}
+  if(type==='complete'||type==='gym'||type==='body')lines.push(...gymReceiptTextV94(d));
+  if(type==='complete'||type==='body'){if(hasWeight(d))lines.push(`Weight: ${state.weight[d]} lb`);const m=state.measure?.[d]||{},bits=['glutes','waist','arms'].filter(k=>m[k]!==''&&m[k]!=null).map(k=>`${k[0].toUpperCase()+k.slice(1)} ${m[k]}`);if(bits.length)lines.push(`Measurements: ${bits.join(' • ')}`)}
+  if(type==='complete'||type==='goals'){const gl=state.goalsByDate?.[d]||[],gh=state.goalHistory?.[d]||{};if(gl.length)lines.push(`Goals: ${gl.map((g,i)=>(gh[i]?.done?'✓ ':'○ ')+g.text).join(' • ')}`)}
+  if(type==='complete'||type==='water'){const water=[1,2,3,4,5].filter(i=>state.water?.[d+'|'+i]).length,daily=[state.checks?.[`daily|${d}|vitamins`]?'Vitamins ✓':'',state.checks?.[`daily|${d}|creatine`]?'Creatine ✓':'',state.checks?.[`daily|${d}|activity`]?dailyActivityGoalLabel(DAYS[(new Date(d+'T12:00:00').getDay()+6)%7])+' ✓':''].filter(Boolean);lines.push(`Daily health: Water ${water}/5${daily.length?' • '+daily.join(' • '):''}`)}
+  if(type==='complete'||type==='bible'){const b=state.bible?.[d],faith=(b?.entries||[]).filter(Boolean),ps=Object.entries(b?.psalms||{}).filter(([,v])=>v).map(([n])=>'Psalm '+n);if(faith.length||ps.length)lines.push(`Faith: ${[...ps,...faith].join(' • ')}`)}
+  if(type==='complete'||type==='school'){if(hasStudy(d))lines.push(`Study: ${[state.studyResources?.[d],state.studyNotes?.[d]].filter(Boolean).join(' • ')}`)}
+  return lines.filter(Boolean);
+}
+function historyDayCardV94(type,d){const lines=historyDayLinesV94(type,d);return `<section class="card history-week-day ${lines.length?'has-entry':'no-entry'}"><div class="row between"><div><small>${new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'long'}).toUpperCase()}</small><h2>${new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}).toUpperCase()}</h2></div><button class="tinybtn history-copy-day" data-copy-history-day="${esc(type)}|${d}" ${lines.length?'':'disabled'}>COPY</button></div>${lines.length?`<div class="history-simple-lines">${lines.map(x=>`<p>${esc(x)}</p>`).join('')}</div>`:'<p class="muted">NO SAVED RECEIPT FOR THIS DAY.</p>'}</section>`}
+function historyWeekStartsV94(type){const set=new Set(histDates(type).map(weekStartV94));set.add(weekStartV94(selectedKey()));return [...set].sort().reverse()}
+function historyWeekTextV94(type,w){const start=new Date(w+'T12:00:00'),out=[`${historyLabelV60(type)} • WEEK OF ${dateLabelV94(w).toUpperCase()}`];for(let i=0;i<7;i++){const d=new Date(start);d.setDate(start.getDate()+i);const key=localDateKey(d),lines=historyDayLinesV94(type,key);if(lines.length)out.push(`\n${dateLabelV94(key).toUpperCase()}\n${lines.join('\n')}`)}return out.join('\n')}
+historyDrill=function(){
+  const p=String(state.sub||'hist:complete:year').split(':'),type=p[1]||'complete',title=historyLabelV60(type);
+  if(p[2]==='days'){const raw=p.slice(3).join(':'),w=(raw.split('|')[1]||raw.split('|')[0]);if(validDateKeyRaw(w)){const start=new Date(w+'T12:00:00'),end=new Date(start);end.setDate(start.getDate()+6);const days=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(start.getDate()+i);return historyDayCardV94(type,localDateKey(d))}).join('');return hero(title,`WEEK OF ${dateLabelV94(w).toUpperCase()}`)+`<button class="btn back" data-v94-history-back="${esc(type)}">‹ ALL WEEKS</button><section class="card history-week-head"><div><small>WEEKLY RECEIPT</small><h2>${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</h2></div><button class="btn primary" data-copy-history-week="${esc(type)}|${w}">COPY WEEK</button></section>${days}`}}
+  const weeks=historyWeekStartsV94(type);return hero(title,'CHOOSE A WEEK')+back('HISTORY')+`<section class="card"><div class="tiles history-week-buttons">${weeks.map(w=>{const s=new Date(w+'T12:00:00'),e=new Date(s);e.setDate(s.getDate()+6);return `<button class="tile" data-v94-history-week="${esc(type)}|${w}"><b>WEEK OF ${esc(dateLabelV94(w).toUpperCase())}</b><span>${s.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${e.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span></button>`}).join('')}</div></section>`;
+};
+history=function(){
+  if(state.sub?.startsWith('hist:'))return historyDrill();
+  const cats=[['complete','ALL HISTORY','SHORT COMPLETE DAILY RECEIPTS'],['routine','ROUTINE HISTORY','BLOCKS COMPLETED + CHANGES'],['gym','GYM / WORKOUT HISTORY','ORIGINAL • MOVED • SKIPPED • ACTUALS'],['body','BODY + GYM HISTORY','WORKOUTS • DAILY WEIGHT • MEASUREMENTS'],['goals','GOALS HISTORY','GOALS + COMPLETION'],['bible','BIBLE + FAITH HISTORY','PSALMS • PRAYER • REFLECTION'],['school','STUDY HISTORY','NOTES + RESOURCES'],['water','DAILY HEALTH HISTORY','WATER • VITAMINS • CREATINE • ACTIVITY']];
+  return hero('HISTORY','PICK A RECEIPT, THEN A WEEK')+`<section class="card history-options-card"><div class="history-option-grid">${cats.map(([t,l,s])=>`<button class="history-option" data-hist="${t}"><span><b>${l}</b><small>${s}</small></span><strong>›</strong></button>`).join('')}</div></section>`;
+};
+document.addEventListener('click',async e=>{
+  const week=e.target.closest?.('[data-v94-history-week]'),back=e.target.closest?.('[data-v94-history-back]'),copyWeek=e.target.closest?.('[data-copy-history-week]'),copyDay=e.target.closest?.('[data-copy-history-day]');if(!week&&!back&&!copyWeek&&!copyDay)return;e.preventDefault();e.stopImmediatePropagation();
+  if(week){const [type,w]=week.dataset.v94HistoryWeek.split('|');state.sub=`hist:${type}:days:${w.slice(0,7)}|${w}`;save();render();appTop();return}
+  if(back){state.sub=`hist:${back.dataset.v94HistoryBack}:year`;save();render();appTop();return}
+  let text='';if(copyWeek){const [type,w]=copyWeek.dataset.copyHistoryWeek.split('|');text=historyWeekTextV94(type,w)}else{const [type,d]=copyDay.dataset.copyHistoryDay.split('|');text=`${historyLabelV60(type)}\n${dateLabelV94(d).toUpperCase()}\n${historyDayLinesV94(type,d).join('\n')}`}
+  try{await navigator.clipboard.writeText(text);showToast('READY TO PASTE ANYWHERE.','RECEIPT COPIED')}catch(err){showToast(text,'COPY THIS RECEIPT')}
+},true);
+
+setInterval(()=>{if(state.route==='today'&&!state.sub&&!uiSheet)render()},60000);
+try{render()}catch(error){console.error('Final daily-use polish',error)}
+
 })();
 </script>
+
+<style id="final-daily-polish-css">
+.today-greeting{margin:10px 0 12px;padding:13px 16px;text-align:center;border:1px solid var(--cuteLine);border-radius:18px;background:linear-gradient(145deg,#f8dfe7,#fff7fa);box-shadow:var(--cuteShadow);color:#684651;font:900 16px/1.25 Georgia,'Times New Roman',serif;letter-spacing:.07em}
+.daily-psalms-tile{background:linear-gradient(145deg,#fff9fb,#f6e2e9)!important}
+.moved-gym-today{background:linear-gradient(145deg,#f6d9e4,#fff8fb)!important;border-color:#dca1b7!important}.gym-day-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gym-day-status{text-align:center}.gym-day-status .paid-tag{display:inline-block;margin-bottom:8px}.gym-move-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.gym-move-choice{display:flex;justify-content:space-between;gap:8px}.moved-divider{display:flex;align-items:center;gap:10px;margin:18px 0 10px;color:var(--pink);font-weight:900;letter-spacing:.08em}.moved-divider:before,.moved-divider:after{content:"";height:1px;background:var(--line);flex:1}.moved-workout-card{border:2px solid #e4abc0!important;background:linear-gradient(145deg,#fff,#fff5f9)!important}.history-week-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.history-week-head h2,.history-week-day h2{margin:3px 0}.history-week-day{padding:14px!important}.history-simple-lines{display:grid;gap:7px}.history-simple-lines p{margin:0;padding:9px 11px;border-radius:12px;background:#fff7fa;border:1px solid var(--line);line-height:1.4}.history-week-day.no-entry{opacity:.72}.history-copy-day{min-width:58px!important;width:auto!important;padding:7px 9px!important}.history-week-buttons .tile b{font-size:13px}.sheet .wide{display:block;margin-top:10px}.sheet .wide input{width:100%;margin-top:6px}
+@media(max-width:520px){.gym-day-action-grid{grid-template-columns:1fr}.history-week-head{align-items:flex-start;flex-direction:column}.history-week-head .btn{width:100%}.gym-move-grid{grid-template-columns:1fr 1fr}.moved-workout-card{padding:11px!important}}
+</style>
 
 
 \n<style id="v82-unified-page-contract-css">
