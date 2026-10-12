@@ -3948,7 +3948,7 @@ Saturday:{start:'2:50 AM',sections:[
 Sunday:{start:'2:50 AM',sections:[
 ['Morning Routine',[[ '2:50 AM','3:05 AM','GET OUT OF BED',[]],['3:05 AM','3:11 AM','MORNING START',['PUT ON APPLE WATCH','STRETCH','MAKE BED','PLAY PODCAST','OPEN BLINDS','TEXT MOMMA','TEXT GRANDMA']],['3:11 AM','3:16 AM','MORNING START #2',['START MORNING LOAD','FILL UP WATER']],['3:16 AM','3:21 AM','PET TIME',['SAY HI TO DOGS']],['3:21 AM','3:41 AM','MORNING CARE','CARE_MORNING'],['3:41 AM','3:56 AM','WHERE ARE YOU EMMELLI?',['PRAYER','DEVOTIONAL','READ PSALMS 23 & 91']],['3:56 AM','4:26 AM','MAKE & EAT BREAKFAST',['BREAKFAST','VITAMINS','CREATINE']],['4:26 AM','4:31 AM','LAUNDRY & PET CARE',['PUT LOAD IN DRYER','FEED DOGS','WASH DOG BOWLS']],['4:31 AM','4:51 AM','WALK THING 1',['WALK TIAMO','SPANISH LESSON']],['4:51 AM','4:53 AM','PET CARE',['NO COAT CARE','PAW BALM']],['4:53 AM','5:13 AM','WALK THING 2',['WALK HERCULES','SPANISH LESSON']],['5:13 AM','5:15 AM','PET CARE',['NO COAT CARE','PAW BALM']],['5:15 AM','5:25 AM','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']],['5:25 AM','6:15 AM','SHOWER AND GET READY',[]],['6:15 AM','6:20 AM','PACK',[]],['6:20 AM','7:00 AM','DRIVE TO WORK',[]]]],
 ['While at Work',[[ '7:00 AM','7:10 AM','START OF SHIFT',['CLOCK IN','BAGS','RETAINER CASE','CHAPSTICK / LOTION','CHARGER','AIRPODS / PORTABLE','LUNCHBOX','WATER','SHIFT LOG']],['7:10 AM','9:10 AM','PERSONAL TIME',['READ','WRITE PRAYERS']],['9:10 AM','9:30 AM','BAG RESET',['CLEAN','ORGANIZE']],['9:30 AM','10:00 AM','TEAS ENGLISH AND REVIEW MISTAKES',[]],['10:00 AM','11:30 AM','WATCH CHURCH',[]],['3:00 PM','3:40 PM','DRIVE HOME FROM WORK',[]]]],
-['After Routine',[[ '3:40 PM','3:45 PM','UNPACK BAGS',[]],['3:45 PM','3:50 PM','PET TIME',['SAY HI TO DOGS']],['3:50 PM','3:55 PM','START SUNDAY LOAD',['BRING SUNDAY LOAD IN FROM CAR','WASH HEADBANDS','WASH HAND/DISH TOWELS','START MORNING LOAD']],['3:55 PM','4:15 PM','WALK THING 1',['WALK TIAMO','SPANISH LESSON']],['4:15 PM','4:35 PM','WALK THING 2',['WALK HERCULES','SPANISH LESSON','PAW CHAMP']],['4:35 PM','4:45 PM','PRAYER • LAUNDRY',['PRAY OVER HOUSE','PUT SUNDAY LOAD IN DRYER']],['4:45 PM','6:45 PM','HOME RESET',['30 MINUTES BEDROOM','30 MINUTES BATHROOM','10 MINUTES LAUNDRY ROOM','20 MINUTES STAIRS','30 MINUTES DECLUTTER','ORGANIZE','REMAINING 10 MINUTES INTENTIONALLY OPEN']],['6:45 PM','7:00 PM','WEEKLY PLANNING',['UPDATE CALENDAR','REVIEW NEXT WEEK’S SCHEDULE','CHANGE AND SET ALARMS']],['7:00 PM','7:40 PM','SELF-CARE RESET PT #1',[]],['7:40 PM','8:20 PM','SELF-CARE RESET PT #2',[]],['8:20 PM','9:10 PM','SELF-CARE RESET PT #3',[]],['9:10 PM','9:20 PM','FOLD LAUNDRY',['FOLD','PUT AWAY SUNDAY LOAD','SWITCH OUT HAND AND DISH TOWELS']]]],
+['After Routine',[[ '3:40 PM','3:45 PM','UNPACK BAGS',[]],['3:45 PM','3:50 PM','PET TIME',['SAY HI TO DOGS']],['3:50 PM','3:55 PM','START SUNDAY LOAD',['BRING SUNDAY LOAD IN FROM CAR','WASH HEADBANDS','WASH HAND/DISH TOWELS','START MORNING LOAD']],['3:55 PM','4:15 PM','WALK THING 1',['WALK TIAMO','SPANISH LESSON']],['4:15 PM','4:35 PM','WALK THING 2',['WALK HERCULES','SPANISH LESSON','PAW CHAMP']],['4:35 PM','4:45 PM','PRAYER • LAUNDRY',['PRAY OVER HOUSE','PUT SUNDAY LOAD IN DRYER']],['4:45 PM','6:45 PM','HOME RESET',['30 MINUTES BEDROOM','30 MINUTES BATHROOM','10 MINUTES LAUNDRY ROOM','20 MINUTES STAIRS','30 MINUTES DECLUTTER','ORGANIZE','REMAINING 10 MINUTES INTENTIONALLY OPEN']],['6:45 PM','7:00 PM','WEEKLY PLANNING',['UPDATE CALENDAR','REVIEW NEXT WEEK’S SCHEDULE','CHANGE AND SET ALARMS']],['7:00 PM','7:40 PM','SELF-CARE RESET PT #1',['SOAK RETAINER + BRUSH','WHITENING STRIPS',"BRUSH DOGS' TEETH","CLEAN DOGS' EARS",'REMOVE WHITENING STRIPS','BRUSH WITH BAKING SODA & HYDROGEN PEROXIDE','RETAINER']],['7:40 PM','8:20 PM','SELF-CARE RESET PT #2',['APPLY AMLA HAIR OIL MASK','CLAY FACE MASK','LIP STAIN','RINSE']],['8:20 PM','9:10 PM','SELF-CARE RESET PT #3',['JUST FOR MEN','RINSE','SHOWER & SHAVE EVERYTHING / INCLUDING FACE','TRIM BANGS','WASH WATER BOTTLE']],['9:10 PM','9:20 PM','FOLD LAUNDRY',['FOLD','PUT AWAY SUNDAY LOAD','SWITCH OUT HAND AND DISH TOWELS']]]],
 ['Night Routine',[[ '9:20 PM','9:35 PM','NIGHT RESET',[]],['9:35 PM','10:05 PM','NIGHT CARE','CARE_NIGHT'],['10:05 PM','10:20 PM','FINAL',['WATCH SOMETHING IN SPANISH','DEVOTIONAL','PRAYER FROM PRAYER BOARD']]]]
 ]}
 };
@@ -8120,6 +8120,31 @@ gym=function(){
   if((source?.status==='skipped'||source?.status==='moved')&&!html.includes('BODY PROGRESS'))html+=`<button class="tile" data-sub="body"><b>BODY PROGRESS</b><span>WEIGHT • MEASUREMENTS • COPY HISTORY</span></button>`;
   return html;
 };
+
+/* Keep already-saved Sunday dates synchronized with the authoritative routine.
+   Merge by stable ID so existing checkmarks and user-added items remain intact. */
+function sundayResetDropdowns(){
+  const rows=ACTUAL_ROUTINE_V14.Sunday.sections.find(x=>x[0]==='After Routine')?.[1]||[];
+  return Object.fromEntries(rows.filter(x=>/^SELF-CARE RESET PT #\d$/.test(x[2])).map(x=>[x[2],x[3]]));
+}
+function restoreSundayResetDropdownsV134(rd){
+  if(!rd||rd.day!=='Sunday'||!Array.isArray(rd.tasks))return rd;
+  const status=state.routineStatus?.[selectedKey()]||{};
+  Object.entries(sundayResetDropdowns()).forEach(([name,items],part)=>{
+    const task=rd.tasks.find(x=>String(x.name||'').toUpperCase()===name);
+    if(!task)return;
+    task.subtasks=Array.isArray(task.subtasks)?task.subtasks:[];
+    const existing=new Set(task.subtasks.map(x=>String(x.name||'').toUpperCase()));
+    items.forEach((item,i)=>{
+      if(existing.has(item.toUpperCase()))return;
+      const id=`sunday-reset-${part+1}-${i+1}`;
+      task.subtasks.push({id,name:item,done:!!status[task.id+'|'+id]});
+    });
+  });
+  return rd;
+}
+const rdayBeforeSundayResetV134=rday;
+rday=function(d){return restoreSundayResetDropdownsV134(rdayBeforeSundayResetV134(d))};
 
 setInterval(()=>{if(state.route==='today'&&!state.sub&&!uiSheet)render()},60000);
 try{render()}catch(error){console.error('Final daily-use polish',error)}
