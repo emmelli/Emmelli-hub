@@ -7870,26 +7870,39 @@ function dailyActivityGoalLabel(day){
   return 'REST DAY';
 }
 function removeAccidentalEmphasisGoal(){
-  const exact='important / extra emphasis';
+  const matches=text=>String(text||'').trim().toLowerCase().replace(/[^a-z]/g,'')==='importantextraemphasis';
+  let changed=false;
   for(const [date,list] of Object.entries(state.goalsByDate||{})){
     if(!Array.isArray(list))continue;
     for(let i=list.length-1;i>=0;i--){
-      if(String(list[i]?.text||'').trim().toLowerCase()!==exact)continue;
+      if(!matches(list[i]?.text))continue;
       list.splice(i,1);
       const old=state.goalHistory?.[date]||{},next={};
       for(const [key,value] of Object.entries(old)){
         const n=Number(key);if(n<i)next[n]=value;else if(n>i)next[n-1]=value;
       }
       if(Object.keys(next).length)state.goalHistory[date]=next;else delete state.goalHistory[date];
+      changed=true;
     }
     if(!list.length)delete state.goalsByDate[date];
   }
+  for(const [date,records] of Object.entries(state.goalHistory||{})){
+    if(!records||typeof records!=='object')continue;
+    for(const [index,record] of Object.entries(records))if(matches(record?.text)){delete records[index];changed=true}
+    if(!Object.keys(records).length)delete state.goalHistory[date];
+  }
+  if(Array.isArray(state.goals)){
+    const kept=state.goals.filter(g=>!matches(g?.text));
+    if(kept.length!==state.goals.length){state.goals=kept;changed=true}
+  }
+  return changed;
 }
-if(!state.checks['cleanup|accidentalEmphasisGoal']){
-  removeAccidentalEmphasisGoal();
-  state.checks['cleanup|accidentalEmphasisGoal']=true;
-  save();
-}
+// Rerun this idempotent cleanup even when an older build already set the
+// migration flag; this fixes records that survived the earlier one-time pass.
+const removedAccidentalEmphasisGoal=removeAccidentalEmphasisGoal();
+const shouldSaveEmphasisCleanup=removedAccidentalEmphasisGoal||!state.checks['cleanup|accidentalEmphasisGoal'];
+state.checks['cleanup|accidentalEmphasisGoal']=true;
+if(shouldSaveEmphasisCleanup)save();
 
 // Remove only the injected tomorrow preview; keep the actual Routine unchanged.
 const routineBeforeDailyPolish=routine;
@@ -7905,7 +7918,7 @@ goals=function(){
   return hero('Goals',DAYS[state.day])+back('Today')+
     `<section class="card goals-daily-card"><h2>DAILY GOALS</h2>${checkbox(`daily|${k}|vitamins`,'VITAMINS')}${checkbox(`daily|${k}|creatine`,'CREATINE')}${checkbox(`daily|${k}|activity`,activity)}</section>`+
     `<section class="card goals-entered-card"><h2>ENTERED GOALS</h2>${open.map(row).join('')||'<p class="muted">No entered goals yet.</p>'}</section>`+
-    `<section class="card goals-add-card"><h2>ADD TODAY’S GOAL</h2><input id="goalText" aria-label="New goal" placeholder="Add a goal"><div class="goal-add-actions"><label class="goal-important-toggle"><input id="goalImportant" type="checkbox"><span>IMPORTANT</span></label><button class="btn primary" data-add-goal>ADD GOAL</button></div></section>`+
+    `<section class="card goals-add-card"><h2>ADD TODAY’S GOAL</h2><input class="goal-entry-input" id="goalText" type="text" aria-label="New goal" placeholder="Add a goal"><div class="goal-add-actions"><label class="goal-important-toggle"><input id="goalImportant" type="checkbox"><span>MARK IMPORTANT</span></label><button class="btn primary" data-add-goal>ADD GOAL</button></div></section>`+
     `<section class="card goals-water-card"><h2>WATER</h2>${waterTracker(k)}</section>`;
 };
 document.addEventListener('click',e=>{
@@ -8356,7 +8369,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 @media(max-width:520px){.exercise-actions{gap:5px}.exercise-actions .exercise-action{min-height:32px;padding:6px 7px;font-size:10px}.gym-day-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.gym-day-action-grid .btn{min-height:38px;padding:8px;font-size:11px}.moved-abs-row{display:block}.moved-abs-row .exercise-actions{margin-top:6px}}
 </style>
 <style id="mobile-format-fix-css">
-.goal-add-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}.goal-important-toggle{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:7px 10px;border:1px solid var(--line);border-radius:12px;background:#fff8fa;font-size:11px;font-weight:900;letter-spacing:.035em;cursor:pointer}.goal-important-toggle input{appearance:none;width:20px;height:20px;min-width:20px;margin:0;border:2px solid var(--pink2);border-radius:7px;background:#fff}.goal-important-toggle input:checked{background:var(--pink);border-color:var(--pink)}.goal-important-toggle input:checked:after{content:"";display:block;width:5px;height:10px;margin:2px 0 0 6px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.goal-entry-input{display:block;width:100%;min-width:0}.goal-add-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}.goal-important-toggle{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:7px 10px;border:1px solid var(--line);border-radius:12px;background:#fff8fa;font-size:11px;font-weight:900;letter-spacing:.035em;cursor:pointer}.goal-important-toggle input{appearance:none;width:20px;height:20px;min-width:20px;margin:0;border:2px solid var(--pink2);border-radius:7px;background:#fff}.goal-important-toggle input:checked{background:var(--pink);border-color:var(--pink)}.goal-important-toggle input:checked:after{content:"";display:block;width:5px;height:10px;margin:2px 0 0 6px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 .ab-workout-v36 .exercise-title{margin-bottom:6px}.ab-workout-v36 .ab-setrow{grid-template-columns:48px 28px minmax(0,1fr)!important;align-items:center}.ab-workout-v36 .ab-setrow>b{font-size:10px;letter-spacing:.04em}.ab-workout-v36 .ab-rep-readout{grid-column:3;min-width:0}.ab-workout-v36 .exercise-card{padding:13px;margin:9px 0}.ab-workout-v36 .exercise-actions{margin-top:7px}
 @media(max-width:520px){
  .app{padding-top:calc(12px + env(safe-area-inset-top))}
