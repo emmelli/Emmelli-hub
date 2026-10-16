@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-09-V92-TRANSACTION-INTEGRITY">
+<meta name="emmelli-current-build" content="2026-10-16-CANONICAL-RUNTIME">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -894,6 +894,55 @@ body > nav.nav .navin,body>nav.nav .navin{grid-template-columns:repeat(5,minmax(
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • Budget • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
+/* Canonical Hub runtime: one store, route registry, migration gate, and event broker. */
+(function installHubRuntime(){
+  if(window.HubRuntime) return;
+  const originalAdd=document.addEventListener.bind(document), buckets=new Map(), installed=new Set();
+  const runtime={
+    version:'canonical-runtime-1',
+    get state(){return typeof state==='undefined'?null:state},
+    storageKey:'emmelliHubVISIBLEPROOF2026_09_30_v11',
+    routes:Object.create(null),
+    migrationSteps:new Set(),
+    on(type,listener,options){
+      if(typeof listener!=='function') return;
+      const opts=typeof options==='boolean'?{capture:options}:(options||{});
+      const key=String(type); if(!buckets.has(key))buckets.set(key,[]);
+      if(opts.signal?.aborted)return;
+      if(buckets.get(key).some(row=>!row.removed&&row.listener===listener&&row.capture===!!opts.capture))return;
+      buckets.get(key).push({listener,once:!!opts.once,capture:!!opts.capture,removed:false});
+      const phase=!!opts.capture, installKey=key+'|'+phase;
+      if(!installed.has(installKey)){
+        installed.add(installKey);
+        originalAdd(key,event=>{
+          const list=buckets.get(key)||[];
+          const previous=event.stopImmediatePropagation;
+          let stopped=false;
+          try{event.stopImmediatePropagation=function(){stopped=true;return previous.call(this)};}catch(_){ }
+          for(const row of [...list]){
+            if(row.removed||row.capture!==phase)continue;
+            if(row.once)row.removed=true;
+            try{row.listener.call(document,event)}catch(error){if(typeof window.reportError==='function')window.reportError(error);else console.error(error)}
+            if(stopped)break;
+          }
+          if(typeof previous==='function')try{event.stopImmediatePropagation=previous}catch(_){ }
+        },phase);
+      }
+    },
+    persist(){
+      if(!runtime.state) return;
+      localStorage.setItem(runtime.storageKey,JSON.stringify(runtime.state));
+    },
+    migrate(name,step){
+      if(runtime.migrationSteps.has(name))return;
+      runtime.migrationSteps.add(name);
+      return step();
+    },
+    render(){return typeof render==='function'?render():undefined}
+  };
+  window.HubRuntime=runtime;
+  document.addEventListener=function(type,listener,options){runtime.on(type,listener,options)};
+})();
 /* V41 LOCKED COOKING UX: TODAY'S COOKING always visible; only workflow dropdowns are GET EVERYTHING OUT / PREP + MEASURE / COOK EVERYTHING TOGETHER / CONTAINERS. Recipe source links are optional references; Hub instructions are self-contained. CONTAINERS owns component ingredient confirmation (including added ingredient source + nutrition identity + amount/unit + DURING COOKING/WHILE PORTIONING/AFTER COOKING), actual finished component weights, actual component grams per container, suggested containers, labels/storage, and save-to-Inventory. */
 window.__EMMELLI_COOKING_FLOW_V41=Object.freeze({top:"TODAY'S COOKING",dropdowns:["GET EVERYTHING OUT","PREP + MEASURE","COOK EVERYTHING TOGETHER","CONTAINERS"],recipeLinksOptional:true,whenAdded:["DURING COOKING","WHILE PORTIONING","AFTER COOKING"]});
 
@@ -1491,9 +1540,9 @@ function applyMondayCookSync(){
  state.foodHistory=(state.foodHistory||[]).filter(x=>!((x.date||"").slice(0,10)==="2026-09-28"&&recipes.includes(x.recipe)&&x.type==="COOKED"));
  recipes.forEach(recipe=>state.foodHistory.push({id:uid("food"),date:"2026-09-28",type:"COOKED — AWAITING WEIGHTS/PACKING",recipe,containers:0}));
  delete state.actualFood["2026-09-28"];
- state.checks[mark]=true;localStorage.setItem(SKEY,JSON.stringify(state));
+ state.checks[mark]=true;HubRuntime.persist();
 }
-applyMondayCookSync();
+HubRuntime.migrate('applyMondayCookSync',()=>applyMondayCookSync());
 function applyMondayActualContainersV1(){
  const mark="migration|mondayActualContainersV5|2026-09-29";
  if(state.checks?.[mark])return;
@@ -1524,7 +1573,7 @@ function applyMondayActualContainersV1(){
  state.foodHistory.push({id:uid("food"),date:"2026-09-29",type:"EATEN",recipe:"Beef & Broccoli Garlic Noodles",containers:1,grams:736,meal:"LUNCH"});
  state.foodHistory.push({id:uid("food"),date:"2026-09-29",type:"EATEN",recipe:"Marry Me Chicken Meatballs",containers:1,meatballsGrams:272,sauceGrams:140,meal:"DINNER"});
  state.checks[mark]=true;
- localStorage.setItem(SKEY,JSON.stringify(state));
+ HubRuntime.persist();
 }
 
 function applyPreparedContainerMacrosSep29(){
@@ -1553,7 +1602,7 @@ function applyPreparedContainerTruthSep29(){
  localStorage.setItem(mark,"1");save()
 }
 
-applyMondayActualContainersV1();
+HubRuntime.migrate('applyMondayActualContainersV1',()=>applyMondayActualContainersV1());
 function applySep28BudgetSync(){
  const mark="sync|2026-09-29|budgetSupportV1";if(state.checks[mark])return;
  // Keep the current live balance and anchor; this historical migration only reconciles dated September records.
@@ -1570,9 +1619,9 @@ function applySep28BudgetSync(){
  sep.push({item:"September Car Insurance — still due",amount:200,day:29,carryover:true});
  sep.push({item:"September FPL — still due",amount:55,day:29,carryover:true});
  state.budget.unplannedByMonth["2026-8"]=sep;
- state.checks[mark]=true;localStorage.setItem(SKEY,JSON.stringify(state));
+ state.checks[mark]=true;HubRuntime.persist();
 }
-applySep28BudgetSync();
+HubRuntime.migrate('applySep28BudgetSync',()=>applySep28BudgetSync());
 function applyBudgetAuditV2(){
  const mark="sync|2026-09-29|budgetAuditV2";if(state.checks[mark])return;
  state.budget.outstandingByMonth=state.budget.outstandingByMonth||{};
@@ -1584,9 +1633,9 @@ function applyBudgetAuditV2(){
    {name:"Car Insurance",amount:200,carryDate:"2026-09-29",originalDate:"2026-09-09"},
    {name:"FPL",amount:55,carryDate:"2026-09-29",originalDate:"2026-09-25"}
  ];
- state.checks[mark]=true;localStorage.setItem(SKEY,JSON.stringify(state));
+ state.checks[mark]=true;HubRuntime.persist();
 }
-applyBudgetAuditV2();
+HubRuntime.migrate('applyBudgetAuditV2',()=>applyBudgetAuditV2());
 function applyBudgetUpdateSep28PaidFPL(){
  const mark="sync|2026-09-29|budgetUpdatePaidFPLV3";if(state.checks[mark])return;
  // Do not reset the user’s live balance while repairing the historical September FPL record.
@@ -1602,10 +1651,9 @@ function applyBudgetUpdateSep28PaidFPL(){
  // The recurring FPL amount is permanently $100/month. September is already paid.
  state.checks["autopay|2026-09-25|FPL|100.00"]=true;
  state.checks[mark]=true;
- localStorage.setItem(SKEY,JSON.stringify(state));
+ HubRuntime.persist();
 }
-applyBudgetUpdateSep28PaidFPL();
-
+HubRuntime.migrate('applyBudgetUpdateSep28PaidFPL',()=>applyBudgetUpdateSep28PaidFPL());
 function goalsForDate(k=selectedKey()){if(!Array.isArray(state.goalsByDate[k]))state.goalsByDate[k]=[];return state.goalsByDate[k]}
 function openGoalsThroughSelectedDay(k=selectedKey()){
  let sel=new Date(k+"T12:00:00"),dow=(sel.getDay()+6)%7,mon=new Date(sel);mon.setDate(sel.getDate()-dow);let rows=[];
@@ -1614,7 +1662,7 @@ function openGoalsThroughSelectedDay(k=selectedKey()){
 }
 if(Array.isArray(state.goals)&&state.goals.length&&!Object.keys(state.goalsByDate).length){state.goalsByDate[selectedKey()]=state.goals.map(g=>({text:String(g?.text||""),important:!!g?.important})).filter(g=>g.text);state.goals=[];save()}
 
-function save(){localStorage.setItem(SKEY,JSON.stringify(state))}
+function save(){HubRuntime.persist()}
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function key(){let d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),q=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${q}`}
 function selectedKey(){let now=new Date(),mon=new Date(now);mon.setHours(12,0,0,0);mon.setDate(now.getDate()-((now.getDay()+6)%7)+state.day+(state.weekOffset||0)*7);let y=mon.getFullYear(),m=String(mon.getMonth()+1).padStart(2,"0"),d=String(mon.getDate()).padStart(2,"0");return `${y}-${m}-${d}`}
@@ -1628,8 +1676,7 @@ function applyPermanentCurrentRequirementsV10(){
  if(state.routines&&typeof state.routines==="object")Object.values(state.routines).forEach(rd=>{(rd?.tasks||[]).forEach(t=>{if(t?.id==="careN"||/^Night Care$/i.test(String(t?.name||"")))t.duration=30})});
  state.checks[mark]=true; save();
 }
-applyPermanentCurrentRequirementsV10();
-
+HubRuntime.migrate('applyPermanentCurrentRequirementsV10',()=>applyPermanentCurrentRequirementsV10());
 function ensurePermanentV13CurrentRules(){
  const mark="migration|permanentV13CurrentRules|2026-10-01";
  state.checks=state.checks||{};
@@ -2372,7 +2419,7 @@ function validateSelectedDayContext(){let d=DAYS[state.day],meal=(MEAL.days||{})
 let history;
 function captureOpenPanels(){let counts={};return [...document.querySelectorAll('#app details[open]')].map(el=>{let summary=(el.querySelector(':scope>summary')?.textContent||'').replace(/\s+/g,' ').trim(),base=[state.route,state.sub||'',summary].join('|'),n=counts[base]||0;counts[base]=n+1;return base+'|'+n})}
 function restoreOpenPanels(keys){let wanted=new Set(keys||[]),counts={};[...document.querySelectorAll('#app details')].forEach(el=>{let summary=(el.querySelector(':scope>summary')?.textContent||'').replace(/\s+/g,' ').trim(),base=[state.route,state.sub||'',summary].join('|'),n=counts[base]||0;counts[base]=n+1;if(wanted.has(base+'|'+n))el.open=true})}
-function render(){let open=captureOpenPanels(),scrollY=window.scrollY;if(state.route==="food"){state.route="today";state.sub=null;save()}validateSelectedDayContext();nav();let fn={today,food,gym,budget,history,wish}[state.route]||today;let html;if(state.route==="today"&&state.sub){let subpages={routine,faith,goals,school,weigh,measure,reset};html=subpages[state.sub]?subpages[state.sub]():today()}else html=fn();document.getElementById("app").innerHTML=html+sheetMarkup()+toastMarkup();restoreOpenPanels(open);if(open.length)requestAnimationFrame(()=>window.scrollTo({top:scrollY,left:0,behavior:'instant'}))}
+function render(){let open=captureOpenPanels(),scrollY=window.scrollY;if(state.route==="food"){state.route="today";state.sub=null;save()}validateSelectedDayContext();nav();HubRuntime.routes.today=()=>{if(state.sub){let subpages={routine,faith,goals,school,weigh,measure,reset};return subpages[state.sub]?subpages[state.sub]():today()}return today()};HubRuntime.routes.gym=()=>gym();HubRuntime.routes.budget=()=>budget();HubRuntime.routes.history=()=>history();HubRuntime.routes.wish=()=>wish();let html=(HubRuntime.routes[state.route]||HubRuntime.routes.today)();document.getElementById("app").innerHTML=html+sheetMarkup()+toastMarkup();restoreOpenPanels(open);if(typeof decorateHubV114==='function')decorateHubV114(document);if(open.length)requestAnimationFrame(()=>window.scrollTo({top:scrollY,left:0,behavior:'instant'}))}
 document.addEventListener("input",e=>{
  let gf=e.target.closest?.("[data-gym-field]");if(gf){let [name,f]=gf.dataset.gymField.split("|"),k=selectedKey(),log=state.gymLog[k]||(state.gymLog[k]={}),z=log[name]||(log[name]={});z[f]=f.startsWith("r")?String(Math.max(0,+gf.value||0)):gf.value.trim();if(f.startsWith("w")||f.startsWith("r")){let i=Number(f.slice(1));z["p"+i]=false;let box=gf.closest('.setrow')?.querySelector('[data-gym-set-planned]');if(box)box.checked=false;z.done=false;gf.closest('.exercise-card')?.classList.remove('completed')}delete state.gymSaved[k];save();return}
  let nn=e.target.closest?.("[data-nutrition-note]");if(nn){let [ri,ii]=nn.dataset.nutritionNote.split("|"),rn=cookRecipeName(todayMeal()?.cook?.[+ri]||"");state.nutritionFacts=state.nutritionFacts||{};let n=state.nutritionFacts[rn+"|"+ii]||(state.nutritionFacts[rn+"|"+ii]={});n.note=nn.value;save();return}
@@ -2513,8 +2560,7 @@ function applyThursdayRoutineV44(){
  /* v56: preserve dated Thursday routine history; only the reusable Thursday template is rebuilt */
  state.checks[mark]=true;save();
 }
-applyThursdayRoutineV44();
-
+HubRuntime.migrate('applyThursdayRoutineV44',()=>applyThursdayRoutineV44());
 function applyThursdayCareMergeV50(){
  const mark="migration|thursdayCareMergeV50|2026-09-29";
  if(state.checks?.[mark])return;
@@ -2523,8 +2569,7 @@ function applyThursdayCareMergeV50(){
  /* v56: preserve dated Thursday routine history; only the reusable Thursday template is rebuilt */
  state.checks[mark]=true;save();
 }
-applyThursdayCareMergeV50();
-
+HubRuntime.migrate('applyThursdayCareMergeV50',()=>applyThursdayCareMergeV50());
 const V48_SYSTEM_AUDIT={autopayEdit:"Per-occurrence amount override flows through week, month, emergency/rent projection and paid live-balance correction",loggingConnections:"Routine, care, water, faith, goals, study, body, run, gym, food, containers, cooking, grocery, inventory, budget, wish and history remain on the shared saved state"};
 
 // ===== FULL SYSTEM RUN v75 — accumulated approved fixes =====
@@ -2569,8 +2614,7 @@ function applySep30InventoryTruthV75(){
  let bacon=(inv.Freezer||[]).find(x=>/Kirkland bacon/i.test(x.name||""));if(bacon)bacon.notes=[bacon.notes,"40 g cooked bacon used at breakfast 9/30; exact remaining pack weight not known"].filter(Boolean).join(" • ");
  state.checks[mark]=true; save();
 }
-applySep30InventoryTruthV75();
-
+HubRuntime.migrate('applySep30InventoryTruthV75',()=>applySep30InventoryTruthV75());
 // Oct 1 inventory truth is re-applied inside the canonical cooking script after v7ApplyInventoryCorrections is defined.
 
 
@@ -2979,12 +3023,10 @@ function decorateHubV114(root=document){
 }
 const _wishCatV114=wishCat;
 wishCat=function(c){let html=_wishCatV114(c);html=html.replace(/<div class="checkrow"><input type="checkbox" data-wish-done/g,'<div class="checkrow wish-item-row"><input type="checkbox" data-wish-done');html=html.replace(/<span style="flex:1">/g,'<span class="wish-name">').replace(/<b>\$(.*?)<\/b><button class="btn" data-wish-edit/g,'<b class="wish-price">$$$1</b><span class="wish-actions"><button class="btn" data-wish-edit').replace(/<button class="btn" data-wish-del="([^"]+)" aria-label="Remove wish item">×<\/button><\/div>/g,'<button class="btn" data-wish-del="$1" aria-label="Remove wish item">Remove</button></span></div>');return html.replace('<section class="card">','<section class="card wish-add-card">')}
-const _renderV114=render;
-render=function(){_renderV114();decorateHubV114(document)};
+/* Render decoration is integrated into the canonical route renderer. */
 
-applyPreparedContainerTruthSep29();
-applyPreparedContainerMacrosSep29();
-
+HubRuntime.migrate('applyPreparedContainerTruthSep29',()=>applyPreparedContainerTruthSep29());
+HubRuntime.migrate('applyPreparedContainerMacrosSep29',()=>applyPreparedContainerMacrosSep29());
 /* V119 semantic button normalization */
 (function(){
  const labels=[
@@ -4265,7 +4307,7 @@ function applyGymPlanRevisionV95(){
  for(const key of Object.keys(state.gymMoveStageV50))if(/^(Monday|Wednesday|Friday)\|/.test(key))delete state.gymMoveStageV50[key];
  state.checks[mark]=true;save();
 }
-applyGymPlanRevisionV95();
+HubRuntime.migrate('applyGymPlanRevisionV95',()=>applyGymPlanRevisionV95());
 AB_MOVES.splice(0,AB_MOVES.length,
  "AB VIDEO — 2 ROUNDS • ABOUT 5 MINUTES TOTAL",
  "CURRENT STARTER MODIFICATION — KNEE CRUNCH SECTION: 16 UNWEIGHTED BACK-TO-BACK; DO NOT USE THE 40 LB WEIGHT YET"
@@ -4940,7 +4982,7 @@ function applyKnownBudgetAnchorSafely(budget,checks){
 }
 {
  const anchorMigration=applyKnownBudgetAnchorSafely(state.budget,state.checks);
- if(anchorMigration.changed)localStorage.setItem(SKEY,JSON.stringify(state));
+ if(anchorMigration.changed)HubRuntime.persist();
 }
 
 function flexMonthIdV28(y,m){return `${y}-${m}`}
@@ -5083,7 +5125,7 @@ window.__EMMELLI_BUDGET_BUILD='V28-FLEX-MONTHLY-EMERGENCY-MOVE-NOT-LOSE';
     });
     state.checks['currentDataClean|2026-10-03']=true;
   }
-  localStorage.setItem(SKEY,JSON.stringify(state));
+  HubRuntime.persist();
 })();
 
 
@@ -5203,7 +5245,7 @@ document.addEventListener('change',e=>{
 
 // Preserve the known October emergency anchor even after live checkoffs advance balanceAsOf.
 state.budget.emergencyAnchors['2026-9']=state.budget.emergencyAnchors['2026-9']||'2026-10-03';
-localStorage.setItem(SKEY,JSON.stringify(state));
+HubRuntime.persist();
 window.__EMMELLI_BUDGET_BUILD='V29-LIVE-CHECKOFF-SAME-MONTH-SECOND-TUESDAY';
 
 
@@ -5493,7 +5535,7 @@ budgetWeek=function(y,m,w){
 
 window.__EMMELLI_BUDGET_BUILD='V34-UNIFIED-BUDGET-ICON-AUDIT';
 
-localStorage.setItem(SKEY,JSON.stringify(state));
+HubRuntime.persist();
 
 // Final boot: all migrations and current-data cleanup above must finish before the first paint.
 
@@ -5652,7 +5694,7 @@ function applyCurrentUnweightedKneeCrunchV45(){
   for(const [k,a] of Object.entries(state.abWorkout||{})){if(!state.gymSavedDetails?.[k]&&a&&typeof a==='object')a.weight0=0;}
   state.checks[mark]=true;save();
 }
-applyCurrentUnweightedKneeCrunchV45();
+HubRuntime.migrate('applyCurrentUnweightedKneeCrunchV45',()=>applyCurrentUnweightedKneeCrunchV45());
 function abPanelV36(k){
   const a=abStateV36(k),base=abBaseWeightV36(),weighted=base>=10,actual=weighted?Math.max(10,Number(a.weight0??base)||base):0;
   return `<section class="card ab-workout-v36"><div class="row between"><div><h2 style="margin:0">AB VIDEO</h2><small class="muted">MONDAY–FRIDAY • 2 ROUNDS • ABOUT 5 MINUTES TOTAL</small></div><span class="pill">ABS</span></div>
