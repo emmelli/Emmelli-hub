@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-18-V169-FINAL-RELEASE">
+<meta name="emmelli-current-build" content="2026-10-18-V170-FINAL-RELEASE">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -890,7 +890,7 @@ body > nav.nav .navin,body>nav.nav .navin{grid-template-columns:repeat(5,minmax(
 .tiamo-fed-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tiamo-fed-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:54px;padding:8px 10px;border:1px solid #f0d8e1;border-radius:15px;background:#fff}.tiamo-fed-period{font-size:12px;font-weight:900;letter-spacing:.07em;color:#76515e}.tiamo-fed-switch{position:relative;width:108px;height:38px;flex:none;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;border:0;border-radius:999px;background:#e7e1e4;color:#755e67;transition:background .18s ease,color .18s ease;box-shadow:inset 0 1px 3px #00000012}.tiamo-fed-switch.is-fed{background:#e84d88;color:#fff;justify-content:flex-start}.tiamo-fed-state{font-size:11px;font-weight:950;letter-spacing:.1em}.tiamo-fed-switch input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:2}.tiamo-fed-switch:focus-within{outline:3px solid #f3a6c2;outline-offset:3px}.tiamo-fed-thumb{position:absolute;left:4px;top:4px;width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #00000025;transition:transform .18s ease}.tiamo-fed-switch.is-fed .tiamo-fed-thumb{transform:translateX(70px)}
 @media(max-width:420px){.tiamo-fed-card{padding:12px!important}.tiamo-fed-controls{grid-template-columns:1fr}.tiamo-fed-row{min-height:50px}.tiamo-fed-switch{width:116px}.tiamo-fed-switch.is-fed .tiamo-fed-thumb{transform:translateX(78px)}}
 </style></head>
-<body data-build="2026-10-18-V169-FINAL-RELEASE">
+<body data-build="2026-10-18-V170-FINAL-RELEASE">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • Budget • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
@@ -900,7 +900,9 @@ body > nav.nav .navin,body>nav.nav .navin{grid-template-columns:repeat(5,minmax(
   const originalAdd=document.addEventListener.bind(document), buckets=new Map(), installed=new Set();
   const runtime={
     version:'canonical-runtime-1',
-    get state(){return typeof state==='undefined'?null:state},
+    stateRef:null,
+    get state(){return runtime.stateRef},
+    bindState(value){runtime.stateRef=value;return value},
     storageKey:'emmelliHubVISIBLEPROOF2026_09_30_v11',
     backupStorageKey:'emmelliHubVISIBLEPROOF2026_09_30_v11__verified_backup',
     lastPersistError:null,
@@ -934,7 +936,7 @@ body > nav.nav .navin,body>nav.nav .navin{grid-template-columns:repeat(5,minmax(
     persist(){
       if(!runtime.state) return false;
       const meta=runtime.state.__persistMeta&&typeof runtime.state.__persistMeta==='object'?runtime.state.__persistMeta:{};
-      runtime.state.__persistMeta={revision:(Number(meta.revision)||0)+1,savedAt:new Date().toISOString(),build:'2026-10-18-V169-FINAL-RELEASE'};
+      runtime.state.__persistMeta={revision:(Number(meta.revision)||0)+1,savedAt:new Date().toISOString(),build:'2026-10-18-V170-FINAL-RELEASE'};
       const payload=JSON.stringify(runtime.state);
       try{
         localStorage.setItem(runtime.storageKey,payload);
@@ -975,7 +977,7 @@ function budgetOccurrenceAmountV125(row){
   }catch(e){}
   return Math.round(Number(row.a||row.amount||0)*100)/100;
 }
-const CURRENT_BUILD="2026-10-18-V169-FINAL-RELEASE";
+const CURRENT_BUILD="2026-10-18-V170-FINAL-RELEASE";
 const CURRENT_PAGE_CONTRACT_V14={today:"receipt-readiness routine faith goals school weigh-in food contextual",food:"today-food meal-plan inventory monday-grocery cook-days",gym:"day-plan run body-progress",budget:"income autopays emergency week-by-week",history:"year month week day",wish:"categories items totals"};
 const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const STUDY={Monday:"TEAS Science",Tuesday:"TEAS Math",Wednesday:"PERT Math",Thursday:"TEAS Reading",Friday:"TEAS Science / weak areas",Saturday:"PERT Reading",Sunday:"TEAS English"};
@@ -1461,6 +1463,7 @@ let state=(()=>{try{
  if(existing)return mergeCurrentStateDefaults(base(),existing);
  return importDurableLegacyStateV1(base());
 }catch(e){return base()}})();
+HubRuntime.bindState(state);
 let uiSheet=null;
 let uiToast=null,toastTimer=null;
 function showToast(message,title=""){uiToast={message:String(message||""),title:String(title||"")};render();clearTimeout(toastTimer);toastTimer=setTimeout(()=>{uiToast=null;render()},2800)}
@@ -4271,9 +4274,9 @@ state.foodLookupDraft=state.foodLookupDraft||null;
 function routineTomorrowInfoV93(day,endMinute,dateKey){
   const i=DAYS.indexOf(day);if(i<0||!validDateKeyRaw(dateKey)||!Number.isFinite(Number(endMinute)))return null;
   const nextDay=DAYS[(i+1)%DAYS.length],nextDate=new Date(dateKey+'T12:00:00');nextDate.setDate(nextDate.getDate()+1);
-  const key=localDateKey(nextDate),wake=Number(state.routineStarts?.[key]??rday(nextDay).start??routineStart(nextDay));
+  const key=localDateKey(nextDate),template=(typeof flex154Build==='function'&&FLEX154_START?.[nextDay]!=null)?flex154Build(nextDay):(state.routineV2?.[nextDay]||initialRoutineDay(nextDay)),wake=Number(state.routineStarts?.[key]??template.start??routineStart(nextDay));
   if(!Number.isFinite(wake))return null;
-  return {day:nextDay,date:key,wakeMinutes:wake,sleepWindowMinutes:Math.max(0,wake+1440-Number(endMinute)),firstTask:rday(nextDay).tasks?.[0]?.name||'Routine start'};
+  return {day:nextDay,date:key,wakeMinutes:wake,sleepWindowMinutes:Math.max(0,wake+1440-Number(endMinute)),firstTask:template.tasks?.[0]?.name||'Routine start'};
 }
 const routineBaseV21=routine;
 routine=function(){
@@ -7616,14 +7619,14 @@ try {for(const x of state.foodHistory||[]){
    actualOverridesPlanned:true,
    oneEntryOneAuthority:true
  });
- window.__EMMELLI_BUILD='2026-10-18-V169-FINAL-RELEASE';
+ window.__EMMELLI_BUILD='2026-10-18-V170-FINAL-RELEASE';
  document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
 })();
 
 
 /* V82 PERFECTED PAGE CONTRACT • recovered from prior approved Hub decisions + Oct 7 updates. */
 (function(){
-  window.__EMMELLI_BUILD='2026-10-18-V169-FINAL-RELEASE';
+  window.__EMMELLI_BUILD='2026-10-18-V170-FINAL-RELEASE';
   document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
   window.EMMELLI_PAGE_CONTRACT_V82=Object.freeze({
     Today:'command center: commentary + Routine + Faith + Goals + Study + Weigh-In + Today’s Food + only day-relevant actions',
@@ -7724,7 +7727,7 @@ try {for(const x of state.foodHistory||[]){
 })();
 /* V83 AUDIT: canonical actual-food checklist; preserve historical receipts and reversible checks. */
 (function(){
- window.__EMMELLI_BUILD='2026-10-18-V169-FINAL-RELEASE';
+ window.__EMMELLI_BUILD='2026-10-18-V170-FINAL-RELEASE';
  document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
  const previousCards=actualMealCardsV44;
  const slots=['breakfast','pre','post','lunch','dinner','snacks'];
@@ -7936,7 +7939,7 @@ function v92NutritionSystem(){
 }
 window.EMMELLI_NUTRITION_SYSTEM_V92=v92NutritionSystem();
 
-window.__EMMELLI_BUILD='2026-10-18-V169-FINAL-RELEASE';
+window.__EMMELLI_BUILD='2026-10-18-V170-FINAL-RELEASE';
 document.documentElement.dataset.emmelliBuild=window.__EMMELLI_BUILD;
 
 /* FINAL DAILY-USE POLISH — bounded changes requested by Emmelli.
@@ -8607,7 +8610,7 @@ const routineStartBeforeV154=routineStart,initialRoutineDayBeforeV154=initialRou
 routineStart=function(day){return FLEX154_START[day]??routineStartBeforeV154(day)};
 initialRoutineDay=function(day){return FLEX154_START[day]!=null?flex154Build(day):initialRoutineDayBeforeV154(day)};
 routineSectionOrder=function(day,sections){if(FLEX154_START[day]==null)return routineSectionOrderBeforeV154(day,sections);let order=['ANCHORS','DAY PLAN','AT WORK','AFTER WORK','THIS WEEK','SUNDAY SELF-CARE','NIGHT'];return order.filter(x=>sections.includes(x)).concat(sections.filter(x=>!order.includes(x)))};
-rday=function(day){let k=selectedKey();if(k<FLEX154_EFFECTIVE||FLEX154_START[day]==null)return rdayBeforeV154(day);state.routineDates=state.routineDates||{};state.routineV2=state.routineV2||{};state.routineStatus=state.routineStatus||{};state.checks=state.checks||{};let mark=`routineCanonical|2026-10-18|flexibleV154|${k}|${day}`,wakeMark=`routineWakeAuthority|2026-10-18|V169|${k}|${day}`,existing=state.routineDates[k];if(!existing?.flexibleRoutineV154||!state.checks[mark]){let fresh={day,...cloneRoutineDay(flex154Build(day)),flexibleRoutineV154:true},status=state.routineStatus[k]||(state.routineStatus[k]={}),nextStatus={};if(existing&&Array.isArray(existing.tasks)){fresh.tasks.forEach(nt=>{let ot=existing.tasks.find(x=>x.name===nt.name&&x.section===nt.section);if(!ot)return;if(status[ot.id]!==undefined)nextStatus[nt.id]=!!status[ot.id];(nt.subtasks||[]).forEach(ns=>{let os=(ot.subtasks||[]).find(x=>x.name===ns.name);if(os&&status[ot.id+'|'+os.id]!==undefined)nextStatus[nt.id+'|'+ns.id]=!!status[ot.id+'|'+os.id]})});existing.tasks.filter(t=>String(t.id||'').startsWith('errand')||t.errandMeta).forEach(t=>{fresh.tasks.push({...t,done:!!status[t.id]});if(status[t.id]!==undefined)nextStatus[t.id]=!!status[t.id]})}state.routineStatus[k]=nextStatus;state.routineDates[k]=fresh;state.routineV2[day]=cloneRoutineDay(flex154Build(day));state.routineV2[day].flexibleRoutineV154=true;state.checks[mark]=true;save()}if(!state.checks[wakeMark]){if(day==='Monday'&&Number(state.routineStarts[k])===320)delete state.routineStarts[k];state.checks[wakeMark]=true;save()}let rd=state.routineDates[k],st=state.routineStatus[k]||(state.routineStatus[k]={});rd.start=FLEX154_START[day];rd.tasks.forEach(t=>{t.done=!!st[t.id];(t.subtasks||[]).forEach(q=>q.done=!!st[t.id+'|'+q.id])});return rd};
+rday=function(day){let k=selectedKey();if(k<FLEX154_EFFECTIVE||FLEX154_START[day]==null)return rdayBeforeV154(day);state.routineDates=state.routineDates||{};state.routineV2=state.routineV2||{};state.routineStatus=state.routineStatus||{};state.checks=state.checks||{};let mark=`routineCanonical|2026-10-18|flexibleV154|${k}|${day}`,wakeMark=`routineWakeAuthority|2026-10-18|V169|${k}|${day}`,existing=state.routineDates[k];if(existing?.day!==day||!existing?.flexibleRoutineV154||!state.checks[mark]){let fresh={day,...cloneRoutineDay(flex154Build(day)),flexibleRoutineV154:true},status=state.routineStatus[k]||(state.routineStatus[k]={}),nextStatus={};if(existing&&existing.day===day&&Array.isArray(existing.tasks)){fresh.tasks.forEach(nt=>{let ot=existing.tasks.find(x=>x.name===nt.name&&x.section===nt.section);if(!ot)return;if(status[ot.id]!==undefined)nextStatus[nt.id]=!!status[ot.id];(nt.subtasks||[]).forEach(ns=>{let os=(ot.subtasks||[]).find(x=>x.name===ns.name);if(os&&status[ot.id+'|'+os.id]!==undefined)nextStatus[nt.id+'|'+ns.id]=!!status[ot.id+'|'+os.id]})});existing.tasks.filter(t=>String(t.id||'').startsWith('errand')||t.errandMeta).forEach(t=>{fresh.tasks.push({...t,done:!!status[t.id]});if(status[t.id]!==undefined)nextStatus[t.id]=!!status[t.id]})}state.routineStatus[k]=nextStatus;state.routineDates[k]=fresh;state.routineV2[day]=cloneRoutineDay(flex154Build(day));state.routineV2[day].flexibleRoutineV154=true;state.checks[mark]=true;save()}if(!state.checks[wakeMark]){if(day==='Monday'&&Number(state.routineStarts[k])===320)delete state.routineStarts[k];state.checks[wakeMark]=true;save()}let rd=state.routineDates[k],st=state.routineStatus[k]||(state.routineStatus[k]={});rd.start=FLEX154_START[day];rd.tasks.forEach(t=>{t.done=!!st[t.id];(t.subtasks||[]).forEach(q=>q.done=!!st[t.id+'|'+q.id])});return rd};
 const routineBeforeV154=routine;
 routine=function(){let html=routineBeforeV154(),day=DAYS[state.day],k=selectedKey();if(k<FLEX154_EFFECTIVE||FLEX154_START[day]==null)return html;html=html.replace(/<section class="card soft"><div class="nowgrid">[\s\S]*?<\/section>/,'');html=html.replace(/<div class="tasktime">[\s\S]*?<\/div>/g,'<div class="tasktime">CHECK OFF WHEN COMPLETE • FLEXIBLE BLOCK</div>');html=html.replace('Routine Sections','TODAY & THIS WEEK');return html};
 /* V164: official categorized purchases and flexible shared weekly checklist. */
@@ -8638,7 +8641,14 @@ function cf169SafeSpendingNotice(){let rows=cf143Forecast().rows.filter(x=>x.typ
 const cf143PaychecksBeforeV169=cf143Paychecks;cf143Paychecks=function(){let html=cf143PaychecksBeforeV169(),notice=cf169SafeSpendingNotice();return notice?html.replace('<section class="card cf143-payday-plan">',notice+'<section class="card cf143-payday-plan">'):html};
 const cf143HomeBeforeV169=cf143Home;cf143Home=function(){let html=cf143HomeBeforeV169(),notice=cf169SafeSpendingNotice();return notice?html.replace('<section class="card"><h2>COMING UP</h2>',notice+'<section class="card"><h2>COMING UP</h2>'):html};
 
-window.EMMELLI_BUDGET_SYSTEM=Object.assign(window.EMMELLI_BUDGET_SYSTEM||{},{version:169,unplannedSummary:cf143UnplannedSummaryV164,unplannedRows:cf143UnplannedRowsV164,unplannedBalances:cf143UnplannedBalancesV164});
+/* V170 release corrections: identify rent by category/whole word, and describe
+   safe weekly funding without implying that every limited week follows rent. */
+const cf143BaseEventsBeforeV170=cf143BaseEvents;cf143BaseEvents=function(){return cf143BaseEventsBeforeV170().filter(e=>!(e.manual===true&&e.status==='skipped'))};
+function cf170ClarifySafeFunding(html){return html.replace(/AFTER RENT AND THE \$100 CHECKING CUSHION/g,'AFTER REQUIRED BILLS, TRANSFERS, AND THE $100 CHECKING CUSHION')}
+const cf143HomeBeforeV170=cf143Home;cf143Home=function(){let html=cf170ClarifySafeFunding(cf143HomeBeforeV170()),today=localDateKey(),rent=cf143BaseEvents().filter(e=>e.date>=today&&e.status!=='skipped'&&e.category==='housing'&&/\bRENT\b/i.test(e.label)).sort((a,b)=>a.date.localeCompare(b.date))[0],replacement=rent?`${esc(rent.date)} • ${money(rent.amount)}`:'NONE SCHEDULED';return html.replace(/(<small>NEXT RENT<\/small><b>)[\s\S]*?(<\/b>)/,`$1${replacement}$2`)};
+const cf143PaychecksBeforeV170=cf143Paychecks;cf143Paychecks=function(){return cf170ClarifySafeFunding(cf143PaychecksBeforeV170())};
+
+window.EMMELLI_BUDGET_SYSTEM=Object.assign(window.EMMELLI_BUDGET_SYSTEM||{},{version:170,unplannedSummary:cf143UnplannedSummaryV164,unplannedRows:cf143UnplannedRowsV164,unplannedBalances:cf143UnplannedBalancesV164});
 setInterval(()=>{if(state.route==='today'&&!state.sub&&!uiSheet)render()},60000);
 try{render()}catch(error){console.error('Final daily-use polish',error)}
 
