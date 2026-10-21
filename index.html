@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-21-V173-CARE-DROPDOWNS-STABLE-CHECKOFF">
+<meta name="emmelli-current-build" content="2026-10-21-V174-CARE-DROPDOWNS-SCOPE-FIX">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -914,7 +914,7 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:520px){.v172-routine-task{grid-template-columns:23px minmax(0,1fr) auto;padding:10px 0}.v172-routine-group>summary{padding:12px}}
 </style>
 </head>
-<body data-build="2026-10-21-V173-CARE-DROPDOWNS-STABLE-CHECKOFF">
+<body data-build="2026-10-21-V174-CARE-DROPDOWNS-SCOPE-FIX">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
@@ -8631,6 +8631,64 @@ window.EMMELLI_BUDGET_SYSTEM=Object.assign(window.EMMELLI_BUDGET_SYSTEM||{},{ver
 setInterval(()=>{if(state.route==='today'&&!state.sub&&!uiSheet)render()},60000);
 try{render()}catch(error){console.error('Final daily-use polish',error)}
 
+/* V174: keep release overrides inside the canonical runtime scope. */
+
+(function(){
+ const V173_BUILD='2026-10-21-V174-CARE-DROPDOWNS-SCOPE-FIX';
+ function navV172(){
+  const links=[['today','Today'],['gym','Gym'],['history','History'],['wish','Wish List']];
+  const el=document.getElementById('nav');if(!el)return;
+  el.innerHTML=links.map(([r,l])=>`<button class="${state.route===r?'on':''}" data-main-route="${r}">${icon(r)}<span>${l}</span></button>`).join('');
+ }
+ const renderBeforeV172=render;
+ render=function(){
+  if(state.route==='budget'||state.route==='money'){state.route='today';state.sub=null;save()}
+  return renderBeforeV172();
+ };
+ nav=navV172;
+ const wishCatBeforeV172=wishCat;
+ wishCat=function(c){return wishCatBeforeV172(c).replace(/<button class="btn" data-wish-budget="[\s\S]*?<\/button>/g,'')};
+ function routineV172(){
+  const day=DAYS[state.day],key=selectedKey(),rd=rday(day),tasks=rd.tasks||[];
+  const sections=[...new Set(tasks.map(t=>t.section||'DAY PLAN'))];
+  const sectionMarkup=sections.map((section,si)=>{
+   const rows=tasks.map((t,i)=>({t,i})).filter(x=>(x.t.section||'DAY PLAN')===section);
+   if(!rows.length)return '';
+   const cards=rows.map(({t,i})=>{
+    const subtasks=(t.subtasks||[]).map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${day}|${i}|${j}" ${q.done?'checked':''}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${day}|${i}|${j}" aria-label="Edit ${esc(q.name)}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${day}|${i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></div>`);
+    const displayName=String(t.name).replace(/^50-MINUTE MORNING ROUTINE$/i,'MORNING ROUTINE').replace(/^NIGHT ROUTINE • 1 HOUR$/i,'NIGHT ROUTINE');
+    let careMarkup='';
+    if(/^50-MINUTE MORNING ROUTINE$/i.test(t.name)){
+     const names=(t.subtasks||[]).map(q=>String(q.name).toUpperCase());
+     const idx=(term,from=0)=>{for(let n=from;n<names.length;n++)if(names[n].includes(term))return n;return names.length};
+     const cuts=[['MORNING START + PETS',0,idx('LIP STAIN')],['ORAL CARE',idx('LIP STAIN'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('HAND SCRUB')],['HAND CARE + GET DRESSED',idx('HAND SCRUB'),idx('STYLE HAIR')],['HAIR CARE',idx('STYLE HAIR'),idx('CLEAN EARS')],['FINISH + BREAKFAST',idx('CLEAN EARS'),names.length]];
+     const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
+     careMarkup=`<details class="v173-care-parent"><summary>MORNING CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
+    }else if(/^NIGHT ROUTINE • 1 HOUR$/i.test(t.name)){
+     const names=(t.subtasks||[]).map(q=>String(q.name).toUpperCase());
+     const idx=(term,from=0)=>{for(let n=from;n<names.length;n++)if(names[n].includes(term))return n;return names.length};
+     const cuts=[['NIGHT RESET',0,idx('WATER FLOSS')],['ORAL CARE',idx('WATER FLOSS'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('SET HAIR FOR SLEEP')],['HAIR CARE',idx('SET HAIR FOR SLEEP'),idx('CLEAN EARS')],['FINISH + PRAYER',idx('CLEAN EARS'),names.length]];
+     const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
+     careMarkup=`<details class="v173-care-parent"><summary>NIGHT CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
+    }else if(subtasks.length){careMarkup=`<div class="v172-routine-subtasks">${subtasks.join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
+    return `<article class="v172-routine-task"><input type="checkbox" aria-label="${esc(displayName)} complete" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><div class="v172-routine-task-title">${esc(displayName)}${t.errandMeta?`<div class="muted">${esc(t.errandMeta.enteredStart||'')}–${esc(t.errandMeta.enteredEnd||'')}</div>`:''}${careMarkup}</div><div class="routine-maintenance"><button class="tinybtn" data-rtask-edit="${day}|${i}">Edit</button><button class="tinybtn" data-rtask-del="${day}|${i}">Remove</button></div></article>`;
+   }).join('');
+   const open=section==='ANCHORS'||section==='DAY PLAN';
+   return `<details class="v172-routine-group" ${open?'open':''}><summary>${esc(section)}</summary><div class="v172-routine-items">${cards}</div></details>`;
+  }).join('');
+  return hero('Routine',`${day.toUpperCase()} • DAILY CHECKLIST`)+back('Today')+`<section class="card soft"><h2>FIXED TIMES</h2><p class="v172-anchor-note">Wake-up, work, cleaners, and appointment times stay under Anchors. The rest is a flexible checklist—no minute-by-minute schedule.</p></section>${flex164Board()}<section class="card"><h2>${esc(day.toUpperCase())} • TODAY’S ROUTINE</h2><p class="muted">Check off tasks as you finish them. Opening or checking one item leaves the other sections and weekly list in place.</p>${sectionMarkup||'<p class="muted">No routine tasks saved.</p>'}</section>`;
+ }
+ const routineBeforeV172=routine;
+ routine=function(){if(selectedKey()>=FLEX154_EFFECTIVE)return routineV172();return routineBeforeV172()};
+ // Ensure all pages and deep links use the reduced navigation, including on rerender.
+ const navAfter=nav;nav=function(){navV172()};
+ // Remove any legacy public Budget API surface; user data in their existing storage is left intact.
+ try{delete window.EMMELLI_BUDGET_SYSTEM}catch(_){window.EMMELLI_BUDGET_SYSTEM=undefined}
+ document.body.dataset.build=V173_BUILD;
+ const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=V173_BUILD;
+ render();
+})();
+
 })();
 </script>
 
@@ -8694,63 +8752,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 @media(max-width:520px){.cf143-nav-primary{grid-template-columns:repeat(2,minmax(0,1fr))}.cf143-nav-primary button:first-child{grid-column:1/-1}.cf143-budget-nav button{min-height:42px;padding:7px 5px;font-size:9px}.cf143-day-tools{grid-template-columns:1fr 1fr}.cf143-day-tools label{grid-column:1/-1}.cf143-day-tools button{width:100%;min-width:0}.cf143-tx-actions{align-items:stretch}.cf143-tx-actions>button{flex:1}.cf143-tx-actions details{margin-left:0}.cf143-tx-actions details>div{display:grid;grid-template-columns:1fr 1fr}.cf143-account-grid-v142{gap:6px}.cash-account-grid-v142>div{padding:9px}.cash-account-grid-v142 b{font-size:14px}.cash-row-v142{grid-template-columns:minmax(0,1fr) auto}.cash-row-v142>.tinybtn{grid-column:1/-1;width:100%}.cash-month-buttons-v142{grid-template-columns:1fr}.cash-actions-v142{display:grid;grid-template-columns:1fr}.cash-actions-v142 .btn{min-width:0;width:100%}.cash-mini-v142{font-size:10px}}
 </style>
 <style id="v166-checklist-chart-css">.v164-chart-wrap{display:grid;grid-template-columns:minmax(145px,220px) 1fr;gap:18px;align-items:center}.v164-pie{width:min(46vw,210px);aspect-ratio:1;border-radius:50%;margin:auto}.v164-chart-legend{display:grid;gap:8px}.v164-chart-legend>div{display:grid;grid-template-columns:12px 1fr auto;gap:8px;align-items:center}.v164-chart-legend i{width:11px;height:11px;border-radius:50%}.flex164-weekly{margin-top:14px}.flex164-check{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;margin:6px 0;border:1px solid var(--line);border-radius:12px;background:#fffafd}.flex164-check input{width:20px;height:20px;flex:0 0 20px;margin:0;accent-color:var(--pink)}.flex164-check span{line-height:1.35}.formgrid label{display:grid;gap:5px}@media(max-width:520px){.v164-chart-wrap{grid-template-columns:1fr}.v164-pie{width:min(58vw,200px)}.cf143-nav-more>div{display:grid;grid-template-columns:1fr}.flex164-check{padding:11px 10px}}</style>
-<script id="v173-release-adjustments">
-(function(){
- const V173_BUILD='2026-10-21-V173-CARE-DROPDOWNS-STABLE-CHECKOFF';
- function navV172(){
-  const links=[['today','Today'],['gym','Gym'],['history','History'],['wish','Wish List']];
-  const el=document.getElementById('nav');if(!el)return;
-  el.innerHTML=links.map(([r,l])=>`<button class="${state.route===r?'on':''}" data-main-route="${r}">${icon(r)}<span>${l}</span></button>`).join('');
- }
- const renderBeforeV172=render;
- render=function(){
-  if(state.route==='budget'||state.route==='money'){state.route='today';state.sub=null;save()}
-  return renderBeforeV172();
- };
- nav=navV172;
- const wishCatBeforeV172=wishCat;
- wishCat=function(c){return wishCatBeforeV172(c).replace(/<button class="btn" data-wish-budget="[\s\S]*?<\/button>/g,'')};
- function routineV172(){
-  const day=DAYS[state.day],key=selectedKey(),rd=rday(day),tasks=rd.tasks||[];
-  const sections=[...new Set(tasks.map(t=>t.section||'DAY PLAN'))];
-  const sectionMarkup=sections.map((section,si)=>{
-   const rows=tasks.map((t,i)=>({t,i})).filter(x=>(x.t.section||'DAY PLAN')===section);
-   if(!rows.length)return '';
-   const cards=rows.map(({t,i})=>{
-    const subtasks=(t.subtasks||[]).map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${day}|${i}|${j}" ${q.done?'checked':''}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${day}|${i}|${j}" aria-label="Edit ${esc(q.name)}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${day}|${i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></div>`);
-    const displayName=String(t.name).replace(/^50-MINUTE MORNING ROUTINE$/i,'MORNING ROUTINE').replace(/^NIGHT ROUTINE • 1 HOUR$/i,'NIGHT ROUTINE');
-    let careMarkup='';
-    if(/^50-MINUTE MORNING ROUTINE$/i.test(t.name)){
-     const names=(t.subtasks||[]).map(q=>String(q.name).toUpperCase());
-     const idx=(term,from=0)=>{for(let n=from;n<names.length;n++)if(names[n].includes(term))return n;return names.length};
-     const cuts=[['MORNING START + PETS',0,idx('LIP STAIN')],['ORAL CARE',idx('LIP STAIN'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('HAND SCRUB')],['HAND CARE + GET DRESSED',idx('HAND SCRUB'),idx('STYLE HAIR')],['HAIR CARE',idx('STYLE HAIR'),idx('CLEAN EARS')],['FINISH + BREAKFAST',idx('CLEAN EARS'),names.length]];
-     const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
-     careMarkup=`<details class="v173-care-parent"><summary>MORNING CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
-    }else if(/^NIGHT ROUTINE • 1 HOUR$/i.test(t.name)){
-     const names=(t.subtasks||[]).map(q=>String(q.name).toUpperCase());
-     const idx=(term,from=0)=>{for(let n=from;n<names.length;n++)if(names[n].includes(term))return n;return names.length};
-     const cuts=[['NIGHT RESET',0,idx('WATER FLOSS')],['ORAL CARE',idx('WATER FLOSS'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('SET HAIR FOR SLEEP')],['HAIR CARE',idx('SET HAIR FOR SLEEP'),idx('CLEAN EARS')],['FINISH + PRAYER',idx('CLEAN EARS'),names.length]];
-     const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
-     careMarkup=`<details class="v173-care-parent"><summary>NIGHT CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
-    }else if(subtasks.length){careMarkup=`<div class="v172-routine-subtasks">${subtasks.join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
-    return `<article class="v172-routine-task"><input type="checkbox" aria-label="${esc(displayName)} complete" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><div class="v172-routine-task-title">${esc(displayName)}${t.errandMeta?`<div class="muted">${esc(t.errandMeta.enteredStart||'')}–${esc(t.errandMeta.enteredEnd||'')}</div>`:''}${careMarkup}</div><div class="routine-maintenance"><button class="tinybtn" data-rtask-edit="${day}|${i}">Edit</button><button class="tinybtn" data-rtask-del="${day}|${i}">Remove</button></div></article>`;
-   }).join('');
-   const open=section==='ANCHORS'||section==='DAY PLAN';
-   return `<details class="v172-routine-group" ${open?'open':''}><summary>${esc(section)}</summary><div class="v172-routine-items">${cards}</div></details>`;
-  }).join('');
-  return hero('Routine',`${day.toUpperCase()} • DAILY CHECKLIST`)+back('Today')+`<section class="card soft"><h2>FIXED TIMES</h2><p class="v172-anchor-note">Wake-up, work, cleaners, and appointment times stay under Anchors. The rest is a flexible checklist—no minute-by-minute schedule.</p></section>${flex164Board()}<section class="card"><h2>${esc(day.toUpperCase())} • TODAY’S ROUTINE</h2><p class="muted">Check off tasks as you finish them. Opening or checking one item leaves the other sections and weekly list in place.</p>${sectionMarkup||'<p class="muted">No routine tasks saved.</p>'}</section>`;
- }
- const routineBeforeV172=routine;
- routine=function(){if(selectedKey()>=FLEX154_EFFECTIVE)return routineV172();return routineBeforeV172()};
- // Ensure all pages and deep links use the reduced navigation, including on rerender.
- const navAfter=nav;nav=function(){navV172()};
- // Remove any legacy public Budget API surface; user data in their existing storage is left intact.
- try{delete window.EMMELLI_BUDGET_SYSTEM}catch(_){window.EMMELLI_BUDGET_SYSTEM=undefined}
- document.body.dataset.build=V173_BUILD;
- const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=V173_BUILD;
- render();
-})();
-</script>
+
 </body>
 </html>
 
