@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-22-V184-PERSISTENCE-REPAIR">
+<meta name="emmelli-current-build" content="2026-10-22-V185-CHECKBOX-EVENT-SHIELD">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -969,6 +969,24 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   window.HubRuntime=runtime;
   document.addEventListener=function(type,listener,options){runtime.on(type,listener,options)};
 })();
+/*
+ * Routine checkbox activation shield.
+ *
+ * The Hub has several older delegated click layers. A routine checkbox click
+ * must not reach those pre-toggle handlers because one of them can re-render
+ * the page before the browser applies the checkbox's new value. Handle the
+ * activation first, preserve the browser's already-updated checked value, and
+ * send one canonical change event to the routine state synchronizer before an
+ * older layer can re-render it. This leaves every routine
+ * block and subtask intact; it only controls the event order.
+ */
+document.addEventListener('click',event=>{
+  const input=event.target?.closest?.('input[type="checkbox"][data-rtask-check],input[type="checkbox"][data-rsub-check],input[type="checkbox"][data-care-group-check]');
+  if(!input)return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  input.dispatchEvent(new Event('change',{bubbles:true}));
+},true);
 /* V41 LOCKED COOKING UX: TODAY'S COOKING always visible; only workflow dropdowns are GET EVERYTHING OUT / PREP + MEASURE / COOK EVERYTHING TOGETHER / CONTAINERS. Recipe source links are optional references; Hub instructions are self-contained. CONTAINERS owns component ingredient confirmation (including added ingredient source + nutrition identity + amount/unit + DURING COOKING/WHILE PORTIONING/AFTER COOKING), actual finished component weights, actual component grams per container, suggested containers, labels/storage, and save-to-Inventory. */
 window.__EMMELLI_COOKING_FLOW_V41=Object.freeze({top:"TODAY'S COOKING",dropdowns:["GET EVERYTHING OUT","PREP + MEASURE","COOK EVERYTHING TOGETHER","CONTAINERS"],recipeLinksOptional:true,whenAdded:["DURING COOKING","WHILE PORTIONING","AFTER COOKING"]});
 
@@ -1465,6 +1483,10 @@ let state=(()=>{try{
 // The runtime is installed outside this closure, so it cannot discover this
 // lexical `state` variable unless the app explicitly supplies it.
 window.__EMMELLI_STATE__=state;
+// Preserve the user's loaded routine checks before legacy startup renderers run.
+// The final current-routine authority restores this exact map after every old
+// migration layer has installed.
+const V185_LOADED_ROUTINE_STATUS=structuredClone(state.routineStatus||{});
 let uiSheet=null;
 let uiToast=null,toastTimer=null;
 function showToast(message,title=""){uiToast={message:String(message||""),title:String(title||"")};render();clearTimeout(toastTimer);toastTimer=setTimeout(()=>{uiToast=null;render()},2800)}
@@ -4165,7 +4187,7 @@ function ar14SyncGroup(d,i,gkey,checked){let x=rday(d).tasks[+i],k=selectedKey()
 document.addEventListener('change',e=>{let t=e.target;if(!(t instanceof HTMLInputElement)||t.type!=='checkbox')return;if(t.dataset.careGroupCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,g]=t.dataset.careGroupCheck.split('|');ar14SyncGroup(d,+i,g,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rtaskCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i]=t.dataset.rtaskCheck.split('|');ar14SyncParent(d,+i,!!t.checked,true);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rsubCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,j]=t.dataset.rsubCheck.split('|');ar14SyncChild(d,+i,+j,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}},true);
 // Migrate selected-date routine now and force a clean render with the authoritative schedule.
 DAYS.forEach(d=>{let fresh=ar14Build(d);state.routineV2[d]=cloneRoutineDay(fresh);state.routineV2[d].actualRoutineV14=true;state.checks['routineCanonical|2026-10-02|actualV14|'+d]=true});
-Object.keys(state.routineDates||{}).forEach(k=>{let idx=(new Date(k+'T12:00:00').getDay()+6)%7,d=DAYS[idx],fresh={day:d,...cloneRoutineDay(state.routineV2[d]),actualRoutineV14:true},old=state.routineDates[k],st=state.routineStatus[k]||(state.routineStatus[k]={}),nextStatus={...st};if(old&&Array.isArray(old.tasks)){fresh.tasks.forEach(nt=>{let ot=old.tasks.find(x=>x.name===nt.name&&x.section===nt.section)||old.tasks.find(x=>x.name===nt.name);if(!ot)return;if(st[ot.id]!==undefined)nextStatus[nt.id]=!!st[ot.id];(nt.subtasks||[]).forEach(ns=>{let os=(ot.subtasks||[]).find(x=>x.name===ns.name);if(os&&st[ot.id+'|'+os.id]!==undefined)nextStatus[nt.id+'|'+ns.id]=!!st[ot.id+'|'+os.id]})});let errands=old.tasks.filter(t=>String(t.id||'').startsWith('errand'));fresh.tasks.push(...errands);errands.forEach(er=>{if(st[er.id]!==undefined)nextStatus[er.id]=!!st[er.id];(er.subtasks||[]).forEach(q=>{if(st[er.id+'|'+q.id]!==undefined)nextStatus[er.id+'|'+q.id]=!!st[er.id+'|'+q.id]})})}state.routineStatus[k]=nextStatus;state.routineDates[k]=fresh});
+Object.keys(state.routineDates||{}).forEach(k=>{let old=state.routineDates[k];if(old?.flexibleRoutineV154)return;let idx=(new Date(k+'T12:00:00').getDay()+6)%7,d=DAYS[idx],fresh={day:d,...cloneRoutineDay(state.routineV2[d]),actualRoutineV14:true},st=state.routineStatus[k]||(state.routineStatus[k]={}),nextStatus={...st};if(old&&Array.isArray(old.tasks)){fresh.tasks.forEach(nt=>{let ot=old.tasks.find(x=>x.name===nt.name&&x.section===nt.section)||old.tasks.find(x=>x.name===nt.name);if(!ot)return;if(st[ot.id]!==undefined)nextStatus[nt.id]=!!st[ot.id];(nt.subtasks||[]).forEach(ns=>{let os=(ot.subtasks||[]).find(x=>x.name===ns.name);if(os&&st[ot.id+'|'+os.id]!==undefined)nextStatus[nt.id+'|'+ns.id]=!!st[ot.id+'|'+os.id]})});let errands=old.tasks.filter(t=>String(t.id||'').startsWith('errand'));fresh.tasks.push(...errands);errands.forEach(er=>{if(st[er.id]!==undefined)nextStatus[er.id]=!!st[er.id];(er.subtasks||[]).forEach(q=>{if(st[er.id+'|'+q.id]!==undefined)nextStatus[er.id+'|'+q.id]=!!st[er.id+'|'+q.id]})})}state.routineStatus[k]=nextStatus;state.routineDates[k]=fresh});
 state.checks['routineSource|2026-10-02|userExactPaste']=true;
 save();render();
 
@@ -8929,9 +8951,9 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  document.body.dataset.build=BUILD;const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=BUILD;
 })();
 
-/* V184 ROUTINE + MOBILE + CHECKBOX + PERSISTENCE REPAIR • 2026-10-22 */
+/* V185 ROUTINE + MOBILE + CHECKBOX EVENT SHIELD + PERSISTENCE REPAIR • 2026-10-22 */
 (function installV181RoutineRepair(){
- const BUILD='2026-10-22-V184-PERSISTENCE-REPAIR';
+ const BUILD='2026-10-22-V185-CHECKBOX-EVENT-SHIELD';
  const V181_START={Monday:450,Tuesday:270,Wednesday:480,Thursday:600,Friday:380,Saturday:260,Sunday:260};
  const beforeRdayV181=rday;
  const savedMigrationsV181=new Set();
@@ -8963,9 +8985,13 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
   subtasks:subs.map((n,i)=>({id:'v181_s'+(i+1),name:n,done:false})),flexibleRoutineV154:true
  });
  rday=function(day){
+  const keyV185=selectedKey();
+  const savedStatusV185={...(state.routineStatus?.[keyV185]||{})};
   const rd=beforeRdayV181(day);
+  state.routineStatus=state.routineStatus||{};
+  state.routineStatus[keyV185]={...savedStatusV185,...(state.routineStatus[keyV185]||{})};
   if(!rd||selectedKey()<FLEX154_EFFECTIVE||!rd.flexibleRoutineV154)return rd;
-  const tasks=rd.tasks||(rd.tasks=[]),key=selectedKey(),status=state.routineStatus?.[key]||{};
+  const tasks=rd.tasks||(rd.tasks=[]),key=keyV185,status=state.routineStatus?.[key]||{};
   for(let i=tasks.length-1;i>=0;i--)if(/COMMUTE BUFFER/i.test(tasks[i].name))tasks.splice(i,1);
   const find=(re,section)=>tasks.find(t=>(!section||t.section===section)&&re.test(String(t.name||'')));
   const set=(task,fields)=>{if(!task)return;const previous=task.subtasks||[];Object.assign(task,fields);if(fields.subtasks){task.subtasks=previous;setSubsV181(task,fields.subtasks,status)}};
@@ -9026,6 +9052,19 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
   }
   const order=['ANCHORS','MORNING','DOG WALKS','MONDAY ERRANDS','COOKING','EXERCISE','SELF-CARE','AT WORK','AFTER WORK','SUNDAY SELF-CARE','NIGHT'];
   tasks.sort((a,b)=>{let x=order.indexOf(a.section),y=order.indexOf(b.section);return (x<0?99:x)-(y<0?99:y)});
+  // Final truth pass: wrappers above may rebuild or reorder the routine after
+  // the canonical routine loader applied completion state. Reapply the saved
+  // status to the exact final tasks/subtasks that will be rendered.
+  const finalStatusV185=state.routineStatus?.[key]||{};
+  tasks.forEach(task=>{
+   task.done=!!finalStatusV185[task.id];
+   (task.subtasks||[]).forEach(sub=>sub.done=!!finalStatusV185[task.id+'|'+sub.id]);
+  });
+  // Keep both legacy migration guards satisfied. Without both flags the old
+  // V14 loader rebuilds the date, then V154 rebuilds it again, clearing the
+  // saved completion map on every render.
+  rd.actualRoutineV14=true;
+  rd.flexibleRoutineV154=true;
   state.routineDates[key]=rd;
   const migratedKey=key+'|'+day;if(!savedMigrationsV181.has(migratedKey)){savedMigrationsV181.add(migratedKey);save()}
   return rd;
@@ -9039,6 +9078,9 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  };
  const routineBeforeV181=routine;
  routine=function(){return routineBeforeV181().replace(/<section class="card flex164-weekly[\s\S]*?<\/section>/,'')};
+ Object.entries(V185_LOADED_ROUTINE_STATUS).forEach(([date,loaded])=>{
+  state.routineStatus[date]={...(state.routineStatus[date]||{}),...(loaded||{})};
+ });
  document.body.dataset.build=BUILD;
  const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=BUILD;
  render();
