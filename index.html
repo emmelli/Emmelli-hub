@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-22-V185-CHECKBOX-EVENT-SHIELD">
+<meta name="emmelli-current-build" content="2026-10-22-V187-ALL-GYM-ACTUALS-PRESERVED">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -4544,7 +4544,7 @@ document.addEventListener("click",async e=>{
   if(t.dataset.gymSetPlanned!==undefined){
     e.stopImmediatePropagation();const d=DAYS[state.day],[ei,si]=t.dataset.gymSetPlanned.split("|").map(Number),ex=GYM_PLAN[d]?.steps[ei];if(!ex)return;
     const k=selectedKey(),log=state.gymLog[k]||(state.gymLog[k]={}),z=log[ex.name]||(log[ex.name]={}),sets=gymSetsForSession(d,k,ex);
-    if(t.checked){const weight=String(sets[si][0]||z["w"+si]||"").trim();if(!weight||weight==="0"){t.checked=false;showToast("Enter the actual assistance or weight for this set first.","ACTUAL WEIGHT NEEDED");return}z["w"+si]=weight;z["r"+si]=String(sets[si][1]||0);z["p"+si]=true;const row=t.closest('.setrow'),inputs=row?.querySelectorAll('[data-gym-field]');if(inputs?.[0])inputs[0].value=z["w"+si];if(inputs?.[1])inputs[1].value=z["r"+si]}else{z["p"+si]=false}
+    if(t.checked){const row=t.closest('.setrow'),inputs=row?.querySelectorAll('[data-gym-field]'),liveWeight=String(inputs?.[0]?.value??z["w"+si]??"").trim(),liveReps=String(inputs?.[1]?.value??z["r"+si]??"").trim(),weight=liveWeight||String(sets[si][0]||"").trim(),reps=liveReps!==""?String(Math.max(0,Number(liveReps)||0)):String(sets[si][1]||0);if(!weight||weight==="0"){t.checked=false;showToast("Enter the actual assistance or weight for this set first.","ACTUAL WEIGHT NEEDED");return}z["w"+si]=weight;z["r"+si]=reps;z["p"+si]=true;if(inputs?.[0])inputs[0].value=z["w"+si];if(inputs?.[1])inputs[1].value=z["r"+si]}else{z["p"+si]=false}
     z.done=sets.every((_,i)=>z["p"+i]===true);delete state.gymSaved[k];save();const card=t.closest('.exercise-card');if(card)card.classList.toggle('completed',z.done);return
   }
   if(t.dataset.gymExerciseReady!==undefined){
@@ -8154,7 +8154,7 @@ document.addEventListener('click',e=>{
   if(b.hasAttribute('data-gym-move-cancel')){uiSheet=null;render();return}
   if(b.dataset.gymMoveTo||b.hasAttribute('data-gym-move-custom')){const target=b.dataset.gymMoveTo||document.getElementById('gymMoveCustomDate')?.value;if(applyGymMoveV94(uiSheet.sourceDate,target)){uiSheet=null;render();showToast('THE WORKOUT WAS ADDED TO THE NEW DAY AS ITS OWN SEPARATE WORKOUT.','GYM DAY MOVED')}return}
   const raw=b.dataset.movedGymSet||b.dataset.movedGymPlanned||b.dataset.movedGymReady||b.dataset.movedGymUndo||b.dataset.movedGymAbs||b.dataset.movedGymTreadmill||b.dataset.saveMovedGym,[source,eiRaw,siRaw]=String(raw).split('|'),move=schedule.moves[source];if(!move)return;move.log=move.log||{strength:{},abs:{},treadmill:{}};const plan=GYM_PLAN[move.sourceDay];
-  if(b.dataset.movedGymSet){const ex=plan.steps[+eiRaw],sets=move.customSets?.[ex.name]||state.gymTargets?.[move.sourceDay+'|'+ex.name]||ex.sets,z=(move.log.strength||(move.log.strength={}))[ex.name]||((move.log.strength)[ex.name]={}),si=+siRaw;if(b.checked){const weight=String(sets[si][0]||z['w'+si]||'').trim();if(!weight||weight==='0'){b.checked=false;showToast('ENTER THE ACTUAL ASSISTANCE OR WEIGHT FOR THIS SET FIRST.','ACTUAL WEIGHT NEEDED');return}z['w'+si]=weight;z['r'+si]=String(sets[si][1]||0);z['p'+si]=true}else{z['p'+si]=false}z.done=sets.every((_,i)=>z['p'+i]===true||Number(z['r'+i]||0)>0);move.savedAt=null;save();render();return}
+  if(b.dataset.movedGymSet){const ex=plan.steps[+eiRaw],sets=move.customSets?.[ex.name]||state.gymTargets?.[move.sourceDay+'|'+ex.name]||ex.sets,z=(move.log.strength||(move.log.strength={}))[ex.name]||((move.log.strength)[ex.name]={}),si=+siRaw;if(b.checked){const row=b.closest('.setrow'),inputs=row?.querySelectorAll('[data-moved-gym-field]'),liveWeight=String(inputs?.[0]?.value??z['w'+si]??'').trim(),liveReps=String(inputs?.[1]?.value??z['r'+si]??'').trim(),weight=liveWeight||String(sets[si][0]||'').trim(),reps=liveReps!==''?String(Math.max(0,Number(liveReps)||0)):String(sets[si][1]||0);if(!weight||weight==='0'){b.checked=false;showToast('ENTER THE ACTUAL ASSISTANCE OR WEIGHT FOR THIS SET FIRST.','ACTUAL WEIGHT NEEDED');return}z['w'+si]=weight;z['r'+si]=reps;z['p'+si]=true}else{z['p'+si]=false}z.done=sets.every((_,i)=>z['p'+i]===true||Number(z['r'+i]||0)>0);move.savedAt=null;save();render();return}
   if(b.dataset.movedGymAbs){move.log.abs=move.log.abs||{};move.log.abs['done'+eiRaw]=!!b.checked;move.savedAt=null;save();return}
   if(b.dataset.movedGymTreadmill){const t=move.log.treadmill||(move.log.treadmill={});if(b.checked&&['incline','speed','duration'].some(k=>t[k]===''||t[k]==null)){b.checked=false;showToast('ENTER INCLINE, SPEED, AND TIME FIRST.','TREADMILL ACTUALS');return}t.done=!!b.checked;move.savedAt=null;save();return}
   if(b.dataset.saveMovedGym){move.savedAt=new Date().toISOString();save();render();showToast('MOVED WORKOUT SAVED TO THIS DAY’S HISTORY.','WORKOUT SAVED');return}
@@ -8798,7 +8798,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
      if(drop){const prior=drop.subtasks||[];drop.name='VALYOU CLEANERS DROP-OFF • ARRIVE BY 8:00 AM • DROP-OFF + RETURN • 40 MINUTES';drop.duration=40;drop.subtasks=['GRAB THE UNIFORMS','RETURN HOME • ABOUT 20 MINUTES, THEN GO BACK TO SLEEP'].map((name,i)=>({id:`s${i+1}`,name,done:!!prior[i]?.done}))}
      const leave=find(/LEAVE FOR VALYOU CLEANERS/i,'ANCHORS');if(leave)leave.name='LEAVE FOR VALYOU CLEANERS • 7:40 AM';
      const second={...flex154Task(day,'ANCHORS','RECOMMENDED DAY WAKE • 10:00 AM • AFTER RETURNING TO SLEEP',0,[],90),done:false};
-     if(!tasks.some(t=>/SECOND WAKE/i.test(t.name)))tasks.splice(Math.max(0,tasks.indexOf(drop)+1),0,second);
+     if(!tasks.some(t=>/^(?:SECOND WAKE|RECOMMENDED DAY WAKE)/i.test(String(t.name||''))))tasks.splice(Math.max(0,tasks.indexOf(drop)+1),0,second);
      const errands=find(/ERRAND LOOP/i,'DAY PLAN');if(errands){errands.name='MONDAY SHOPPING + ERRANDS • ABOUT 2 HOURS 10 MINUTES';errands.duration=130;const prior=errands.subtasks||[];errands.subtasks=['DRIVE TO LOCKWOOD RIDGE • 25 MINUTES','GROCERY SHOPPING • 1 HOUR','WALMART • GET JUGS, PAY FOR SUMMIT, GET REST OF GROCERIES','DETWEILER’S • GET PRODUCE, CHEESE, AND MEAT','REPTILE STORE • TWO 12-PACKS OF MEDIUM ROACHES OR 10 BIG FLYING ROACHES','DRIVE HOME • 25 MINUTES','PUT AWAY GROCERIES AND PORTION MEAT • 20 MINUTES'].map((name,i)=>({id:`s${i+1}`,name,done:!!prior[i]?.done}))}
      const gym=find(/GYM \+ TREADMILL \+ ABS/i,'DAY PLAN');if(gym){const prior=gym.subtasks||[];gym.name='GYM • TREADMILL + ABS • ABOUT 2 HOURS 45 MINUTES INCLUDING SHOWER';gym.duration=165;gym.subtasks=['TREADMILL + ABS • 45 MINUTES','DRIVE TO GYM • 15 MINUTES','GYM • 1 HOUR','DRIVE HOME • 15 MINUTES','SHOWER AND GET READY • 30 MINUTES'].map((name,i)=>({id:`s${i+1}`,name,done:!!prior[i]?.done}))}
      const pick=find(/VALYOU CLEANERS PICK-UP/i,'ANCHORS');if(pick)tasks.splice(tasks.indexOf(pick),1);
@@ -8953,7 +8953,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 
 /* V185 ROUTINE + MOBILE + CHECKBOX EVENT SHIELD + PERSISTENCE REPAIR • 2026-10-22 */
 (function installV181RoutineRepair(){
- const BUILD='2026-10-22-V185-CHECKBOX-EVENT-SHIELD';
+ const BUILD='2026-10-22-V191-ROUTINE-AND-GYM-LAYOUT';
  const V181_START={Monday:450,Tuesday:270,Wednesday:480,Thursday:600,Friday:380,Saturday:260,Sunday:260};
  const beforeRdayV181=rday;
  const savedMigrationsV181=new Set();
@@ -8962,7 +8962,8 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
   if(/MORNING ROUTINE|MORNING CARE|GET READY \+ PACK FOR WORK/.test(n))return 'MORNING';
   if(/^MORNING DOG WALKS/.test(n))return 'MORNING';
   if(/^LATER DOG WALKS/.test(n))return 'AFTER WORK';
-  if(/ERRAND LOOP|MONDAY SHOPPING|GROCERY SHOPPING|DRIVE TO LOCKWOOD|DRIVE HOME|PUT AWAY GROCERIES/.test(n))return 'MONDAY ERRANDS';
+  if(/ERRAND LOOP|MONDAY SHOPPING|GROCERY SHOPPING|DRIVE TO LOCKWOOD|PUT AWAY GROCERIES/.test(n))return 'MONDAY ERRANDS';
+  if(/^DRIVE HOME\b/.test(n))return 'AFTER WORK';
   if(/COOK \+ PREP|PREP \+ COOK|COOKING BLOCK/.test(n))return 'COOKING';
   if(/GYM \+ TREADMILL|WALKING WORKOUT|WALK\/RUN|TREADMILL \+ ABS/.test(n))return 'EXERCISE';
   if(/RED LIGHT|MASK/.test(n))return 'SELF-CARE';
@@ -9050,6 +9051,35 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
     tasks.splice(cook?tasks.indexOf(cook):tasks.length,0,t);
    }
   }
+  // Keep one scheduled cook/prep block on the three requested cook days. Older
+  // routine migrations could leave duplicate copies in a saved day; carry any
+  // completed state to the retained block before removing those copies.
+  const cookDays=['Monday','Wednesday','Thursday'];
+  const cookTasks=tasks.filter(t=>/^(?:COOK \+ PREP|PREP \+ COOK|COOKING BLOCK)/i.test(String(t.name||'')));
+  let cookingChanged=false;
+  if(cookDays.includes(day)){
+   let keep=cookTasks[0];
+   if(!keep){keep=makeTaskV181(day,'cook','COOK + PREP + CLEAN','COOKING',60);tasks.push(keep);cookingChanged=true}
+   const completed=cookTasks.some(t=>!!status[t.id]||!!t.done);
+   if(keep.name!=='COOK + PREP + CLEAN'||keep.section!=='COOKING'||Number(keep.duration)!==60){keep.name='COOK + PREP + CLEAN';keep.section='COOKING';keep.duration=60;cookingChanged=true}
+   if(completed&&!status[keep.id]){status[keep.id]=true;cookingChanged=true}
+   for(const duplicate of cookTasks.slice(1)){
+    const at=tasks.indexOf(duplicate);if(at>=0){tasks.splice(at,1);delete status[duplicate.id];cookingChanged=true}
+   }
+  }else{
+   for(const duplicate of cookTasks){const at=tasks.indexOf(duplicate);if(at>=0){tasks.splice(at,1);delete status[duplicate.id];cookingChanged=true}}
+  }
+  if(cookingChanged)save();
+  if(day==='Monday'){
+   const dayWakes=tasks.filter(t=>/^(?:SECOND WAKE|RECOMMENDED DAY WAKE)\b/i.test(String(t.name||'')));
+   if(dayWakes.length>1){
+    const keep=dayWakes[0],completed=dayWakes.some(t=>!!status[t.id]||!!t.done);
+    keep.name='RECOMMENDED DAY WAKE • 10:00 AM • AFTER RETURNING TO SLEEP';keep.section='ANCHORS';keep.duration=0;
+    if(completed)status[keep.id]=true;
+    for(const duplicate of dayWakes.slice(1)){const at=tasks.indexOf(duplicate);if(at>=0)tasks.splice(at,1);delete status[duplicate.id]}
+    save();
+   }
+  }
   const order=['ANCHORS','MORNING','DOG WALKS','MONDAY ERRANDS','COOKING','EXERCISE','SELF-CARE','AT WORK','AFTER WORK','SUNDAY SELF-CARE','NIGHT'];
   tasks.sort((a,b)=>{let x=order.indexOf(a.section),y=order.indexOf(b.section);return (x<0?99:x)-(y<0?99:y)});
   // Final truth pass: wrappers above may rebuild or reorder the routine after
@@ -9078,11 +9108,86 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  };
  const routineBeforeV181=routine;
  routine=function(){return routineBeforeV181().replace(/<section class="card flex164-weekly[\s\S]*?<\/section>/,'')};
+ // V191 presentation pass: keep the established routine blocks, put the
+ // everyday task groups first, and keep disclosure state stable on rerender.
+ const V191_BUILD='2026-10-22-V191-ROUTINE-AND-GYM-LAYOUT';
+ const disclosureV191=(()=>{try{return JSON.parse(localStorage.getItem('emmelliHubDisclosureV191')||'{}')}catch(_){return {}}})();
+ const saveDisclosureV191=()=>{try{localStorage.setItem('emmelliHubDisclosureV191',JSON.stringify(disclosureV191))}catch(_){}};
+ document.addEventListener('toggle',e=>{
+  const d=e.target;if(!(d instanceof HTMLDetailsElement))return;
+  const key=d.dataset.routineDisclosureV191||d.dataset.gymDisclosureV191;if(!key)return;
+  disclosureV191[key]=!!d.open;saveDisclosureV191();
+ },true);
+ function applyRoutineLayoutV191(html){
+  const template=document.createElement('template');template.innerHTML=html;
+  template.content.querySelectorAll('.card.soft').forEach(card=>{if(/^FIXED TIMES$/i.test(card.querySelector('h2')?.textContent?.trim()||''))card.remove()});
+  const groups=[...template.content.querySelectorAll('details.v172-routine-group')];
+  const byName=new Map(groups.map(g=>[(g.querySelector(':scope > summary')?.textContent||'').trim().toUpperCase(),g]));
+  const body=g=>g?.querySelector(':scope > .v172-routine-items');
+  const exerciseBody=body(byName.get('EXERCISE')),afternoonBody=body(byName.get('AFTERNOON'));
+  if(exerciseBody&&afternoonBody){
+   const before=[],after=[];
+   for(const task of [...afternoonBody.querySelectorAll(':scope > .v172-routine-task')]){
+    const name=(task.querySelector('.v172-routine-task-title')?.textContent||'').trim().toUpperCase();
+    if(/^GET READY FOR GYM\b/.test(name))before.push(task);
+    else if(/^SHOWER \+ GET READY\b|^SHOWER AND GET READY\b/.test(name))after.push(task);
+   }
+   const first=exerciseBody.querySelector(':scope > .v172-routine-task');
+   for(const task of before.reverse())exerciseBody.insertBefore(task,first);
+   for(const task of after)exerciseBody.appendChild(task);
+   if(!afternoonBody.querySelector(':scope > .v172-routine-task'))byName.get('AFTERNOON')?.remove();
+  }
+  const anchors=byName.get('ANCHORS'),morning=byName.get('MORNING'),work=byName.get('AT WORK');
+  if(anchors){
+   const anchorBody=body(anchors),morningBody=body(morning),workBody=body(work);
+   const anchorTasks=[...(anchorBody?.querySelectorAll(':scope > .v172-routine-task')||[])];
+   const movedToMorning=[],movedToWork=[];
+   for(const task of anchorTasks){
+    const name=(task.querySelector('.v172-routine-task-title')?.textContent||'').trim().toUpperCase();
+    if(/RECOMMENDED WAKE|^WAKE\b|VALYOU CLEANERS/.test(name)&&morningBody)movedToMorning.push(task);
+    else if(/LEAVE FOR WORK|^WORK\b/.test(name)&&workBody)movedToWork.push(task);
+   }
+   for(const task of movedToMorning.reverse())morningBody.insertBefore(task,morningBody.firstChild);
+   for(const task of movedToWork.reverse())workBody.insertBefore(task,workBody.firstChild);
+   if(anchorBody&&!anchorBody.querySelector('.v172-routine-task'))anchors.remove();
+   else if(anchorBody){const s=anchors.querySelector(':scope > summary');if(s)s.textContent='SCHEDULED TIMES'}
+  }
+  const priority=['MORNING','MONDAY ERRANDS','COOKING','EXERCISE','SELF-CARE','AFTERNOON','AT WORK','AFTER WORK','SUNDAY SELF-CARE','NIGHT','DOG WALKS','DAY PLAN','ANCHORS'];
+  const remaining=[...template.content.querySelectorAll('details.v172-routine-group')];
+  remaining.forEach((group,index)=>{
+   const summary=group.querySelector(':scope > summary'),label=(summary?.textContent||'').trim().toUpperCase();
+   const stable=selectedKey()+'|'+(label==='ANCHORS'?'SCHEDULED TIMES':label);
+   group.dataset.routineDisclosureV191=stable;
+   if(summary&&label==='ANCHORS')summary.textContent='SCHEDULED TIMES';
+   group.open=Object.prototype.hasOwnProperty.call(disclosureV191,stable)?!!disclosureV191[stable]:true;
+  });
+  const container=remaining[0]?.parentElement;
+  if(container)remaining.sort((a,b)=>{const an=(a.querySelector(':scope > summary')?.textContent||'').trim().toUpperCase(),bn=(b.querySelector(':scope > summary')?.textContent||'').trim().toUpperCase(),ai=priority.indexOf(an),bi=priority.indexOf(bn);return (ai<0?99:ai)-(bi<0?99:bi)}).forEach(g=>container.appendChild(g));
+  return template.innerHTML;
+ }
+ const routineBeforeV191=routine;
+ routine=function(){const html=routineBeforeV191();return state.sub==='routine'?applyRoutineLayoutV191(html):html};
+ const gymBeforeV191=gym;
+ gym=function(){
+  const template=document.createElement('template');template.innerHTML=gymBeforeV191();
+  const keyBase=selectedKey();
+  template.content.querySelectorAll('details.workout-progress-dropdown').forEach((d,i)=>{
+   const label=(d.querySelector(':scope > summary > span:first-child')?.textContent||'WORKOUT PROGRESS').trim().toUpperCase();
+   const key=keyBase+'|GYM-PROGRESS|'+label+'|'+i;d.dataset.gymDisclosureV191=key;
+   d.open=Object.prototype.hasOwnProperty.call(disclosureV191,key)?!!disclosureV191[key]:true;
+  });
+  template.content.querySelectorAll('details.workout-section-drop').forEach((d,i)=>{
+   const label=(d.querySelector(':scope > summary')?.textContent||'WORKOUT SECTION').trim().toUpperCase();
+   const key=keyBase+'|GYM-SECTION|'+label+'|'+i;d.dataset.gymDisclosureV191=key;
+   d.open=Object.prototype.hasOwnProperty.call(disclosureV191,key)?!!disclosureV191[key]:true;
+  });
+  return template.innerHTML;
+ };
  Object.entries(V185_LOADED_ROUTINE_STATUS).forEach(([date,loaded])=>{
   state.routineStatus[date]={...(state.routineStatus[date]||{}),...(loaded||{})};
  });
- document.body.dataset.build=BUILD;
- const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=BUILD;
+ document.body.dataset.build=V191_BUILD;
+ const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=V191_BUILD;
  render();
 })();
 })();
@@ -9197,6 +9302,35 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  .v172-routine-subtasks{margin:8px 0 0!important;padding-left:8px!important;overflow:visible!important}
  .v172-routine-subtasks .subrow{grid-template-columns:21px minmax(0,1fr) auto auto!important}
  .v172-routine-subtasks .sub-name{overflow-wrap:anywhere!important;word-break:normal!important}
+}
+</style>
+<style id="v191-routine-gym-layout">
+/* Keep daily routine blocks readable on narrow phones and quick to scan. */
+.v172-routine-group{margin:9px 0;border-radius:17px;background:linear-gradient(145deg,#fff,#fff8fa)}
+.v172-routine-group>summary{list-style:none;position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 48px 13px 14px;cursor:pointer;font-weight:900;letter-spacing:.04em;color:var(--ink)}
+.v172-routine-group>summary::-webkit-details-marker{display:none}
+.v172-routine-group>summary:after{content:'+';position:absolute;right:13px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:27px;height:27px;border:1px solid var(--line);border-radius:50%;background:#fff;color:var(--pink);font-size:18px}
+.v172-routine-group[open]>summary:after{content:'−'}
+.v172-routine-items{padding:0 13px 10px}
+.v172-routine-task{grid-template-columns:24px minmax(0,1fr);align-items:start;width:100%;min-width:0}
+.v172-routine-task>input{grid-column:1;grid-row:1;margin-top:2px}
+.v172-routine-task>.v172-routine-task-title{grid-column:2;grid-row:1;display:block;min-width:0;width:100%;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal}
+.v172-routine-task>.routine-maintenance{grid-column:2;grid-row:2;display:flex;flex-wrap:wrap;gap:6px;min-width:0;margin-top:5px}
+.v172-routine-task-title details{width:100%;min-width:0}
+.v172-routine-task-title .v173-care-parent,.v172-routine-task-title .v173-care-group{border:1px solid var(--line);border-radius:13px;background:#fff;margin:7px 0;overflow:hidden}
+.v172-routine-task-title .v173-care-parent>summary,.v172-routine-task-title .v173-care-group>summary{list-style:none;cursor:pointer;padding:10px 12px;font-weight:850}
+.v172-routine-task-title .v173-care-parent>summary::-webkit-details-marker,.v172-routine-task-title .v173-care-group>summary::-webkit-details-marker{display:none}
+.v172-routine-task-title .v173-care-content,.v172-routine-task-title .v173-care-group>.v172-routine-subtasks{padding:0 10px 9px}
+.workout-section-drop,.workout-progress-dropdown{scroll-margin-top:12px}
+@media(max-width:520px){
+ .v172-routine-items{padding:0 10px 9px}
+ .v172-routine-task{grid-template-columns:23px minmax(0,1fr)!important;gap:7px!important;padding:11px 0!important}
+ .v172-routine-task>.v172-routine-task-title{grid-column:2;grid-row:1;min-width:0;width:100%}
+ .v172-routine-task>.routine-maintenance{grid-column:2;grid-row:2;display:flex!important;flex-wrap:wrap;gap:6px;min-width:0;margin-top:5px}
+ .v172-routine-task-title,.v172-routine-task-title details,.v172-routine-subtasks{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
+ .v172-routine-subtasks .subrow{grid-template-columns:21px minmax(0,1fr) auto auto!important;gap:5px!important;width:100%;min-width:0;align-items:start!important}
+ .v172-routine-subtasks .sub-name{min-width:0;overflow-wrap:anywhere;word-break:normal;line-height:1.35}
+ .v172-routine-subtasks .subrow .tinybtn{min-width:37px!important;width:auto!important;padding:6px 6px;white-space:nowrap}
 }
 </style>
 </body>
