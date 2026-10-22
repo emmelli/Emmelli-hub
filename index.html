@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-22-V180-DAY-COMPLETE">
+<meta name="emmelli-current-build" content="2026-10-21-V181-ROUTINE-REPAIR">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -914,7 +914,7 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:520px){.v172-routine-task{grid-template-columns:23px minmax(0,1fr) auto;padding:10px 0}.v172-routine-group>summary{padding:12px}}
 </style>
 </head>
-<body data-build="2026-10-22-V180-DAY-COMPLETE">
+<body data-build="2026-10-21-V180-DAY-COMPLETE">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script>
@@ -8322,7 +8322,7 @@ function initBudgetPlansV140(){
  ];
  if(!Array.isArray(state.budget.affirmPlans))state.budget.affirmPlans=[
   {id:'affirm-amazon-202610',merchant:'AMAZON',amount:58.02,nextDate:'2026-10-21',paymentNumber:1,totalPayments:6,remaining:348.12,autopay:true,active:true},
-  {id:'affirm-shein-202610',merchant:'SHEIN',amount:17.98,nextDate:'2026-10-22',paymentNumber:1,totalPayments:3,remaining:53.94,autopay:true,active:true}
+  {id:'affirm-shein-202610',merchant:'SHEIN',amount:17.98,nextDate:'2026-10-21',paymentNumber:1,totalPayments:3,remaining:53.94,autopay:true,active:true}
  ];
 }
 initBudgetPlansV140();
@@ -8425,7 +8425,7 @@ function cf143BuildScheduleV143(){let out=[],start=cf143Date(CF143_START),end=cf
  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){let k=cf143Key(d),dow=d.getDay();if(dow===1){let repay=cf143Add(k,1);out.push(cf143Event(`cleaners-card-weekly-${k}`,k,'MONDAY CLEANERS • UNIFORM SHIRT • CREDIT CARD',30,'card-purchase','cleaning',{account:'card',recurring:'weekly',cleanerCardPurchase:true,linkedRepaymentId:`cleaners-weekly-${k}`}));out.push(cf143Event(`cleaners-weekly-${k}`,repay,'CLEANERS CREDIT CARD REPAYMENT • MONDAY UNIFORM CLEANING',30,'expense','cleaning',{account:'spending',recurring:'weekly',cardPayment:true,cleanerCardRepayment:true,linkedPurchaseId:`cleaners-card-weekly-${k}`}))}if(dow===2){out.push(cf143Event(`income-job1-${k}`,k,'JOB 1',650,'income','income',{source:'job1'}),cf143Event(`income-jeremiah-${k}`,k,'JEREMIAH',450,'income','income',{source:'jeremiah'}),cf143Event(`spend-weekly-${k}`,k,'TRANSFER TO SPENDING • GAS $60 + GROCERIES/HOUSEHOLD $100 + PETS $20 + MONDAY CLEANERS $30',210,'transfer','spending-funding',{from:'checking',to:'spending',linkedTransferId:`weekly-${k}`,breakdown:'GAS $60 • GROCERIES/HOUSEHOLD $100 • PETS $20 • MONDAY CLEANERS $30'}));for(const [id,label,amount] of [['gas','GAS',60],['groceries','GROCERIES / HOUSEHOLD',100],['pet','PET NEEDS',20]])out.push(cf143Event(`purchase-${id}-${k}`,k,`${label} • WEEKLY PLAN`,amount,'expense','weekly-purchase',{account:'spending',forecastDateAssumption:true,sequence:30}))}if(dow===5)out.push(cf143Event(`income-job2-${k}`,k,'JOB 2',185,'income','income',{source:'job2',includedOpening:k==='2026-10-16'}));if(d.getDate()===9)out.push(cf143Event(`income-extra-${k}`,k,'ADDITIONAL JEREMIAH CONTRIBUTION',200,'income','income',{source:'jeremiah-extra'}))}
  for(let d=cf143Date('2026-11-01');d<=end;d.setMonth(d.getMonth()+1)){let month=cf143Month(cf143Key(d));out.push(cf143Event(`spend-monthly-${month}`,`${month}-01`,'TRANSFER TO WELLS FARGO #2 • $400 MONTHLY PERSONAL / PET ENVELOPE • HELD FROM THE 1ST',400,'transfer','spending-funding',{from:'checking',to:'spending',linkedTransferId:`monthly-${month}`,breakdown:'$400 RESERVED IN WELLS FARGO #2 • PERSONAL / PET PURCHASE DATES ARE ENTERED WHEN ACTUALLY SPENT'}));if(cfg.unknownReserveActive)out.push(cf143Event(`reserve-unreconciled-${month}`,`${month}-01`,'UNRECONCILED FIXED-BILL RESERVE • NO CONFIRMED CHARGE DATE',31.95,'reserve','unreconciled-fixed',{confirmed:false,provisionalDate:true}))}
  for(let y=2026,m=9;y<2027||m<=9;){let month=`${y}-${String(m+1).padStart(2,'0')}`;for(const row of CF143_FIXED){let r=cf143FixedRule(row);if(!r.active){continue}if(month==='2026-10'&&r.day<16)continue;if(month==='2026-10'&&r.id==='credit-min')continue;let max=new Date(y,m+1,0).getDate(),date=`${month}-${String(Math.min(r.day,max)).padStart(2,'0')}`;if(month==='2026-10'&&r.id==='tiamo')date='2026-10-21';out.push(cf143Event(`fixed-${r.id}-${month}`,date,r.label,r.amount,'expense','fixed',{fixedId:r.id}))}m++;if(m>11){m=0;y++}}
- out.push(cf143Event('one-mom-2026-10-20','2026-11-01','MOM • ONE-TIME • MOVED FROM OCT 20',200,'expense','special'),cf143Event('one-jeremiah-2026-10-20','2026-10-20','JEREMIAH • ONE-TIME PAYMENT',400,'expense','special'),cf143Event('spend-brows-funding-2026-10-20','2026-10-20','TRANSFER TO WELLS FARGO #2 • OCT 21 BROWS/LASHES APPOINTMENT',170,'transfer','spending-funding',{from:'checking',to:'spending',linkedTransferId:'appointment-brows-2026-10-21',appointmentFunding:true}),cf143Event('personal-brows-2026-10-21','2026-10-21','EYEBROWS / LASHES APPOINTMENT • ONE OCCURRENCE',170,'expense','personal-care',{account:'spending',personalId:'brows',month:'2026-10',forecastDateAssumption:false,coveredCycle:'2026-11'}),cf143Event('personal-nails-2026-10-22','2026-10-22','NAILS • PLANNED ASAP AFTER OCTOBER 21 BROWS/LASHES • CREDIT CARD IF BOOKED',120,'card-purchase','personal-care',{account:'card',personalId:'nails',month:'2026-10',forecastDateAssumption:true,coveredCycle:'2026-11'}),cf143Event('card-payment-2026-10-22',cfg.creditCard.paymentDate||'2026-10-21','CREDIT CARD • FULL CURRENT BALANCE PAYMENT',cfg.creditCard.oct22ExpectedPayment,'expense','credit-card',{cardPayment:true,confirmed:false}));
+ out.push(cf143Event('one-mom-2026-10-20','2026-11-01','MOM • ONE-TIME • MOVED FROM OCT 20',200,'expense','special'),cf143Event('one-jeremiah-2026-10-20','2026-10-20','JEREMIAH • ONE-TIME PAYMENT',400,'expense','special'),cf143Event('spend-brows-funding-2026-10-20','2026-10-20','TRANSFER TO WELLS FARGO #2 • OCT 21 BROWS/LASHES APPOINTMENT',170,'transfer','spending-funding',{from:'checking',to:'spending',linkedTransferId:'appointment-brows-2026-10-21',appointmentFunding:true}),cf143Event('personal-brows-2026-10-21','2026-10-21','EYEBROWS / LASHES APPOINTMENT • ONE OCCURRENCE',170,'expense','personal-care',{account:'spending',personalId:'brows',month:'2026-10',forecastDateAssumption:false,coveredCycle:'2026-11'}),cf143Event('personal-nails-2026-10-21','2026-10-21','NAILS • PLANNED ASAP AFTER OCTOBER 21 BROWS/LASHES • CREDIT CARD IF BOOKED',120,'card-purchase','personal-care',{account:'card',personalId:'nails',month:'2026-10',forecastDateAssumption:true,coveredCycle:'2026-11'}),cf143Event('card-payment-2026-10-21',cfg.creditCard.paymentDate||'2026-10-21','CREDIT CARD • FULL CURRENT BALANCE PAYMENT',cfg.creditCard.oct22ExpectedPayment,'expense','credit-card',{cardPayment:true,confirmed:false}));
  for(let d=cf143Date('2026-10-21');d<=cf143Date('2027-03-21');d.setMonth(d.getMonth()+1)){let k=cf143Key(d);out.push(cf143Event(`affirm-amazon-${cf143Month(k)}`,k,'AMAZON AFFIRM • MONTHLY PAYMENT',58.02,'expense','affirm',{actualScheduled:58.02,cushion:0}))}for(const month of ['2026-10','2026-11','2026-12'])out.push(cf143Event(`affirm-shein-${month}`,`${month}-22`,'SHEIN AFFIRM • MONTHLY PAYMENT',17.98,'expense','affirm',{actualScheduled:17.98,cushion:0}));
  for(let d=cf143Date('2026-11-08');d<=end;d.setMonth(d.getMonth()+1)){let k=cf143Key(d),month=cf143Month(k);out.push(cf143Event(`reserve-amazon-monthly-${month}`,`${month}-06`,'AMAZON MONTHLY • $123.43 ITEMS + $8 TAX RESERVE',131.43,'reserve','amazon-reserve',{confirmed:false,provisionalDate:true}));out.push(cf143Event(`amazon-monthly-${month}`,k,'AMAZON SUBSCRIBE & SAVE • 4 MONTHLY ITEMS • $123.43 ITEMS + $8 TAX RESERVE',131.43,'expense','amazon',{subtotal:123.43,taxReserve:8,taxUnverified:false,chargeDateUnverified:false,estimated:true}))}for(let d=cf143Date('2027-01-08');d<=end;d.setMonth(d.getMonth()+3)){let k=cf143Key(d),month=cf143Month(k);out.push(cf143Event(`reserve-amazon-quarterly-${month}`,`${month}-06`,'AMAZON QUARTERLY • $37.77 ITEMS + $6 TAX RESERVE',43.77,'reserve','amazon-reserve',{confirmed:false,provisionalDate:true}));out.push(cf143Event(`amazon-quarterly-${month}`,k,'AMAZON SUBSCRIBE & SAVE • 3 QUARTERLY ITEMS • $37.77 ITEMS + $6 TAX RESERVE',43.77,'expense','amazon',{subtotal:37.77,taxReserve:6,taxUnverified:false,chargeDateUnverified:false,estimated:true}))}
  out.push(cf143Event('rent-2026-11','2026-11-10','NOVEMBER RENT',2090,'expense','housing'),cf143Event('rent-2026-12','2026-12-08','DECEMBER RENT',2090,'expense','housing'));for(const month of ['2027-01','2027-02','2027-03'])out.push(cf143Event(`rent-${month}`,`${month}-01`,`${cashMonthLabelV142(month)} RENT`,2065,'expense','housing'));out.push(cf143Event('rent-move-2027-03-26','2027-03-26','MOVE / PRORATION / NEW APARTMENT • COVERS APRIL',3000,'expense','housing'));for(let m=5;m<=10;m++){let month=`2027-${String(m).padStart(2,'0')}`,date=`${month}-01`;if(date<=CF143_END)out.push(cf143Event(`rent-${month}`,date,`${cashMonthLabelV142(month)} RENT`,1300,'expense','housing'))}
@@ -8440,7 +8440,7 @@ function cf143LedgerV144(){let c=cf143Cfg(),l=c.ledger&&typeof c.ledger==='objec
 function cf143ApplyReleaseMigrationV146(){let c=cf143Cfg(),l=cf143LedgerV144();if(l.releaseCorrectionVersion>=1)return l;let events=cf143BuildScheduleV143(),now=cf143StampV144();for(const e of events){if(e.type==='reserve')continue;let t=l.transactions[e.id];if(!t){t=l.transactions[e.id]={...e,id:e.id,ruleId:e.fixedId||e.source||e.personalId||null,scheduledDate:e.date,scheduledAmountCents:cf143MoneyCentsV144(e.amount),status:'scheduled',actualAmountCents:null,actualDate:null,actualTime:null,account:e.account||(e.type==='expense'?'checking':'checking'),fromAccount:e.from||'checking',toAccount:e.to||'spending',notes:e.forecastDateAssumption?'Planned date; confirm it before marking completed.':'',history:[],createdAt:now};continue}if(e.id==='one-mom-2026-10-20'){let before=JSON.parse(JSON.stringify(t));t.label=e.label;t.scheduledDate='2026-11-01';t.scheduledAmountCents=20000;t.type='expense';t.category='special';t.account='checking';if(t.status==='confirmed'&&t.actualDate==='2026-10-20'){t.status='scheduled';t.actualAmountCents=null;t.actualDate=null;t.actualTime=null}t.history=Array.isArray(t.history)?t.history:[];if(JSON.stringify(before)!==JSON.stringify(t)){t.history.push({action:'MOVED_MOM_PAYMENT_TO_NOVEMBER_1',before,at:now});l.audit.push({id:`audit-mom-move-${now}`,transactionId:t.id,action:'MOVED_MOM_PAYMENT_TO_NOVEMBER_1',before,after:JSON.parse(JSON.stringify(t)),at:now})}}if((e.id==='spend-monthly-2026-11'||e.id.startsWith('spend-weekly-'))&&t.status==='scheduled'){t.label=e.label;t.sequence=e.sequence;t.type='transfer';t.fromAccount='checking';t.toAccount='spending';t.account='checking';t.scheduledDate=e.date;t.scheduledAmountCents=cf143MoneyCentsV144(e.amount)}if((e.id.startsWith('amazon-monthly-')||e.id.startsWith('amazon-quarterly-'))&&t.status==='scheduled'){t.scheduledDate=e.date;t.scheduledAmountCents=cf143MoneyCentsV144(e.amount);t.label=e.label}}l.schemaVersion=3;l.releaseCorrectionVersion=1;c.ledger=l;return l}
 let cf143NeedsReleaseMigrationV146=!cf143Cfg().ledger.releaseCorrectionVersion;cf143ApplyReleaseMigrationV146();if(cf143NeedsReleaseMigrationV146)save();
 function cf143ApplyFinalAuthorityV151(){let c=cf143Cfg(),l=cf143LedgerV144();if(l.authorityCorrectionV151)return;let now=cf143StampV144();if(c.amazon&&c.amazon.monthlyUnreconciled===74.45)c.amazon.monthlyUnreconciled=0;if(c.amazon&&c.amazon.quarterlyUnreconciled===6)c.amazon.quarterlyUnreconciled=0;let events=cf143BuildScheduleV143();for(const e of events){let t=l.transactions[e.id];if(!t||t.status==='confirmed'||t.status==='skipped'||t.manual||t.history?.some(h=>h.action==='EDITED'))continue;if(e.category==='amazon'||e.category==='affirm'){t.scheduledAmountCents=cf143MoneyCentsV144(e.amount);t.amount=e.amount;t.label=e.label;t.date=e.date;t.scheduledDate=e.date;t.cushion=0}}for(const t of Object.values(l.transactions)){if(t.category==='unreconciled-fixed'&&t.type==='reserve'&&t.status==='scheduled')t.status='skipped'}l.authorityCorrectionV151=true;l.audit.push({id:'budget-authority-v151',action:'APPLY_BUDGET_AUTHORITY_CORRECTIONS',at:now,notes:'Updated only default opening balance and unedited scheduled Amazon/Affirm entries; confirmed and edited financial records preserved.'});c.ledger=l}cf143ApplyFinalAuthorityV151();save();
-function cf143ApplyAccountsV155(){let c=cf143Cfg(),l=cf143LedgerV144();if(l.accountsCorrectionV155)return;let now=cf143StampV144(),depop=l.transactions['actual-depop-2026-10-16'];if(depop)depop.includedInOpening=true;for(const t of Object.values(l.transactions)){if(t.status==='confirmed'||t.manual||t.history?.some(h=>h.action==='EDITED'))continue;if(t.id==='fixed-tiamo-2026-10'){t.date='2026-10-20';t.scheduledDate='2026-10-20'}if(t.id==='card-payment-2026-10-22'){t.label='CREDIT CARD • FULL CURRENT BALANCE PAYMENT';t.date='2026-10-21';t.scheduledDate='2026-10-21';t.scheduledAmountCents=9378;t.amount=93.78;t.cardPayment=true}if(t.id.startsWith('cleaners-weekly-')){let monday=t.id.slice(-10),repay=cf143Add(monday,1);t.label='CLEANERS CREDIT CARD REPAYMENT • MONDAY UNIFORM CLEANING';t.type='expense';t.category='cleaning';t.account='spending';t.actualAccount='spending';t.date=repay;t.scheduledDate=repay;t.scheduledAmountCents=3000;t.amount=30;t.cardPayment=true;t.cleanerCardRepayment=true;t.linkedPurchaseId='cleaners-card-weekly-'+monday}}l.accountsCorrectionV155=true;l.audit.push({id:'budget-accounts-v155',action:'APPLY_OCTOBER_18_CONFIRMED_ACCOUNTS_AND_PAYMENT_TIMING',at:now,notes:'Confirmed checking $13.92, spending $0, savings $0, card $93.78; moved first Tiamo payment to Oct 20; cleaners use Monday card purchase and Tuesday $30 repayment; full card payment scheduled Oct 21. Confirmed and user-edited transactions preserved.'});c.ledger=l}
+function cf143ApplyAccountsV155(){let c=cf143Cfg(),l=cf143LedgerV144();if(l.accountsCorrectionV155)return;let now=cf143StampV144(),depop=l.transactions['actual-depop-2026-10-16'];if(depop)depop.includedInOpening=true;for(const t of Object.values(l.transactions)){if(t.status==='confirmed'||t.manual||t.history?.some(h=>h.action==='EDITED'))continue;if(t.id==='fixed-tiamo-2026-10'){t.date='2026-10-20';t.scheduledDate='2026-10-20'}if(t.id==='card-payment-2026-10-21'){t.label='CREDIT CARD • FULL CURRENT BALANCE PAYMENT';t.date='2026-10-21';t.scheduledDate='2026-10-21';t.scheduledAmountCents=9378;t.amount=93.78;t.cardPayment=true}if(t.id.startsWith('cleaners-weekly-')){let monday=t.id.slice(-10),repay=cf143Add(monday,1);t.label='CLEANERS CREDIT CARD REPAYMENT • MONDAY UNIFORM CLEANING';t.type='expense';t.category='cleaning';t.account='spending';t.actualAccount='spending';t.date=repay;t.scheduledDate=repay;t.scheduledAmountCents=3000;t.amount=30;t.cardPayment=true;t.cleanerCardRepayment=true;t.linkedPurchaseId='cleaners-card-weekly-'+monday}}l.accountsCorrectionV155=true;l.audit.push({id:'budget-accounts-v155',action:'APPLY_OCTOBER_18_CONFIRMED_ACCOUNTS_AND_PAYMENT_TIMING',at:now,notes:'Confirmed checking $13.92, spending $0, savings $0, card $93.78; moved first Tiamo payment to Oct 20; cleaners use Monday card purchase and Tuesday $30 repayment; full card payment scheduled Oct 21. Confirmed and user-edited transactions preserved.'});c.ledger=l}
 cf143ApplyAccountsV155();save();
 function cf143ApplyFinalCorrectionsV157(){let c=cf143Cfg(),l=cf143LedgerV144();if(l.finalCorrectionsV165)return;let now=cf143StampV144();for(const t of Object.values(l.transactions)){let edited=t.manual||t.history?.some(h=>h.action==='EDITED');if(t.id==='fixed-tiamo-2026-10'&&t.status!=='confirmed'&&!edited){t.label='TIAMO • $85 MANUAL PAYMENT AFTER OCT 20 AUTOPAY FAILS';t.scheduledDate='2026-10-21';t.scheduledAmountCents=8500;t.amount=85}if(t.id==='one-mom-2026-10-20'&&t.status!=='confirmed'&&!edited){t.label='MOM • ONE-TIME • MOVED FROM OCTOBER';t.scheduledDate='2026-11-01';t.scheduledAmountCents=20000;t.amount=200}if(t.id.startsWith('amazon-monthly-')&&t.status!=='confirmed'&&!edited){let month=t.id.slice('amazon-monthly-'.length);t.scheduledDate=month+'-08';t.date=month+'-08';t.scheduledAmountCents=13143;t.amount=131.43;t.subtotal=123.43;t.taxReserve=8;t.taxUnverified=false;t.chargeDateUnverified=false}if(t.id.startsWith('amazon-quarterly-')&&t.status!=='confirmed'&&!edited){let month=t.id.slice('amazon-quarterly-'.length);t.scheduledDate=month+'-08';t.date=month+'-08';t.scheduledAmountCents=4377;t.amount=43.77;t.subtotal=37.77;t.taxReserve=6;t.taxUnverified=false;t.chargeDateUnverified=false}if(t.id.startsWith('spend-monthly-')&&t.status==='scheduled'&&!edited){let month=t.id.slice('spend-monthly-'.length);t.label=`TRANSFER TO WELLS FARGO #2 • $400 MONTHLY PERSONAL / PET ENVELOPE • HELD FROM THE 1ST`;t.scheduledDate=month+'-01';t.date=month+'-01';t.scheduledAmountCents=40000;t.amount=400;t.breakdown='$400 RESERVED IN WELLS FARGO #2 • PERSONAL / PET PURCHASE DATES ARE ENTERED WHEN ACTUALLY SPENT'}if(t.id.startsWith('affirm-amazon-')&&t.status!=='confirmed'&&!edited){t.scheduledAmountCents=5802;t.amount=58.02;t.actualScheduled=58.02;t.cushion=0}if(t.id.startsWith('affirm-shein-')&&t.status!=='confirmed'&&!edited){t.scheduledAmountCents=1798;t.amount=17.98;t.actualScheduled=17.98;t.cushion=0}if(t.id.startsWith('fixed-angel-guild-')&&t.status!=='confirmed'&&!edited)t.status='skipped';if(/HP\s*INSTANT\s*INK/i.test(t.label||'')&&t.category==='fixed'&&t.status!=='confirmed'&&!edited)t.status='skipped'}c.version=165;l.finalCorrectionsV165=true;l.audit.push({id:'budget-final-v165',action:'APPLY_KNOWN_DATES_AND_MONTHLY_ENVELOPE',at:now,notes:'Mom remains moved once to Nov 1; Jeremiah $400 remains Oct 20; October brows $170 and planned nails $120 remain October items; the full $400 monthly personal/pet transfer is reserved in WF#2 on each 1st from November; envelope purchases are not forecast on assumed dates; weekly cleaner funding remains part of the $210 Tuesday transfer; canceled Angel Guild excluded; Amazon Affirm $58.02; SHEIN Affirm $17.98; Amazon subscription charges use the known 8th with the 6th set-aside.'});c.ledger=l}
 cf143ApplyFinalCorrectionsV157();save();
@@ -8656,7 +8656,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
    if(!rows.length)return '';
    const cards=rows.map(({t,i})=>{
     const subtasks=(t.subtasks||[]).map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${day}|${i}|${j}" ${q.done?'checked':''}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${day}|${i}|${j}" aria-label="Edit ${esc(q.name)}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${day}|${i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></div>`);
-    const displayName=String(t.name).replace(/^(?:50|60)-MINUTE MORNING ROUTINE$/i,'MORNING ROUTINE • 1 HOUR').replace(/^NIGHT ROUTINE • 1 HOUR$/i,'NIGHT ROUTINE');
+    const displayName=String(t.name).replace(/^(?:50|60)-MINUTE MORNING ROUTINE$/i,'MORNING ROUTINE • 1 HOUR').replace(/^NIGHT ROUTINE • 1 HOUR$/i,'NIGHT ROUTINE');const durationMinutes=Number(t.duration)||0,durationLabel=durationMinutes>0&&!/(?:\d+\s*(?:MIN(?:UTE)?S?|HOURS?)|\d+-MINUTE)/i.test(displayName)?(durationMinutes>=60?Math.floor(durationMinutes/60)+' HOUR'+(Math.floor(durationMinutes/60)===1?'':'S')+(durationMinutes%60?' '+durationMinutes%60+' MINUTES':''):durationMinutes+' MINUTES'):'';
     let careMarkup='';
     if(/^(?:50|60)-MINUTE MORNING ROUTINE$/i.test(t.name)){
      const names=(t.subtasks||[]).map(q=>String(q.name).toUpperCase());
@@ -8671,7 +8671,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
      const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
      careMarkup=`<details class="v173-care-parent"><summary>NIGHT CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
     }else if(subtasks.length){careMarkup=`<div class="v172-routine-subtasks">${subtasks.join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
-    return `<article class="v172-routine-task"><input type="checkbox" aria-label="${esc(displayName)} complete" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><div class="v172-routine-task-title">${esc(displayName)}${t.errandMeta?`<div class="muted">${esc(t.errandMeta.enteredStart||'')}–${esc(t.errandMeta.enteredEnd||'')}</div>`:''}${careMarkup}</div><div class="routine-maintenance"><button class="tinybtn" data-rtask-edit="${day}|${i}">Edit</button><button class="tinybtn" data-rtask-del="${day}|${i}">Remove</button></div></article>`;
+    return `<article class="v172-routine-task"><input type="checkbox" aria-label="${esc(displayName)} complete" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><div class="v172-routine-task-title">${esc(displayName)}${durationLabel?`<small class="v181-duration">${durationLabel}</small>`:''}${t.errandMeta?`<div class="muted">${esc(t.errandMeta.enteredStart||'')}–${esc(t.errandMeta.enteredEnd||'')}</div>`:''}${careMarkup}</div><div class="routine-maintenance"><button class="tinybtn" data-rtask-edit="${day}|${i}">Edit</button><button class="tinybtn" data-rtask-del="${day}|${i}">Remove</button></div></article>`;
    }).join('');
    const open=section==='ANCHORS'||section==='MORNING';
    return `<details class="v172-routine-group" ${open?'open':''}><summary>${esc(section)}</summary><div class="v172-routine-items">${cards}</div></details>`;
@@ -8691,7 +8691,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 
 /* V175: place the flexible checklist at the bottom of Today and repair phone task cards. */
 (function installV175RoutineLayout(){
- const BUILD='2026-10-22-V178-WEDNESDAY-BIBLE-STUDY-REMOVED';
+ const BUILD='2026-10-21-V178-WEDNESDAY-BIBLE-STUDY-REMOVED';
  flex164Board=function(){
   const key=selectedKey(),wk=flex164WeekStart(key),checks=(state.weeklyRoutineChecks||{})[wk]||{};
   const monday=new Date(wk+'T12:00:00'),dates=Array.from({length:7},(_,i)=>{const d=new Date(monday);d.setDate(d.getDate()+i);return localDateKey(d)});
@@ -8733,9 +8733,9 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  render();
 })();
 
-/* V179 FINAL ROUTINE AUTHORITY • 2026-10-22 */
+/* V179 FINAL ROUTINE AUTHORITY • 2026-10-21 */
 (function installV179FinalRoutine(){
- const BUILD='2026-10-22-V179-FINAL-ROUTINE';
+ const BUILD='2026-10-21-V179-FINAL-ROUTINE';
  const previousRday=rday;
  const dayStart={Monday:600,Tuesday:270,Wednesday:480,Thursday:600,Friday:380,Saturday:260,Sunday:260};
  const dayClock={Monday:'10:00 AM (AFTER CLEANER DROP-OFF)',Tuesday:'4:30 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:20 AM',Saturday:'4:20 AM',Sunday:'4:20 AM'};
@@ -8855,9 +8855,9 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 })();
 
 })();
-/* V180 DAY-COMPLETENESS PASS • 2026-10-22 */
+/* V180 DAY-COMPLETENESS PASS • 2026-10-21 */
 (function installV180DayCompleteness(){
- const BUILD='2026-10-22-V180-DAY-COMPLETE';
+ const BUILD='2026-10-21-V180-DAY-COMPLETE';
  const priorRday=rday;
  rday=function(day){
    const rd=priorRday(day);if(selectedKey()<FLEX154_EFFECTIVE||!rd?.flexibleRoutineV154)return rd;
@@ -8917,6 +8917,120 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  document.body.dataset.build=BUILD;const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=BUILD;
 })();
 
+/* V181 ROUTINE + MOBILE REPAIR • 2026-10-21 */
+(function installV181RoutineRepair(){
+ const BUILD='2026-10-21-V181-ROUTINE-REPAIR';
+ const V181_START={Monday:450,Tuesday:270,Wednesday:480,Thursday:600,Friday:380,Saturday:260,Sunday:260};
+ const beforeRdayV181=rday;
+ const savedMigrationsV181=new Set();
+ const sectionForV181=t=>{
+  const n=String(t.name||'').toUpperCase();
+  if(/MORNING ROUTINE|MORNING CARE|GET READY \+ PACK FOR WORK/.test(n))return 'MORNING';
+  if(/^MORNING DOG WALKS/.test(n))return 'MORNING';
+  if(/^LATER DOG WALKS/.test(n))return 'AFTER WORK';
+  if(/ERRAND LOOP|MONDAY SHOPPING|GROCERY SHOPPING|DRIVE TO LOCKWOOD|DRIVE HOME|PUT AWAY GROCERIES/.test(n))return 'MONDAY ERRANDS';
+  if(/COOK \+ PREP|PREP \+ COOK|COOKING BLOCK/.test(n))return 'COOKING';
+  if(/GYM \+ TREADMILL|WALKING WORKOUT|WALK\/RUN|TREADMILL \+ ABS/.test(n))return 'EXERCISE';
+  if(/RED LIGHT|MASK/.test(n))return 'SELF-CARE';
+  if(/NIGHT ROUTINE|NIGHT CARE|FINAL/.test(n))return 'NIGHT';
+  if(t.section==='ANCHORS'||t.section==='AT WORK'||t.section==='AFTER WORK'||t.section==='SUNDAY SELF-CARE')return t.section;
+  return t.section||'AFTERNOON';
+ };
+ const setSubsV181=(task,names,status)=>{
+  const previous=task.subtasks||[];
+  task.subtasks=names.map((name,i)=>{
+   const old=previous.find(q=>String(q.name).toUpperCase()===name.toUpperCase());
+   const id=old?.id||('v181_s'+(i+1));
+   const aliases=previous.filter(q=>/15-MINUTE DRIVE EACH WAY/i.test(q.name)&&/^DRIVE TO GYM|^DRIVE HOME/i.test(name)||/SHOWER AND CHANGE AFTER/i.test(q.name)&&/SHOWER AND GET READY/i.test(name));
+   const aliasDone=aliases.some(q=>status?.[task.id+'|'+q.id]!==undefined?!!status[task.id+'|'+q.id]:!!q.done);
+   return {id,name,done:status?.[task.id+'|'+id]!==undefined?!!status[task.id+'|'+id]:!!old?.done||aliasDone};
+  });
+ };
+ const makeTaskV181=(day,key,name,section,duration,subs=[])=>({
+  id:'v181_'+day.slice(0,3).toLowerCase()+'_'+key,name,section,duration,done:false,customFixed:null,
+  subtasks:subs.map((n,i)=>({id:'v181_s'+(i+1),name:n,done:false})),flexibleRoutineV154:true
+ });
+ rday=function(day){
+  const rd=beforeRdayV181(day);
+  if(!rd||selectedKey()<FLEX154_EFFECTIVE||!rd.flexibleRoutineV154)return rd;
+  const tasks=rd.tasks||(rd.tasks=[]),key=selectedKey(),status=state.routineStatus?.[key]||{};
+  for(let i=tasks.length-1;i>=0;i--)if(/COMMUTE BUFFER/i.test(tasks[i].name))tasks.splice(i,1);
+  const find=(re,section)=>tasks.find(t=>(!section||t.section===section)&&re.test(String(t.name||'')));
+  const set=(task,fields)=>{if(!task)return;const previous=task.subtasks||[];Object.assign(task,fields);if(fields.subtasks){task.subtasks=previous;setSubsV181(task,fields.subtasks,status)}};
+  rd.start=V181_START[day];
+  const wake=find(/^(?:RECOMMENDED WAKE|WAKE)\s*•/i,'ANCHORS');
+  if(wake)wake.name='RECOMMENDED WAKE • '+routineClockV140(V181_START[day]);
+  const morning=find(/^(?:50|60)-MINUTE MORNING ROUTINE$|^MORNING ROUTINE/i);
+  if(morning){morning.name='60-MINUTE MORNING ROUTINE';morning.section='MORNING';morning.duration=60}
+  for(const task of tasks){
+   if(/^MORNING DOG WALKS/i.test(task.name)){task.name='MORNING DOG WALKS • 40 MINUTES';task.section='MORNING';task.duration=40}
+   else if(/^LATER DOG WALKS/i.test(task.name)){task.name='LATER DOG WALKS • 40 MINUTES';task.section='AFTER WORK';task.duration=40}
+   else task.section=sectionForV181(task);
+  }
+  const gymSubs=['GET READY FOR GYM • 20 MINUTES','TREADMILL + ABS • 45 MINUTES','DRIVE TO GYM • 15 MINUTES','GYM • 1 HOUR','DRIVE HOME • 15 MINUTES','SHOWER AND GET READY • 30 MINUTES'];
+  const walkSubs=['GET READY FOR WALKING WORKOUT • 20 MINUTES','WALK / RUN + ABS • 45 MINUTES','SHOWER AND GET READY • 30 MINUTES'];
+  for(const t of tasks){
+   if(/GYM \+ TREADMILL \+ ABS/i.test(t.name))set(t,{name:'GYM + TREADMILL + ABS • 3 HR 5 MIN TOTAL',section:'EXERCISE',duration:185,subtasks:gymSubs});
+   else if(/WALKING WORKOUT \+ ABS/i.test(t.name))set(t,{name:'WALK / RUN + ABS',section:'EXERCISE',duration:95,subtasks:walkSubs});
+   else if(/RED LIGHT FACE MASK/i.test(t.name)){t.name='RED LIGHT FACE MASK';t.section='SELF-CARE';t.duration=15;setSubsV181(t,['SPRAY WITH ALCOHOL AFTERWARD'],status)}
+   else if(/(?:COOK \+ PREP|PREP \+ COOK) \+ CLEAN/i.test(t.name)){t.name='COOK + PREP + CLEAN';t.section='COOKING';t.duration=60}
+  }
+  if(day==='Wednesday'){
+   for(let i=tasks.length-1;i>=0;i--)if(/BIBLE STUDY AT HOME/i.test(tasks[i].name))tasks.splice(i,1);
+   const leave=find(/^LEAVE FOR WORK/i,'ANCHORS');
+   if(leave){leave.name='LEAVE FOR WORK • 2:15 PM';setSubsV181(leave,['DRIVE TO WORK • 40 MINUTES'],status)}
+   const work=find(/^WORK • 3:00/i,'ANCHORS');
+   if(work)work.name='WORK • 3:00–11:00 PM • 537 SANCTUARY DR., LONGBOAT KEY';
+  }
+  if(day==='Thursday'){
+   if(!tasks.some(t=>/(?:COOK \+ PREP|PREP \+ COOK) \+ CLEAN/i.test(t.name)))tasks.push(makeTaskV181(day,'cook','COOK + PREP + CLEAN','COOKING',60));
+   const leave=find(/^LEAVE FOR WORK/i,'ANCHORS');
+   if(leave){leave.name='LEAVE FOR WORK • 2:15 PM';setSubsV181(leave,['DRIVE TO WORK • 40 MINUTES'],status)}
+   const work=find(/^WORK • 3:00/i,'ANCHORS');
+   if(work)work.name='WORK • 3:00–11:00 PM • 537 SANCTUARY DR., LONGBOAT KEY';
+  }
+  if(day==='Friday'){
+   for(let i=tasks.length-1;i>=0;i--)if(/(?:COOK \+ PREP|PREP \+ COOK) \+ CLEAN/i.test(tasks[i].name))tasks.splice(i,1);
+   const leave=find(/^LEAVE FOR WORK/i,'ANCHORS');
+   if(leave){leave.name='LEAVE FOR WORK • 8:20 AM';setSubsV181(leave,['DRIVE TO WORK • 25 MINUTES'],status)}
+   const work=find(/^WORK • 8:45/i,'ANCHORS');
+   if(work){work.name='WORK • 8:45 AM–5:15 PM • MOTE MARINE NEAR UTC';work.duration=510}
+  }
+  if(['Tuesday','Saturday','Sunday'].includes(day)&&!tasks.some(t=>/GET READY \+ PACK FOR WORK/i.test(t.name))){
+   const leave=find(/^LEAVE FOR WORK/i,'ANCHORS');
+   const t=makeTaskV181(day,'ready','GET READY + PACK FOR WORK • 20 MINUTES','MORNING',20);
+   const at=leave?tasks.indexOf(leave):tasks.length;tasks.splice(at,0,t);
+  }
+  if(day==='Monday'){
+   const drop=find(/^VALYOU CLEANERS DROP-OFF/i,'ANCHORS');
+   if(drop){drop.name='VALYOU CLEANERS DROP-OFF • BY 8:00 AM';setSubsV181(drop,['GRAB THE UNIFORMS','RETURN HOME • 20 MINUTES'],status)}
+   const loop=find(/ERRAND LOOP/i);
+   if(loop){loop.name='MONDAY SHOPPING + ERRANDS • 1 HOUR 50 MINUTES';loop.section='MONDAY ERRANDS';loop.duration=110}
+   if(!tasks.some(t=>/PUT AWAY GROCERIES \+ PORTION MEAT/i.test(t.name))){
+    const cook=tasks.find(t=>/(?:COOK \+ PREP|PREP \+ COOK) \+ CLEAN/i.test(t.name));
+    const t=makeTaskV181(day,'groceries','PUT AWAY GROCERIES + PORTION MEAT • 20 MINUTES','MONDAY ERRANDS',20);
+    tasks.splice(cook?tasks.indexOf(cook):tasks.length,0,t);
+   }
+  }
+  const order=['ANCHORS','MORNING','DOG WALKS','MONDAY ERRANDS','COOKING','EXERCISE','SELF-CARE','AT WORK','AFTER WORK','SUNDAY SELF-CARE','NIGHT'];
+  tasks.sort((a,b)=>{let x=order.indexOf(a.section),y=order.indexOf(b.section);return (x<0?99:x)-(y<0?99:y)});
+  state.routineDates[key]=rd;
+  const migratedKey=key+'|'+day;if(!savedMigrationsV181.has(migratedKey)){savedMigrationsV181.add(migratedKey);save()}
+  return rd;
+ };
+ flex164Board=function(){
+  const key=selectedKey(),wk=flex164WeekStart(key);state.weeklyRoutineChecks=state.weeklyRoutineChecks||{};
+  const checks=state.weeklyRoutineChecks[wk]||(state.weeklyRoutineChecks[wk]={});
+  const goals=[['school-practice','SCHOOL PRACTICE'],['piano','PIANO PRACTICE • 45 MINUTES'],['reptar','REPTAR CAGE RESET'],['shoes','SHOE CLEANING'],['paper','RESTOCK PAPER PRODUCTS'],['supplies','CHECK SPONGES, SOAP, AND SCENT DISPENSERS']];
+  const box=([id,label])=>'<label class="flex164-check"><input type="checkbox" data-flex164-check="'+esc(wk)+'|'+esc(id)+'" '+(checks[id]?'checked':'')+'><span>'+esc(label)+'</span></label>';
+  return '<section class="card flex164-weekly v181-weekly"><div class="v175-weekly-heading"><span>♡</span><div><h2>THINGS I STILL NEED TO DO THIS WEEK</h2><small>VISIBLE EVERY DAY • CHECK OFF WHEN DONE</small></div></div><p class="muted">These are flexible weekly goals. Leave anything unfinished for another day.</p>'+goals.map(box).join('')+'</section>';
+ };
+ const routineBeforeV181=routine;
+ routine=function(){return routineBeforeV181().replace(/<section class="card flex164-weekly[\s\S]*?<\/section>/,'')};
+ document.body.dataset.build=BUILD;
+ const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=BUILD;
+ render();
+})();
 </script>
 
 <style id="final-daily-polish-css">
@@ -9007,6 +9121,28 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 .v172-routine-task,.v172-routine-task-title,.v172-routine-task-title details,.v173-care-content,.v173-care-group,.v172-routine-subtasks{min-width:0;max-width:100%;box-sizing:border-box}
 .v172-routine-task-title{width:100%;overflow-wrap:anywhere;word-break:normal}.v172-routine-task-title details{display:block;width:100%}
 @media(max-width:520px){.v172-routine-task{grid-template-columns:23px minmax(0,1fr)!important;width:100%;min-width:0}.v172-routine-items{min-width:0;padding-left:10px;padding-right:10px}.v172-routine-task-title{grid-column:2;min-width:0;width:100%}.v172-routine-task-title .subrow{grid-template-columns:22px minmax(0,1fr) auto auto!important;width:100%;min-width:0}.v172-routine-task-title .sub-name{min-width:0;overflow-wrap:anywhere;word-break:normal}.v172-routine-subtasks{width:100%;min-width:0;overflow:visible}.v179-weekly{padding:13px}.v179-school>summary{padding:11px}.v179-school .flex164-check{padding:9px 8px}}
+</style>
+<style id="v181-mobile-routine-fix">
+.v172-routine-items,.v172-routine-task,.v172-routine-task-title,.v172-routine-task-title details,.v172-routine-subtasks,.v173-care-content,.v173-care-group{box-sizing:border-box;min-width:0;max-width:100%}
+.v172-routine-items{width:100%;overflow:visible}
+.v172-routine-task{width:100%;grid-template-columns:24px minmax(0,1fr) auto;align-items:start}
+.v172-routine-task-title{width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.35}
+.v172-routine-task-title details,.v172-routine-subtasks{display:block;width:100%}
+.v172-routine-subtasks .subrow{display:grid!important;grid-template-columns:22px minmax(0,1fr) auto auto!important;gap:6px!important;align-items:start!important;width:100%;min-width:0}
+.v172-routine-subtasks .subrow input{grid-column:1;min-width:19px;margin-top:2px}
+.v172-routine-subtasks .sub-name{grid-column:2;display:block;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.35}
+.v172-routine-subtasks .subrow .tinybtn{min-width:40px;width:auto;max-width:100%;white-space:nowrap;padding:6px 7px}
+.v181-duration{display:block;margin-top:4px;font-size:12px;font-weight:700;color:var(--muted);line-height:1.35;overflow-wrap:anywhere}
+@media(max-width:520px){
+ .v172-routine-task{grid-template-columns:23px minmax(0,1fr)!important;width:100%;min-width:0;padding:11px 0!important}
+ .v172-routine-task>input{grid-column:1;grid-row:1}
+ .v172-routine-task>.v172-routine-task-title{grid-column:2;grid-row:1;min-width:0;width:100%}
+ .v172-routine-task>.routine-maintenance{grid-column:2;grid-row:2;display:flex!important;flex-wrap:wrap;gap:6px;margin-top:5px;min-width:0}
+ .v172-routine-task>.routine-maintenance .tinybtn{min-width:66px;min-height:35px;padding:7px 9px;white-space:nowrap}
+ .v172-routine-subtasks{margin:8px 0 0!important;padding-left:8px!important;overflow:visible!important}
+ .v172-routine-subtasks .subrow{grid-template-columns:21px minmax(0,1fr) auto auto!important}
+ .v172-routine-subtasks .sub-name{overflow-wrap:anywhere!important;word-break:normal!important}
+}
 </style>
 </body>
 </html>
