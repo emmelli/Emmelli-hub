@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-23-V198-DRAFT-CARE-ROUTINE">
+<meta name="emmelli-current-build" content="2026-10-23-V199-DRAFT-CARE-ROUTINE">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -918,7 +918,7 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:520px){.hub-cloud-sync{border-radius:15px}.hub-cloud-sync>summary{padding:10px 12px}.hub-cloud-body{padding:0 12px 12px}.hub-cloud-actions .btn{flex:1 1 auto}}
 </style>
 </head>
-<body data-build="2026-10-23-V198-DRAFT-CARE-ROUTINE">
+<body data-build="2026-10-23-V199-DRAFT-CARE-ROUTINE">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
@@ -8963,7 +8963,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 
 /* V185 ROUTINE + MOBILE + CHECKBOX EVENT SHIELD + PERSISTENCE REPAIR • 2026-10-22 */
 (function installV181RoutineRepair(){
- const BUILD='2026-10-23-V198-DRAFT-CARE-ROUTINE';
+ const BUILD='2026-10-23-V199-DRAFT-CARE-ROUTINE';
  const V181_START={Monday:450,Tuesday:270,Wednesday:480,Thursday:600,Friday:380,Saturday:260,Sunday:260};
  const beforeRdayV181=rday;
  const savedMigrationsV181=new Set();
@@ -9120,7 +9120,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  routine=function(){return routineBeforeV181().replace(/<section class="card flex164-weekly[\s\S]*?<\/section>/,'')};
  // V191 presentation pass: keep the established routine blocks, put the
  // everyday task groups first, and keep disclosure state stable on rerender.
- const V191_BUILD='2026-10-23-V198-DRAFT-CARE-ROUTINE';
+ const V191_BUILD='2026-10-23-V199-DRAFT-CARE-ROUTINE';
  const disclosureV191=(()=>{try{return JSON.parse(localStorage.getItem('emmelliHubDisclosureV191')||'{}')}catch(_){return {}}})();
  const saveDisclosureV191=()=>{try{localStorage.setItem('emmelliHubDisclosureV191',JSON.stringify(disclosureV191))}catch(_){}};
  document.addEventListener('toggle',e=>{
@@ -9200,8 +9200,6 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=V191_BUILD;
  render();
 })();
-})();
-
 /* V193: per-date Bible draft autosave + authenticated Supabase sync for active Hub data. */
 function hubCloudSyncCard(){
  const c=window.__EMMELLI_CLOUD_SYNC__||{};
@@ -9362,9 +9360,12 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
   if(changed)save();return rd;
  };
 })();
-document.body.dataset.build='2026-10-23-V198-DRAFT-CARE-ROUTINE';
-const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V198-DRAFT-CARE-ROUTINE';
+document.body.dataset.build='2026-10-23-V199-DRAFT-CARE-ROUTINE';
+const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V199-DRAFT-CARE-ROUTINE';
 render();initializeHubCloudSync();
+
+})();
+
 
 </script>
 
