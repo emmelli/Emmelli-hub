@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-23-V202-GYM-PREFILL-CLOUD-SYNC-SCOPE-FIX">
+<meta name="emmelli-current-build" content="2026-10-23-V204-CLOUD-ROUTINE-SERUM-FIX">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -8909,7 +8909,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
    const addBefore=(task,before)=>{if(task&&before){const at=tasks.indexOf(before);if(at>=0)tasks.splice(at,0,task);else tasks.push(task)}};
    if(day==='Monday'){
      const errands=find(/MONDAY SHOPPING \+ ERRANDS/i),gym=find(/^GYM • TREADMILL \+ ABS/i);
-     if(!find(/FOLD LAUNDRY • 10 MINUTES/i))addBefore(flex154Task(day,'AFTERNOON','FOLD LAUNDRY • 10 MINUTES',10,['FOLD','PUT AWAY MORNING LOAD'],97),gym||errands);
+     if(!find(/^FOLD LAUNDRY(?:\s*•|$)/i))addBefore(flex154Task(day,'AFTERNOON','FOLD LAUNDRY • 10 MINUTES',10,['FOLD','PUT AWAY MORNING LOAD'],97),gym||errands);
      if(gym){gym.name='GYM + TREADMILL + ABS • ABOUT 3 HOURS 5 MINUTES INCLUDING GETTING READY, DRIVES, AND SHOWER';gym.duration=185;const old=gym.subtasks||[];gym.subtasks=['GET READY FOR GYM • 20 MINUTES','TREADMILL + ABS • 45 MINUTES','DRIVE TO GYM • 15 MINUTES','GYM • 1 HOUR','DRIVE HOME • 15 MINUTES','SHOWER AND GET READY • 30 MINUTES'].map((name,i)=>({id:`s${i+1}`,name,done:!!old.find(q=>q.name===name)?.done}))}
    }
    if(day==='Tuesday'){
@@ -9201,7 +9201,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  render();
 })();
 
-/* V202: keep cloud auth and persistence inside the Hub's main state scope. */
+/* V202/V204: cloud auth scope and stable routine rules. */
 /* V193: per-date Bible draft autosave + authenticated Supabase sync for active Hub data. */
 function hubCloudSyncCard(){
  const c=window.__EMMELLI_CLOUD_SYNC__||{};
@@ -9337,16 +9337,47 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
    const subs=morning.subtasks||[];
    const reptar=syncSub(morning,/^FEED REPTAR\b/i,reptarDays.has(day),'FEED REPTAR','v196_morning_reptar',/^WASH DOG BOWLS$/i);
    if(reptar){const from=subs.indexOf(reptar),bowls=subs.findIndex(q=>/^WASH DOG BOWLS$/i.test(q.name)),to=bowls>=0?bowls+1:subs.length;if(from!==to){subs.splice(from,1);subs.splice(Math.min(to,subs.length),0,reptar);changed=true}}
-   syncSub(morning,/^BRIGHTENING SERUM\b/i,washDays.has(day),'BRIGHTENING SERUM','v196_morning_brightening',/^SNAIL MUCIN$/i);
+   syncSub(morning,/^BRIGHTENING SERUM\b/i,false,'BRIGHTENING SERUM','v196_morning_brightening',/^SNAIL MUCIN$/i);
    syncSub(morning,/^(?:WASH DAYS:|WASH HAIR\b)/i,washDays.has(day),'WASH HAIR • L’ORÉAL SHAMPOO + CONDITIONER','v196_morning_wash',/^STYLE HAIR$/i);
    syncSub(morning,/^(?:AFTER WASH:|AFTER WASH\b)/i,washDays.has(day),'AFTER WASH • 21-IN-1 LEAVE-IN SPRAY ON DAMP HAIR, THEN A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON MID-LENGTHS + ENDS','v196_morning_afterwash',/^WASH HAIR\b/i);
    syncSub(morning,/^(?:NON-WASH DAYS:|NON-WASH DAY\b)/i,!washDays.has(day),'NON-WASH DAY • A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON ENDS ONLY IF DRY','v196_morning_nonwash',/^STYLE HAIR$/i);
   }
+  const nightCare=tasks.find(t=>/^(?:NIGHT CARE|NIGHT ROUTINE)\b/i.test(String(t.name||'')));
+  syncSub(nightCare,/^BRIGHTENING SERUM\b/i,washDays.has(day),'BRIGHTENING SERUM','v204_night_brightening',/^SNAIL MUCIN$/i);
   for(const task of tasks){
    if(/^MORNING DOG WALKS/i.test(String(task.name||''))){if(task.section!=='MORNING'){task.section='MORNING';changed=true}if(Number(task.duration)!==40){task.duration=40;changed=true}}
-   const wake=String(task.name||'').match(/^(?:FIRST WAKE|RECOMMENDED DAY WAKE|RECOMMENDED WAKE|WAKE)\s*•\s*(\d{1,2}(?::\d{2})?\s*[AP]M)/i);
-   if(wake){const name='WAKE UP AT • '+wake[1].toUpperCase();if(task.name!==name){task.name=name;changed=true}}
+   const wake=String(task.name||'').match(/^(?:FIRST WAKE|RECOMMENDED DAY WAKE|SECOND WAKE|RECOMMENDED WAKE|WAKE)\s*•\s*(\d{1,2}(?::\d{2})?\s*[AP]M)/i);
+   if(wake&&day!=='Monday'){const name='WAKE UP AT • '+wake[1].toUpperCase();if(task.name!==name){task.name=name;changed=true}}
    if(/^GO TO SLEEP$/i.test(String(task.name||''))){if(task.section!=='NIGHT'){task.section='NIGHT';changed=true}}
+  }
+  if(day==='Monday'){
+   const completed=t=>Object.prototype.hasOwnProperty.call(status,t.id)?!!status[t.id]:!!t.done;
+   const keepOne=(pattern,name)=>{
+    const hits=tasks.filter(t=>pattern.test(String(t.name||'')));
+    if(!hits.length)return;
+    const keep=hits[0],wasDone=hits.some(completed);
+    if(keep.name!==name){keep.name=name;changed=true}
+    if(wasDone&&!status[keep.id]){status[keep.id]=true;changed=true}
+    for(const duplicate of hits.slice(1)){
+     const at=tasks.indexOf(duplicate);if(at>=0)tasks.splice(at,1);
+     delete status[duplicate.id];changed=true;
+    }
+   };
+   // Keep the two intentional Monday wake anchors stable so V179 recognizes
+   // the second wake and does not recreate it on each render.
+   keepOne(/^(?:FIRST WAKE|WAKE UP AT)\s*•\s*7:30 AM\b/i,'FIRST WAKE • 7:30 AM • CLEANER DROP-OFF');
+   keepOne(/^(?:SECOND WAKE|RECOMMENDED DAY WAKE|WAKE UP AT)\s*•\s*10:00 AM\b/i,'RECOMMENDED DAY WAKE • 10:00 AM • AFTER RETURNING TO SLEEP');
+   const foldBlocks=tasks.filter(t=>/^FOLD LAUNDRY(?:\s*•|$)/i.test(String(t.name||'')));
+   if(foldBlocks.length>1){
+    const keep=foldBlocks[0],wasDone=foldBlocks.some(completed);
+    const childDone=new Set();
+    for(const duplicate of foldBlocks.slice(1))for(const sub of duplicate.subtasks||[])
+     if(Object.prototype.hasOwnProperty.call(status,duplicate.id+'|'+sub.id)?status[duplicate.id+'|'+sub.id]:sub.done)childDone.add(String(sub.name||'').toUpperCase());
+    for(const sub of keep.subtasks||[])if(childDone.has(String(sub.name||'').toUpperCase())&&!status[keep.id+'|'+sub.id])status[keep.id+'|'+sub.id]=true;
+    if(wasDone&&!status[keep.id])status[keep.id]=true;
+    for(const duplicate of foldBlocks.slice(1)){const at=tasks.indexOf(duplicate);if(at>=0)tasks.splice(at,1);delete status[duplicate.id];changed=true}
+    if(wasDone||childDone.size)changed=true;
+   }
   }
   const sunday=day==='Sunday'&&tasks.find(t=>/SUNDAY SELF-CARE RESET/i.test(String(t.name||'')));
   if(sunday){for(const sub of [...(sunday.subtasks||[])]){if(/^APPLY PLAIN 100% COCONUT OIL .*BEFORE SUNDAY WASH$/i.test(sub.name)){sub.name='APPLY PLAIN 100% COCONUT OIL TO MID-LENGTHS + ENDS AS THE SUNDAY OIL TREATMENT';changed=true}else if(/^(?:SHAMPOO WITH L’ORÉAL|CONDITION$|21-IN-1 LEAVE-IN SPRAY)/i.test(sub.name)){sunday.subtasks.splice(sunday.subtasks.indexOf(sub),1);delete status[sunday.id+'|'+sub.id];changed=true}}}
@@ -9355,8 +9386,8 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
   if(changed)save();return rd;
  };
 })();
-document.body.dataset.build='2026-10-23-V202-GYM-PREFILL-CLOUD-SYNC-SCOPE-FIX';
-const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V202-GYM-PREFILL-CLOUD-SYNC-SCOPE-FIX';
+document.body.dataset.build='2026-10-23-V204-CLOUD-ROUTINE-SERUM-FIX';
+const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V204-CLOUD-ROUTINE-SERUM-FIX';
 render();initializeHubCloudSync();
 })();
 
