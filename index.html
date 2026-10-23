@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-23-V201-GYM-PLAN-PREFILL-ACTUALS-PRESERVED">
+<meta name="emmelli-current-build" content="2026-10-23-V202-GYM-PREFILL-CLOUD-SYNC-SCOPE-FIX">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -9200,8 +9200,8 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=V191_BUILD;
  render();
 })();
-})();
 
+/* V202: keep cloud auth and persistence inside the Hub's main state scope. */
 /* V193: per-date Bible draft autosave + authenticated Supabase sync for active Hub data. */
 function hubCloudSyncCard(){
  const c=window.__EMMELLI_CLOUD_SYNC__||{};
@@ -9355,9 +9355,10 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
   if(changed)save();return rd;
  };
 })();
-document.body.dataset.build='2026-10-23-V201-GYM-PLAN-PREFILL-ACTUALS-PRESERVED';
-const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V201-GYM-PLAN-PREFILL-ACTUALS-PRESERVED';
+document.body.dataset.build='2026-10-23-V202-GYM-PREFILL-CLOUD-SYNC-SCOPE-FIX';
+const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V202-GYM-PREFILL-CLOUD-SYNC-SCOPE-FIX';
 render();initializeHubCloudSync();
+})();
 
 </script>
 
