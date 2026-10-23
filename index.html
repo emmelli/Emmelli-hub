@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-23-V204-CLOUD-ROUTINE-SERUM-FIX">
+<meta name="emmelli-current-build" content="2026-10-23-V206-TRUE-BLOCK-HIERARCHY">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -8712,8 +8712,27 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
      const cuts=[['START + SHOWER',0,idx('WATER FLOSS')],['ORAL CARE',idx('WATER FLOSS'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('SET HAIR FOR SLEEP')],['HAIR CARE',idx('SET HAIR FOR SLEEP'),idx('CLEAN EARS')],['FINISH + HAND CARE',idx('CLEAN EARS'),names.length]];
      const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
      careMarkup=`<details class="v173-care-parent"><summary>NIGHT CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
-    }else if(/MORNING DOG WALKS/i.test(t.name)&&subtasks.length){const raw=t.subtasks||[],walk2=raw.findIndex(q=>/^WALK THING 2\b/i.test(q.name)),split=walk2>0?walk2:raw.length,group=(label,a,b)=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}</div></details>`;careMarkup=`<div class="v173-care-content">${group("TIAMO’S WALK",0,split)}${walk2>0?group("HERCULES’S WALK",split,raw.length):''}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
-    else if(subtasks.length){careMarkup=`<div class="v172-routine-subtasks">${subtasks.join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
+    }else if(subtasks.length){
+     /* V206 hierarchy rule: a saved subtask carrying a duration is a real
+        block heading. Every following item belongs inside that block until
+        the next duration heading. Do not invent replacement labels such as
+        "Tiamo's Walk" or "Hercules's Walk." */
+     const raw=t.subtasks||[],durationHeading=/\s*[•·]\s*(?:ABOUT\s*)?\d+(?:\.\d+)?\s*(?:HOURS?|HRS?|HR|MINUTES?|MINS?|MIN)\b/i;
+     const firstIsHeading=raw.length>0&&durationHeading.test(String(raw[0].name||''));
+     if(firstIsHeading){
+      const groups=[];
+      raw.forEach((q,j)=>{
+       if(durationHeading.test(String(q.name||''))||!groups.length)groups.push({heading:q,headingIndex:j,items:[]});
+       else groups[groups.length-1].items.push(j);
+      });
+      const groupMarkup=groups.map(g=>{
+       const heading=displayRoutineTextV196(g.heading.name);
+       const inner=g.items.map(j=>subtasks[j]).join('');
+       return `<details class="v173-care-group v206-duration-block"><summary><span class="v206-block-check"><input type="checkbox" aria-label="${esc(heading)} complete" data-rsub-check="${day}|${i}|${g.headingIndex}" ${g.heading.done?'checked':''}></span><span class="v206-block-name">${esc(heading)}</span><span class="v206-block-actions"><button class="tinybtn icon-action" type="button" data-rsub-edit="${day}|${i}|${g.headingIndex}" aria-label="Edit ${esc(heading)}">Edit</button><button class="tinybtn icon-action" type="button" data-rsub-del="${day}|${i}|${g.headingIndex}" aria-label="Remove ${esc(heading)}">×</button></span></summary><div class="v172-routine-subtasks">${inner}</div></details>`;
+      }).join('');
+      careMarkup=`<div class="v173-care-content">${groupMarkup}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;
+     }else careMarkup=`<div class="v172-routine-subtasks">${subtasks.join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;
+    }
     return `<article class="v172-routine-task"><input type="checkbox" aria-label="${esc(displayName)} complete" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><div class="v172-routine-task-title">${esc(displayName)}${durationLabel?`<small class="v181-duration">${durationLabel}</small>`:''}${t.errandMeta?`<div class="muted">${esc(t.errandMeta.enteredStart||'')}–${esc(t.errandMeta.enteredEnd||'')}</div>`:''}${careMarkup}</div><div class="routine-maintenance"><button class="tinybtn" data-rtask-edit="${day}|${i}">Edit</button><button class="tinybtn" data-rtask-del="${day}|${i}">Remove</button></div></article>`;
    }).join('');
    const open=section==='ANCHORS'||section==='MORNING';
@@ -9386,8 +9405,8 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
   if(changed)save();return rd;
  };
 })();
-document.body.dataset.build='2026-10-23-V204-CLOUD-ROUTINE-SERUM-FIX';
-const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V204-CLOUD-ROUTINE-SERUM-FIX';
+document.body.dataset.build='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
+const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
 render();initializeHubCloudSync();
 })();
 
@@ -9398,6 +9417,21 @@ render();initializeHubCloudSync();
 .daily-psalms-tile{background:linear-gradient(145deg,#fff9fb,#f6e2e9)!important}
 .moved-gym-today{background:linear-gradient(145deg,#f6d9e4,#fff8fb)!important;border-color:#dca1b7!important}.gym-day-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gym-day-status{text-align:center}.gym-day-status .paid-tag{display:inline-block;margin-bottom:8px}.gym-move-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.gym-move-choice{display:flex;justify-content:space-between;gap:8px}.moved-divider{display:flex;align-items:center;gap:10px;margin:18px 0 10px;color:var(--pink);font-weight:900;letter-spacing:.08em}.moved-divider:before,.moved-divider:after{content:"";height:1px;background:var(--line);flex:1}.moved-workout-card{border:2px solid #e4abc0!important;background:linear-gradient(145deg,#fff,#fff5f9)!important}.history-week-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.history-week-head h2,.history-week-day h2{margin:3px 0}.history-week-day{padding:14px!important}.history-simple-lines{display:grid;gap:7px}.history-simple-lines p{margin:0;padding:9px 11px;border-radius:12px;background:#fff7fa;border:1px solid var(--line);line-height:1.4}.history-week-day.no-entry{opacity:.72}.history-copy-day{min-width:58px!important;width:auto!important;padding:7px 9px!important}.history-week-buttons .tile b{font-size:13px}.sheet .wide{display:block;margin-top:10px}.sheet .wide input{width:100%;margin-top:6px}
 @media(max-width:520px){.gym-day-action-grid{grid-template-columns:1fr}.history-week-head{align-items:flex-start;flex-direction:column}.history-week-head .btn{width:100%}.gym-move-grid{grid-template-columns:1fr 1fr}.moved-workout-card{padding:11px!important}}
+</style>
+
+<style id="v206-true-block-hierarchy">
+/* Duration-bearing entries define the user's block hierarchy, but the clean
+   routine intentionally keeps the duration text hidden. */
+.v206-duration-block>summary{display:grid!important;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:8px}
+.v206-block-check{display:grid;place-items:center}.v206-block-check input{width:19px;height:19px;margin:0;accent-color:var(--pink)}
+.v206-block-name{min-width:0;overflow-wrap:anywhere}.v206-block-actions{display:flex;align-items:center;gap:5px}
+body:not(.routine-edit-mode-v205) .v206-block-actions{display:none!important}
+.v206-duration-block>.v172-routine-subtasks{padding-left:10px!important}
+@media(max-width:520px){
+ .v206-duration-block>summary{grid-template-columns:21px minmax(0,1fr) auto!important;padding:10px 8px!important;gap:6px!important}
+ .v206-block-actions{grid-column:2/-1;flex-wrap:wrap;margin-top:3px}
+ .v206-duration-block>.v172-routine-subtasks{padding-left:7px!important}
+}
 </style>
 
 
@@ -9560,5 +9594,72 @@ render();initializeHubCloudSync();
  .subrow>button.tinybtn:last-of-type{grid-column:4!important}
 }
 </style>
+<style id="v205-clean-routine-edit-mode">
+/* The daily routine stays calm and readable. Maintenance controls appear only
+   after the single Edit Routine button at the bottom is intentionally opened. */
+body:not(.routine-edit-mode-v205) .v172-routine-task>.routine-maintenance,
+body:not(.routine-edit-mode-v205) #app [data-rtask-edit],
+body:not(.routine-edit-mode-v205) #app [data-rtask-del],
+body:not(.routine-edit-mode-v205) #app [data-rsub-edit],
+body:not(.routine-edit-mode-v205) #app [data-rsub-del],
+body:not(.routine-edit-mode-v205) #app [data-rsub-add]{display:none!important}
+body:not(.routine-edit-mode-v205) .v172-routine-subtasks .subrow{
+ grid-template-columns:22px minmax(0,1fr)!important;
+}
+.routine-edit-panel-v205{margin-top:15px;padding:14px;text-align:center;background:linear-gradient(145deg,#fffafd,#fff3f7)}
+.routine-edit-panel-v205 .btn{width:100%;min-height:48px}
+.routine-edit-panel-v205 p{margin:9px 2px 0;font-size:13px;line-height:1.4}
+body.routine-edit-mode-v205 .routine-edit-panel-v205{border-color:#dba8b9;background:#fff0f5}
+body.routine-edit-mode-v205 .v172-routine-task>.routine-maintenance{display:flex!important}
+body.routine-edit-mode-v205 #app [data-rtask-edit],
+body.routine-edit-mode-v205 #app [data-rtask-del],
+body.routine-edit-mode-v205 #app [data-rsub-edit],
+body.routine-edit-mode-v205 #app [data-rsub-del],
+body.routine-edit-mode-v205 #app [data-rsub-add]{display:inline-flex!important;align-items:center;justify-content:center}
+@media(max-width:520px){
+ body:not(.routine-edit-mode-v205) .v172-routine-subtasks .subrow{grid-template-columns:21px minmax(0,1fr)!important}
+ .routine-edit-panel-v205{padding:12px;margin-top:12px}
+}
+</style>
+<script>
+(function installV205RoutineEditMode(){
+ let enabled=false;
+ let syncing=false;
+ function syncPanel(){
+  if(syncing)return;syncing=true;
+  requestAnimationFrame(()=>{
+   syncing=false;
+   const app=document.getElementById('app');
+   const routineOpen=app?.querySelector('.hero h1')?.textContent.trim().toUpperCase()==='ROUTINE';
+   if(!routineOpen){enabled=false;document.body.classList.remove('routine-edit-mode-v205');return}
+   document.body.classList.toggle('routine-edit-mode-v205',enabled);
+   if(app&&!app.querySelector('[data-routine-edit-mode-v205]')){
+    const panel=document.createElement('section');
+    panel.className='card routine-edit-panel-v205';
+    panel.innerHTML=`<button class="btn ${enabled?'primary':''}" type="button" data-routine-edit-mode-v205 aria-expanded="${enabled}">${enabled?'DONE EDITING':'EDIT ROUTINE'}</button><p class="muted">${enabled?'Editing is on. Use the controls above, then tap Done Editing.':'Need to change a block or item? Turn on editing here.'}</p>`;
+    app.appendChild(panel);
+   }
+  });
+ }
+ const observer=new MutationObserver(syncPanel);
+ const app=document.getElementById('app');if(app)observer.observe(app,{childList:true});
+ document.addEventListener('click',event=>{
+  const button=event.target.closest?.('[data-routine-edit-mode-v205]');
+  if(!button)return;
+  event.preventDefault();event.stopImmediatePropagation();
+  enabled=!enabled;
+  document.body.classList.toggle('routine-edit-mode-v205',enabled);
+  button.classList.toggle('primary',enabled);
+  button.setAttribute('aria-expanded',String(enabled));
+  button.textContent=enabled?'DONE EDITING':'EDIT ROUTINE';
+  const note=button.parentElement?.querySelector('p');
+  if(note)note.textContent=enabled?'Editing is on. Use the controls above, then tap Done Editing.':'Need to change a block or item? Turn on editing here.';
+ },true);
+ document.body.dataset.build='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
+ const meta=document.querySelector('meta[name="emmelli-current-build"]');
+ if(meta)meta.content='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
+ syncPanel();
+})();
+</script>
 </body>
 </html>
