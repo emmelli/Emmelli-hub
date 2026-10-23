@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-23-V192-MOBILE-ROUTINE-LAYOUT">
+<meta name="emmelli-current-build" content="2026-10-23-V196-SIMPLE-GROUPED-ROUTINE">
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -918,7 +918,7 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:520px){.hub-cloud-sync{border-radius:15px}.hub-cloud-sync>summary{padding:10px 12px}.hub-cloud-body{padding:0 12px 12px}.hub-cloud-actions .btn{flex:1 1 auto}}
 </style>
 </head>
-<body data-build="2026-10-23-V194-FAITH-DRAFT-CLEAR-FIX">
+<body data-build="2026-10-23-V196-SIMPLE-GROUPED-ROUTINE">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
@@ -8614,7 +8614,7 @@ const FLEX154_WEEK=['SCHOOL PRACTICE DAILY','PIANO PRACTICE • 45 MINUTES','MON
 const FLEX154_SELFCARE=['PART 1 • 40 MINUTES','SOAK AND BRUSH RETAINER','APPLY WHITENING STRIPS','BRUSH DOGS’ TEETH','CLEAN DOGS’ EARS','REMOVE WHITENING STRIPS','BRUSH WITH BAKING SODA AND HYDROGEN PEROXIDE','PUT RETAINER IN','PART 2 • 40 MINUTES','APPLY PLAIN 100% COCONUT OIL TO MID-LENGTHS + ENDS 30–60 MINUTES BEFORE SUNDAY WASH','CLAY FACE MASK','LIP STAIN','RINSE','PART 3 • 50 MINUTES','JUST FOR MEN','RINSE','SHOWER AND SHAVE EVERYTHING, INCLUDING FACE','SHAMPOO WITH L’ORÉAL (REPEAT IF NEEDED)','CONDITION','21-IN-1 LEAVE-IN SPRAY ON DAMP HAIR','A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON MID-LENGTHS + ENDS','TRIM BANGS','WASH WATER BOTTLE','PUT AWAY SUNDAY LAUNDRY','SWITCH BATHROOM AND KITCHEN HAND TOWELS','REPLACE PAPER TOWELS','REFILL ALCOHOL FOR PHONE DISINFECTING'];
 function flex154DogWalks(wednesday=false){let a=['WALK THING 1 • 20 MINUTES','SPANISH LESSON','WALK TIAMO','PET CARE • 2 MINUTES','PAW BALM','NO COAT CARE','WALK THING 2 • 20 MINUTES','SPANISH LESSON','WALK HERCULES','PET CARE • 2 MINUTES','PAW BALM','NO COAT CARE'];if(wednesday)a.push('CURRY BRUSH','DAMP MICROFIBER CLOTH');return a}
 function flex154Task(day,section,name,duration,subs,seq){return {id:`flex154_${day.slice(0,3).toLowerCase()}_${seq}`,name,duration:Number(duration)||0,section,done:false,subtasks:(subs||[]).map((x,i)=>({id:`s${i+1}`,name:x,done:false})),customFixed:null,flexibleRoutineV154:true}}
-function flex154Build(day){let defs=[],add=(section,name,duration=0,subs=[])=>defs.push([section,name,duration,subs]),morning=[...FLEX154_MORNING_BASE];if(day==='Monday'||day==='Wednesday')morning.splice(13,0,'FEED REPTAR');
+function flex154Build(day){let defs=[],add=(section,name,duration=0,subs=[])=>defs.push([section,name,duration,subs]),washDay=['Monday','Wednesday','Friday'].includes(day),morning=FLEX154_MORNING_BASE.filter(item=>item!=='BRIGHTENING SERUM'||washDay).map(item=>{if(/^WASH DAYS:/i.test(item))return washDay?'WASH HAIR • L’ORÉAL SHAMPOO + CONDITIONER':null;if(/^AFTER WASH:/i.test(item))return washDay?'AFTER WASH • 21-IN-1 LEAVE-IN SPRAY ON DAMP HAIR, THEN A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON MID-LENGTHS + ENDS':null;if(/^NON-WASH DAYS:/i.test(item))return washDay?null:'NON-WASH DAY • A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON ENDS ONLY IF DRY';return item}).filter(Boolean);if(['Monday','Wednesday','Friday','Sunday'].includes(day))morning.splice(Math.max(0,morning.findIndex(x=>/^WASH DOG BOWLS$/i.test(x))+1),0,'FEED REPTAR');
  add('ANCHORS',`WAKE • ${routineClockV140(FLEX154_START[day])}`,0,[]);
  if(day==='Monday'){
   add('ANCHORS','LEAVE FOR VALYOU CLEANERS • 7:40 AM',0,['20-MINUTE DRIVE • ARRIVE BY 8:00 AM']);
@@ -8688,6 +8688,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  nav=navV172;
  const wishCatBeforeV172=wishCat;
  wishCat=function(c){return wishCatBeforeV172(c).replace(/<button class="btn" data-wish-budget="[\s\S]*?<\/button>/g,'')};
+ function displayRoutineTextV196(value){return String(value||'').replace(/\s*[•·]\s*(?:ABOUT\s*)?\d+(?:\.\d+)?\s*(?:HOURS?|HRS?|HR|MINUTES?|MINS?|MIN)(?:\s+\d+(?:\.\d+)?\s*(?:HOURS?|HRS?|HR|MINUTES?|MINS?|MIN))*(?:\s+TOTAL)?(?:\s+INCLUDING\b[^•]*)?(?:\s+EACH\b.*)?/gi,'').replace(/\s*[•·]\s*$/,'').replace(/\s{2,}/g,' ').trim()}
  function routineV172(){
   const day=DAYS[state.day],key=selectedKey(),rd=rday(day),tasks=rd.tasks||[];
   const sections=[...new Set(tasks.map(t=>t.section||'DAY PLAN'))];
@@ -8695,22 +8696,24 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
    const rows=tasks.map((t,i)=>({t,i})).filter(x=>(x.t.section||'DAY PLAN')===section);
    if(!rows.length)return '';
    const cards=rows.map(({t,i})=>{
-    const subtasks=(t.subtasks||[]).map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${day}|${i}|${j}" ${q.done?'checked':''}><span class="sub-name">${esc(q.name)}</span><button class="tinybtn icon-action" data-rsub-edit="${day}|${i}|${j}" aria-label="Edit ${esc(q.name)}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${day}|${i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></div>`);
-    const displayName=String(t.name).replace(/^(?:50|60)-MINUTE MORNING ROUTINE$/i,'MORNING ROUTINE • 1 HOUR').replace(/^NIGHT ROUTINE • 1 HOUR$/i,'NIGHT ROUTINE');const durationMinutes=Number(t.duration)||0,durationLabel=durationMinutes>0&&!/(?:\d+\s*(?:MIN(?:UTE)?S?|HOURS?)|\d+-MINUTE)/i.test(displayName)?(durationMinutes>=60?Math.floor(durationMinutes/60)+' HOUR'+(Math.floor(durationMinutes/60)===1?'':'S')+(durationMinutes%60?' '+durationMinutes%60+' MINUTES':''):durationMinutes+' MINUTES'):'';
+    const subtasks=(t.subtasks||[]).map((q,j)=>`<div class="subrow"><input type="checkbox" aria-label="${esc(q.name)} complete" data-rsub-check="${day}|${i}|${j}" ${q.done?'checked':''}><span class="sub-name">${esc(displayRoutineTextV196(q.name))}</span><button class="tinybtn icon-action" data-rsub-edit="${day}|${i}|${j}" aria-label="Edit ${esc(q.name)}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${day}|${i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></div>`);
+    const displayName=displayRoutineTextV196(String(t.name).replace(/^(?:50|60)-MINUTE MORNING ROUTINE$/i,'MORNING ROUTINE').replace(/^NIGHT ROUTINE • 1 HOUR$/i,'NIGHT ROUTINE').replace(/^NIGHT CARE • 30 MINUTES$/i,'NIGHT ROUTINE'));const durationLabel='';
     let careMarkup='';
     if(/^(?:50|60)-MINUTE MORNING ROUTINE$/i.test(t.name)){
      const names=(t.subtasks||[]).map(q=>String(q.name).toUpperCase());
      const idx=(term,from=0)=>{for(let n=from;n<names.length;n++)if(names[n].includes(term))return n;return names.length};
-     const cuts=[['MORNING START + PETS',0,idx('LIP STAIN')],['ORAL CARE',idx('LIP STAIN'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('HAND SCRUB')],['HAND CARE + GET DRESSED',idx('HAND SCRUB'),idx('STYLE HAIR')],['HAIR CARE',idx('STYLE HAIR'),idx('CLEAN EARS')],['FINISH + BREAKFAST',idx('CLEAN EARS'),names.length]];
-     const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
-     careMarkup=`<details class="v173-care-parent"><summary>MORNING CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
+     const cuts=[['MORNING START',0,idx('LIP STAIN')],['ORAL CARE',idx('LIP STAIN'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('HAND SCRUB')],['HAND CARE + GET DRESSED',idx('HAND SCRUB'),idx('STYLE HAIR')],['HAIR CARE',idx('STYLE HAIR'),idx('CLEAN EARS')],['FINISH + BREAKFAST',idx('CLEAN EARS'),names.length]];
+     const startGroup=cuts[0],startMarkup=`<details class="v173-care-parent"><summary>MORNING START</summary><div class="v173-care-content"><div class="v172-routine-subtasks">${subtasks.slice(startGroup[1],startGroup[2]).join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div></div></details>`;
+     const careGroups=cuts.slice(1).filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}</div></details>`).join('');
+     careMarkup=startMarkup+`<details class="v173-care-parent"><summary>MORNING CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
     }else if(/^(?:NIGHT ROUTINE • 1 HOUR|NIGHT CARE • 30 MINUTES)$/i.test(t.name)){
      const names=(t.subtasks||[]).map(q=>String(q.name).toUpperCase());
      const idx=(term,from=0)=>{for(let n=from;n<names.length;n++)if(names[n].includes(term))return n;return names.length};
      const cuts=[['START + SHOWER',0,idx('WATER FLOSS')],['ORAL CARE',idx('WATER FLOSS'),idx('CLEANSER')],['SKINCARE',idx('CLEANSER'),idx('SET HAIR FOR SLEEP')],['HAIR CARE',idx('SET HAIR FOR SLEEP'),idx('CLEAN EARS')],['FINISH + HAND CARE',idx('CLEAN EARS'),names.length]];
      const careGroups=cuts.filter(([,a,b])=>b>a).map(([label,a,b])=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}${a===0?`<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button>`:''}</div></details>`).join('');
      careMarkup=`<details class="v173-care-parent"><summary>NIGHT CARE</summary><div class="v173-care-content">${careGroups}</div></details>`;
-    }else if(subtasks.length){careMarkup=`<div class="v172-routine-subtasks">${subtasks.join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
+    }else if(/MORNING DOG WALKS/i.test(t.name)&&subtasks.length){const raw=t.subtasks||[],walk2=raw.findIndex(q=>/^WALK THING 2\b/i.test(q.name)),split=walk2>0?walk2:raw.length,group=(label,a,b)=>`<details class="v173-care-group"><summary>${label}</summary><div class="v172-routine-subtasks">${subtasks.slice(a,b).join('')}</div></details>`;careMarkup=`<div class="v173-care-content">${group("TIAMO’S WALK",0,split)}${walk2>0?group("HERCULES’S WALK",split,raw.length):''}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
+    else if(subtasks.length){careMarkup=`<div class="v172-routine-subtasks">${subtasks.join('')}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add item</button></div>`;}
     return `<article class="v172-routine-task"><input type="checkbox" aria-label="${esc(displayName)} complete" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><div class="v172-routine-task-title">${esc(displayName)}${durationLabel?`<small class="v181-duration">${durationLabel}</small>`:''}${t.errandMeta?`<div class="muted">${esc(t.errandMeta.enteredStart||'')}–${esc(t.errandMeta.enteredEnd||'')}</div>`:''}${careMarkup}</div><div class="routine-maintenance"><button class="tinybtn" data-rtask-edit="${day}|${i}">Edit</button><button class="tinybtn" data-rtask-del="${day}|${i}">Remove</button></div></article>`;
    }).join('');
    const open=section==='ANCHORS'||section==='MORNING';
@@ -8792,9 +8795,9 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
    const find=(re,section=null)=>tasks.find(t=>(!section||t.section===section)&&re.test(t.name));
    const setName=(re,name,section=null)=>{const t=find(re,section);if(t)t.name=name;return t};
    const setDuration=(re,duration,section=null)=>{const t=find(re,section);if(t)t.duration=duration;return t};
-   // One shared, one-hour daily routine; existing named subtasks remain intact and nested by care category.
+   // One shared, 50-minute daily routine; existing named subtasks remain intact and nested by care category.
    let morning=find(/MORNING ROUTINE/i,'DAY PLAN');
-   if(morning){morning.name='60-MINUTE MORNING ROUTINE';morning.duration=60}
+   if(morning){morning.name='50-MINUTE MORNING ROUTINE';morning.duration=50}
    // Recommended wake times and fixed departures.
    let wake=find(/^RECOMMENDED WAKE|^WAKE/i,'ANCHORS');
    if(wake)wake.name=`RECOMMENDED WAKE • ${dayClock[day]}`;
@@ -9007,7 +9010,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
   const wake=find(/^(?:RECOMMENDED WAKE|WAKE)\s*•/i,'ANCHORS');
   if(wake)wake.name='RECOMMENDED WAKE • '+routineClockV140(V181_START[day]);
   const morning=find(/^(?:50|60)-MINUTE MORNING ROUTINE$|^MORNING ROUTINE/i);
-  if(morning){morning.name='60-MINUTE MORNING ROUTINE';morning.section='MORNING';morning.duration=60}
+  if(morning){morning.name='50-MINUTE MORNING ROUTINE';morning.section='MORNING';morning.duration=50}
   for(const task of tasks){
    if(/^MORNING DOG WALKS/i.test(task.name)){task.name='MORNING DOG WALKS • 40 MINUTES';task.section='MORNING';task.duration=40}
    else if(/^LATER DOG WALKS/i.test(task.name)){task.name='LATER DOG WALKS • 40 MINUTES';task.section='AFTER WORK';task.duration=40}
@@ -9159,7 +9162,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
    if(anchorBody&&!anchorBody.querySelector('.v172-routine-task'))anchors.remove();
    else if(anchorBody){const s=anchors.querySelector(':scope > summary');if(s)s.textContent='SCHEDULED TIMES'}
   }
-  const priority=['MORNING','MONDAY ERRANDS','COOKING','EXERCISE','SELF-CARE','AFTERNOON','AT WORK','AFTER WORK','SUNDAY SELF-CARE','NIGHT','DOG WALKS','DAY PLAN','ANCHORS'];
+  const priority=['MORNING','SCHEDULED TIMES','ANCHORS','MONDAY ERRANDS','COOKING','EXERCISE','SELF-CARE','AFTERNOON','AT WORK','AFTER WORK','DOG WALKS','DAY PLAN','SUNDAY SELF-CARE','NIGHT'];
   const remaining=[...template.content.querySelectorAll('details.v172-routine-group')];
   remaining.forEach((group,index)=>{
    const summary=group.querySelector(':scope > summary'),label=(summary?.textContent||'').trim().toUpperCase();
@@ -9316,8 +9319,44 @@ document.addEventListener('click',async e=>{
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pollHubCloudState()});
 const todayBeforeV193CloudSync=today;
 today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;return html.replace(/(<section class="hero"[\s\S]*?<\/section>)/,`$1${hubCloudSyncCard()}`)};
-document.body.dataset.build='2026-10-23-V194-FAITH-DRAFT-CLEAR-FIX';
-const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V194-FAITH-DRAFT-CLEAR-FIX';
+(function installV196SimpleRoutine(){
+ const previousRday=rday,washDays=new Set(['Monday','Wednesday','Friday']),reptarDays=new Set(['Monday','Wednesday','Friday','Sunday']);
+ rday=function(day){
+  const rd=previousRday(day);if(!rd||selectedKey()<FLEX154_EFFECTIVE||!rd.flexibleRoutineV154)return rd;
+  state.routineStatus=state.routineStatus||{};const key=selectedKey(),status=state.routineStatus?.[key]||(state.routineStatus[key]={}),tasks=rd.tasks||[];let changed=false;
+  const morning=tasks.find(t=>/^(?:50|60)-MINUTE MORNING ROUTINE$|^MORNING ROUTINE/i.test(String(t.name||'')));
+  const syncSub=(task,pattern,keep,name,id,afterPattern)=>{
+   if(!task)return null;task.subtasks=task.subtasks||[];const hits=task.subtasks.filter(q=>pattern.test(String(q.name||'')));let item=hits[0]||null;
+   if(!keep){for(const q of hits){task.subtasks.splice(task.subtasks.indexOf(q),1);delete status[task.id+'|'+q.id];changed=true}return null}
+   if(!item){item={id,name,done:!!status[task.id+'|'+id]};let at=-1;if(afterPattern){const prior=task.subtasks.findIndex(q=>afterPattern.test(String(q.name||'')));if(prior>=0)at=prior+1}if(at<0)at=task.subtasks.length;task.subtasks.splice(at,0,item);changed=true}
+   else{if(item.name!==name){item.name=name;changed=true}for(const duplicate of hits.slice(1)){task.subtasks.splice(task.subtasks.indexOf(duplicate),1);delete status[task.id+'|'+duplicate.id];changed=true}}
+   return item;
+  };
+  if(morning){
+   if(morning.name!=='50-MINUTE MORNING ROUTINE'){morning.name='50-MINUTE MORNING ROUTINE';changed=true}if(Number(morning.duration)!==50){morning.duration=50;changed=true}
+   const subs=morning.subtasks||[];
+   const reptar=syncSub(morning,/^FEED REPTAR\b/i,reptarDays.has(day),'FEED REPTAR','v196_morning_reptar',/^WASH DOG BOWLS$/i);
+   if(reptar){const from=subs.indexOf(reptar),bowls=subs.findIndex(q=>/^WASH DOG BOWLS$/i.test(q.name)),to=bowls>=0?bowls+1:subs.length;if(from!==to){subs.splice(from,1);subs.splice(Math.min(to,subs.length),0,reptar);changed=true}}
+   syncSub(morning,/^BRIGHTENING SERUM\b/i,washDays.has(day),'BRIGHTENING SERUM','v196_morning_brightening',/^SNAIL MUCIN$/i);
+   syncSub(morning,/^(?:WASH DAYS:|WASH HAIR\b)/i,washDays.has(day),'WASH HAIR • L’ORÉAL SHAMPOO + CONDITIONER','v196_morning_wash',/^STYLE HAIR$/i);
+   syncSub(morning,/^(?:AFTER WASH:|AFTER WASH\b)/i,washDays.has(day),'AFTER WASH • 21-IN-1 LEAVE-IN SPRAY ON DAMP HAIR, THEN A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON MID-LENGTHS + ENDS','v196_morning_afterwash',/^WASH HAIR\b/i);
+   syncSub(morning,/^(?:NON-WASH DAYS:|NON-WASH DAY\b)/i,!washDays.has(day),'NON-WASH DAY • A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON ENDS ONLY IF DRY','v196_morning_nonwash',/^STYLE HAIR$/i);
+  }
+  for(const task of tasks){
+   if(/^MORNING DOG WALKS/i.test(String(task.name||''))){if(task.section!=='MORNING'){task.section='MORNING';changed=true}if(Number(task.duration)!==40){task.duration=40;changed=true}}
+   const wake=String(task.name||'').match(/^(?:FIRST WAKE|RECOMMENDED DAY WAKE|RECOMMENDED WAKE|WAKE)\s*•\s*(\d{1,2}(?::\d{2})?\s*[AP]M)/i);
+   if(wake){const name='WAKE UP AT • '+wake[1].toUpperCase();if(task.name!==name){task.name=name;changed=true}}
+   if(/^GO TO SLEEP$/i.test(String(task.name||''))){if(task.section!=='NIGHT'){task.section='NIGHT';changed=true}}
+  }
+  const sunday=day==='Sunday'&&tasks.find(t=>/SUNDAY SELF-CARE RESET/i.test(String(t.name||'')));
+  if(sunday){for(const sub of [...(sunday.subtasks||[])]){if(/^APPLY PLAIN 100% COCONUT OIL .*BEFORE SUNDAY WASH$/i.test(sub.name)){sub.name='APPLY PLAIN 100% COCONUT OIL TO MID-LENGTHS + ENDS AS THE SUNDAY OIL TREATMENT';changed=true}else if(/^(?:SHAMPOO WITH L’ORÉAL|CONDITION$|21-IN-1 LEAVE-IN SPRAY)/i.test(sub.name)){sunday.subtasks.splice(sunday.subtasks.indexOf(sub),1);delete status[sunday.id+'|'+sub.id];changed=true}}}
+  let sleep=tasks.find(t=>/^GO TO SLEEP$/i.test(String(t.name||'')));
+  if(!sleep){sleep={id:'v196_go_to_sleep_'+day.slice(0,3).toLowerCase(),name:'GO TO SLEEP',section:'NIGHT',duration:0,done:!!status['v196_go_to_sleep_'+day.slice(0,3).toLowerCase()],customFixed:null,subtasks:[],flexibleRoutineV154:true};tasks.push(sleep);changed=true}
+  if(changed)save();return rd;
+ };
+})();
+document.body.dataset.build='2026-10-23-V196-SIMPLE-GROUPED-ROUTINE';
+const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V196-SIMPLE-GROUPED-ROUTINE';
 render();initializeHubCloudSync();
 
 </script>
