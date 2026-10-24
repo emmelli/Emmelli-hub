@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-23-V206-TRUE-BLOCK-HIERARCHY">
+<meta name="emmelli-current-build" content="2026-10-24-V210-NEW-DOWNLOAD-PATH">
+<!-- EMMELLI UPLOAD PROOF: V210 • CREATED OCTOBER 24, 2026 -->
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -8799,8 +8800,8 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 (function installV179FinalRoutine(){
  const BUILD='2026-10-21-V179-FINAL-ROUTINE';
  const previousRday=rday;
- const dayStart={Monday:600,Tuesday:270,Wednesday:480,Thursday:600,Friday:380,Saturday:260,Sunday:260};
- const dayClock={Monday:'10:00 AM (AFTER CLEANER DROP-OFF)',Tuesday:'4:30 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:20 AM',Saturday:'4:20 AM',Sunday:'4:20 AM'};
+ const dayStart={Monday:600,Tuesday:300,Wednesday:480,Thursday:600,Friday:380,Saturday:290,Sunday:290};
+ const dayClock={Monday:'10:00 AM (AFTER CLEANER DROP-OFF)',Tuesday:'5:00 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:20 AM',Saturday:'4:50 AM',Sunday:'4:50 AM'};
  function carryTask(oldTask,task){
    if(!oldTask)return task;
    task.done=!!oldTask.done;
@@ -8983,7 +8984,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
 /* V185 ROUTINE + MOBILE + CHECKBOX EVENT SHIELD + PERSISTENCE REPAIR • 2026-10-22 */
 (function installV181RoutineRepair(){
  const BUILD='2026-10-23-V192-MOBILE-ROUTINE-LAYOUT';
- const V181_START={Monday:450,Tuesday:270,Wednesday:480,Thursday:600,Friday:380,Saturday:260,Sunday:260};
+ const V181_START={Monday:450,Tuesday:300,Wednesday:480,Thursday:600,Friday:380,Saturday:290,Sunday:290};
  const beforeRdayV181=rday;
  const savedMigrationsV181=new Set();
  const sectionForV181=t=>{
@@ -9339,7 +9340,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 const todayBeforeV193CloudSync=today;
 today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;return html.replace(/(<section class="hero"[\s\S]*?<\/section>)/,`$1${hubCloudSyncCard()}`)};
 (function installV196SimpleRoutine(){
- const previousRday=rday,washDays=new Set(['Monday','Wednesday','Friday']),reptarDays=new Set(['Monday','Wednesday','Friday','Sunday']);
+ const previousRday=rday,regularWashDays=new Set(['Monday','Wednesday','Friday']),brighteningDays=new Set(['Monday','Wednesday','Friday']),reptarDays=new Set(['Monday','Wednesday','Friday','Sunday']);
  rday=function(day){
   const rd=previousRday(day);if(!rd||selectedKey()<FLEX154_EFFECTIVE||!rd.flexibleRoutineV154)return rd;
   state.routineStatus=state.routineStatus||{};const key=selectedKey(),status=state.routineStatus?.[key]||(state.routineStatus[key]={}),tasks=rd.tasks||[];let changed=false;
@@ -9357,12 +9358,13 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
    const reptar=syncSub(morning,/^FEED REPTAR\b/i,reptarDays.has(day),'FEED REPTAR','v196_morning_reptar',/^WASH DOG BOWLS$/i);
    if(reptar){const from=subs.indexOf(reptar),bowls=subs.findIndex(q=>/^WASH DOG BOWLS$/i.test(q.name)),to=bowls>=0?bowls+1:subs.length;if(from!==to){subs.splice(from,1);subs.splice(Math.min(to,subs.length),0,reptar);changed=true}}
    syncSub(morning,/^BRIGHTENING SERUM\b/i,false,'BRIGHTENING SERUM','v196_morning_brightening',/^SNAIL MUCIN$/i);
-   syncSub(morning,/^(?:WASH DAYS:|WASH HAIR\b)/i,washDays.has(day),'WASH HAIR • L’ORÉAL SHAMPOO + CONDITIONER','v196_morning_wash',/^STYLE HAIR$/i);
-   syncSub(morning,/^(?:AFTER WASH:|AFTER WASH\b)/i,washDays.has(day),'AFTER WASH • 21-IN-1 LEAVE-IN SPRAY ON DAMP HAIR, THEN A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON MID-LENGTHS + ENDS','v196_morning_afterwash',/^WASH HAIR\b/i);
-   syncSub(morning,/^(?:NON-WASH DAYS:|NON-WASH DAY\b)/i,!washDays.has(day),'NON-WASH DAY • A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON ENDS ONLY IF DRY','v196_morning_nonwash',/^STYLE HAIR$/i);
+   const regularWash=regularWashDays.has(day);
+   syncSub(morning,/^(?:WASH DAYS:|WASH HAIR\b)/i,regularWash,'WASH HAIR • L’ORÉAL SHAMPOO + CONDITIONER','v196_morning_wash',/^STYLE HAIR$/i);
+   syncSub(morning,/^(?:AFTER WASH:|AFTER WASH\b)/i,regularWash,'AFTER WASH • 21-IN-1 LEAVE-IN SPRAY ON DAMP HAIR, THEN A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON MID-LENGTHS + ENDS','v196_morning_afterwash',/^WASH HAIR\b/i);
+   syncSub(morning,/^(?:NON-WASH DAYS:|NON-WASH DAY\b|SUNDAY HAIR WASH\b)/i,!regularWash,day==='Sunday'?'SUNDAY HAIR WASH • COMPLETE AFTER THE COCONUT-OIL TREATMENT IN SUNDAY SELF-CARE':'NON-WASH DAY • A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON ENDS ONLY IF DRY','v196_morning_nonwash',/^STYLE HAIR$/i);
   }
   const nightCare=tasks.find(t=>/^(?:NIGHT CARE|NIGHT ROUTINE)\b/i.test(String(t.name||'')));
-  syncSub(nightCare,/^BRIGHTENING SERUM\b/i,washDays.has(day),'BRIGHTENING SERUM','v204_night_brightening',/^SNAIL MUCIN$/i);
+  syncSub(nightCare,/^BRIGHTENING SERUM\b/i,brighteningDays.has(day),'BRIGHTENING SERUM','v204_night_brightening',/^SNAIL MUCIN$/i);
   for(const task of tasks){
    if(/^MORNING DOG WALKS/i.test(String(task.name||''))){if(task.section!=='MORNING'){task.section='MORNING';changed=true}if(Number(task.duration)!==40){task.duration=40;changed=true}}
    const wake=String(task.name||'').match(/^(?:FIRST WAKE|RECOMMENDED DAY WAKE|SECOND WAKE|RECOMMENDED WAKE|WAKE)\s*•\s*(\d{1,2}(?::\d{2})?\s*[AP]M)/i);
@@ -9399,14 +9401,20 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
    }
   }
   const sunday=day==='Sunday'&&tasks.find(t=>/SUNDAY SELF-CARE RESET/i.test(String(t.name||'')));
-  if(sunday){for(const sub of [...(sunday.subtasks||[])]){if(/^APPLY PLAIN 100% COCONUT OIL .*BEFORE SUNDAY WASH$/i.test(sub.name)){sub.name='APPLY PLAIN 100% COCONUT OIL TO MID-LENGTHS + ENDS AS THE SUNDAY OIL TREATMENT';changed=true}else if(/^(?:SHAMPOO WITH L’ORÉAL|CONDITION$|21-IN-1 LEAVE-IN SPRAY)/i.test(sub.name)){sunday.subtasks.splice(sunday.subtasks.indexOf(sub),1);delete status[sunday.id+'|'+sub.id];changed=true}}}
+  if(sunday){
+   syncSub(sunday,/^APPLY PLAIN 100% COCONUT OIL\b/i,true,'APPLY PLAIN 100% COCONUT OIL TO MID-LENGTHS + ENDS 30–60 MINUTES BEFORE THE SUNDAY WASH','v208_sunday_oil',/^PART 2\b/i);
+   syncSub(sunday,/^SHAMPOO WITH L’ORÉAL\b/i,true,'SHAMPOO WITH L’ORÉAL • REPEAT IF NEEDED TO REMOVE THE COCONUT OIL','v208_sunday_shampoo',/^SHOWER AND SHAVE EVERYTHING/i);
+   syncSub(sunday,/^CONDITION$/i,true,'CONDITION','v208_sunday_condition',/^SHAMPOO WITH L’ORÉAL\b/i);
+   syncSub(sunday,/^21-IN-1 LEAVE-IN SPRAY\b/i,true,'21-IN-1 LEAVE-IN SPRAY ON DAMP HAIR','v208_sunday_leavein',/^CONDITION$/i);
+   syncSub(sunday,/^A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL\b/i,true,'A LITTLE GARNIER FRUCTIS SLEEK & SHINE OIL ON MID-LENGTHS + ENDS','v208_sunday_finishing_oil',/^21-IN-1 LEAVE-IN SPRAY\b/i);
+  }
   let sleep=tasks.find(t=>/^GO TO SLEEP$/i.test(String(t.name||'')));
   if(!sleep){sleep={id:'v196_go_to_sleep_'+day.slice(0,3).toLowerCase(),name:'GO TO SLEEP',section:'NIGHT',duration:0,done:!!status['v196_go_to_sleep_'+day.slice(0,3).toLowerCase()],customFixed:null,subtasks:[],flexibleRoutineV154:true};tasks.push(sleep);changed=true}
   if(changed)save();return rd;
  };
 })();
-document.body.dataset.build='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
-const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
+document.body.dataset.build='2026-10-24-V210-NEW-DOWNLOAD-PATH';
+const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-24-V210-NEW-DOWNLOAD-PATH';
 render();initializeHubCloudSync();
 })();
 
@@ -9655,9 +9663,9 @@ body.routine-edit-mode-v205 #app [data-rsub-add]{display:inline-flex!important;a
   const note=button.parentElement?.querySelector('p');
   if(note)note.textContent=enabled?'Editing is on. Use the controls above, then tap Done Editing.':'Need to change a block or item? Turn on editing here.';
  },true);
- document.body.dataset.build='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
+ document.body.dataset.build='2026-10-24-V210-NEW-DOWNLOAD-PATH';
  const meta=document.querySelector('meta[name="emmelli-current-build"]');
- if(meta)meta.content='2026-10-23-V206-TRUE-BLOCK-HIERARCHY';
+ if(meta)meta.content='2026-10-24-V210-NEW-DOWNLOAD-PATH';
  syncPanel();
 })();
 </script>
