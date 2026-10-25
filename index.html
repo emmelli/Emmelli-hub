@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-24-V210-NEW-DOWNLOAD-PATH">
-<!-- EMMELLI UPLOAD PROOF: V210 • CREATED OCTOBER 24, 2026 -->
+<meta name="emmelli-current-build" content="2026-10-24-V211-IOS-SAFE-BOOT">
+<!-- EMMELLI UPLOAD PROOF: V211 • IOS SAFE BOOT • CREATED OCTOBER 24, 2026 -->
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -919,7 +919,7 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:520px){.hub-cloud-sync{border-radius:15px}.hub-cloud-sync>summary{padding:10px 12px}.hub-cloud-body{padding:0 12px 12px}.hub-cloud-actions .btn{flex:1 1 auto}}
 </style>
 </head>
-<body data-build="2026-10-23-V196-SIMPLE-GROUPED-ROUTINE">
+<body data-build="2026-10-24-V211-IOS-SAFE-BOOT">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
@@ -1487,6 +1487,12 @@ let state=(()=>{try{
  if(existing&&typeof existing==="object")return mergeCurrentStateDefaults(base(),existing);
  return importDurableLegacyStateV1(base());
 }catch(e){return base()}})();
+// V211: Always boot on Today while legacy layers finish installing. An older
+// saved History/Budget route could otherwise be rendered by an intermediate
+// startup layer before the current routers exist, leaving iOS on the loader.
+// User data is preserved; only the startup page is normalized.
+state.route="today";
+state.sub=null;
 // Bind the private application state to the canonical persistence bridge.
 // The runtime is installed outside this closure, so it cannot discover this
 // lexical `state` variable unless the app explicitly supplies it.
@@ -1748,7 +1754,7 @@ function ensurePermanentV13CurrentRules(){
 }
 ensurePermanentV13CurrentRules();
 function setRoute(r,sub=null){if(r==="food"){r="today";sub=null}state.route=r;state.sub=sub;save();render();appTop()}
-function nav(){let a=[["today","Today"],["gym","Gym"],["budget","Budget"],["history","History"],["wish","Wish List"]];document.getElementById("nav").innerHTML=a.map(([r,l])=>`<button class="${state.route===r?'on':''}" data-main-route="${r}">${icon(r)}<span>${l}</span></button>`).join("")}
+function nav(){let a=[["today","Today"],["gym","Gym"],["history","History"],["wish","Wish List"]];document.getElementById("nav").innerHTML=a.map(([r,l])=>`<button class="${state.route===r?'on':''}" data-main-route="${r}">${icon(r)}<span>${l}</span></button>`).join("")}
 function week(){let sel=new Date(selectedKey()+"T12:00:00"),mon=new Date(sel);mon.setDate(sel.getDate()-state.day);let sun=new Date(mon);sun.setDate(mon.getDate()+6);let label=`${mon.toLocaleDateString("en",{month:"short",day:"numeric"})} – ${sun.toLocaleDateString("en",{month:"short",day:"numeric",year:"numeric"})}`;return `<div class="weeknav"><button class="weekshift" data-week-shift="-1" aria-label="Previous week">‹</button><div class="weekbar">${DAYS.map((d,i)=>`<button class="daybtn ${state.day===i?'on':''}" data-day="${i}">${d.slice(0,3).toUpperCase()}</button>`).join("")}</div><button class="weekshift" data-week-shift="1" aria-label="Next week">›</button><div class="weekrange">${esc(label)}</div></div>`}
 function fullSelectedDate(){return new Date(selectedKey()+"T12:00:00").toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}
 function hero(title,sub=""){return `<section class="hero"><div class="eyebrow">${esc(fullSelectedDate())}</div><h1>${esc(title)}</h1>${sub?`<div class="muted">${esc(sub)}</div>`:""}${week()}</section>`}
@@ -9413,8 +9419,8 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
   if(changed)save();return rd;
  };
 })();
-document.body.dataset.build='2026-10-24-V210-NEW-DOWNLOAD-PATH';
-const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-24-V210-NEW-DOWNLOAD-PATH';
+document.body.dataset.build='2026-10-24-V211-IOS-SAFE-BOOT';
+const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-24-V211-IOS-SAFE-BOOT';
 render();initializeHubCloudSync();
 })();
 
@@ -9663,9 +9669,9 @@ body.routine-edit-mode-v205 #app [data-rsub-add]{display:inline-flex!important;a
   const note=button.parentElement?.querySelector('p');
   if(note)note.textContent=enabled?'Editing is on. Use the controls above, then tap Done Editing.':'Need to change a block or item? Turn on editing here.';
  },true);
- document.body.dataset.build='2026-10-24-V210-NEW-DOWNLOAD-PATH';
+ document.body.dataset.build='2026-10-24-V211-IOS-SAFE-BOOT';
  const meta=document.querySelector('meta[name="emmelli-current-build"]');
- if(meta)meta.content='2026-10-24-V210-NEW-DOWNLOAD-PATH';
+ if(meta)meta.content='2026-10-24-V211-IOS-SAFE-BOOT';
  syncPanel();
 })();
 </script>
