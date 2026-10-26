@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-24-V211-IOS-SAFE-BOOT">
-<!-- EMMELLI UPLOAD PROOF: V211 • IOS SAFE BOOT • CREATED OCTOBER 24, 2026 -->
+<meta name="emmelli-current-build" content="2026-10-26-V214-USER-UPLOAD-MERGED">
+<!-- EMMELLI UPLOAD PROOF: V214 • USER UPLOAD PRESERVED + MOBILE CLARITY FIXES • OCTOBER 26, 2026 -->
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -919,7 +919,7 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:520px){.hub-cloud-sync{border-radius:15px}.hub-cloud-sync>summary{padding:10px 12px}.hub-cloud-body{padding:0 12px 12px}.hub-cloud-actions .btn{flex:1 1 auto}}
 </style>
 </head>
-<body data-build="2026-10-24-V211-IOS-SAFE-BOOT">
+<body data-build="2026-10-26-V214-USER-UPLOAD-MERGED">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
@@ -6535,7 +6535,7 @@ today = function(){
   } else if(state.day===6){
     contextual+=`<button class="tile" data-sub="reset"><b>SUNDAY RESET</b><span>HOME + WEEK RESET</span></button>`;
   }
-  const receipt=`<section class="card day-receipt receipt-top"><button class="btn primary" data-toggle-day-receipt><span><b>RECEIPT READINESS • ${s.done}/${s.total} SECTIONS COMPLETE</b><br><small>${s.done===s.total?'READY • COMPLETE DAY RECORD':`${s.total-s.done} SECTION${s.total-s.done===1?'':'S'} STILL INCOMPLETE`}</small></span><span class="receipt-chevron">${receiptOpen?'▲':'▼'}</span></button>${receiptOpen?`<div class="receipt-list">${s.sections.map(sec=>`<div class="receipt-missing"><div class="row between"><b>${esc(sec.name)}</b><span class="category-count">${sec.done}/${sec.total}</span></div>${sec.missing.length?`<small class="muted">STILL NEEDED: ${sec.missing.map(esc).join(' • ')}</small>`:`<small class="receipt-good">COMPLETE</small>`}</div>`).join('')}</div>`:''}</section>`;
+  const receipt=`<section class="card day-receipt receipt-top"><button class="btn primary" data-toggle-day-receipt><span><b>RECEIPT READINESS • ${s.done}/${s.total} SECTIONS COMPLETE</b><br><small>${s.done===s.total?'READY • COMPLETE DAY RECORD':`${s.total-s.done} SECTION${s.total-s.done===1?'':'S'} STILL INCOMPLETE`}</small></span><span class="receipt-chevron">${receiptOpen?'▲':'▼'}</span></button>${receiptOpen?`<div class="receipt-list">${s.sections.map(sec=>`<details class="receipt-missing receipt-section-drop"><summary><span><b>${esc(sec.name)}</b><small>${sec.missing.length?`${sec.missing.length} STILL NEEDED`:'COMPLETE'}</small></span><span class="category-count">${sec.done}/${sec.total}</span></summary>${sec.missing.length?`<ul class="receipt-needed-list">${sec.missing.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`:`<p class="receipt-good">Everything is filled in.</p>`}</details>`).join('')}</div>`:''}</section>`;
   const handoffCard='';
   return `<section class="hero"><div class="eyebrow">TODAY</div><h1>${esc(fullSelectedDate())}</h1>${week()}</section>${receipt}${tiamoFedCard(k)}<div class="grid today-destinations"><button class="tile" data-sub="routine"><b>ROUTINE</b><span>${done}/${total} COMPLETE</span></button><button class="tile" data-sub="faith"><b>BIBLE + FAITH</b><span>READING • PRAYER • DEVOTIONAL • REFLECTION</span></button><button class="tile" data-sub="goals"><b>GOALS</b><span>GOALS • WATER • DAILY HEALTH</span></button><button class="tile" data-sub="school"><b>STUDY TODAY</b><span>${esc(STUDY[d])} • 30 MIN</span></button><button class="tile" data-sub="weigh"><b>DAILY WEIGH-IN</b><span>FEEDS BODY PROGRESS + HISTORY</span></button><section class="tile today-commentary-tile" aria-label="Today Commentary"><b>TODAY COMMENTARY</b><span>${esc(commentary.join(' '))}</span></section>${contextual}</div>${handoffCard}`;
 };
@@ -9674,6 +9674,85 @@ body.routine-edit-mode-v205 #app [data-rsub-add]{display:inline-flex!important;a
  if(meta)meta.content='2026-10-24-V211-IOS-SAFE-BOOT';
  syncPanel();
 })();
+</script>
+<style id="v212-today-clarity">
+/* Keep the Today receipt readable at a glance; open only the section the user wants. */
+.receipt-section-drop{padding:0!important;overflow:hidden}
+.receipt-section-drop>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;cursor:pointer}
+.receipt-section-drop>summary::-webkit-details-marker{display:none}
+.receipt-section-drop>summary>span:first-child{display:grid;gap:2px;min-width:0}
+.receipt-section-drop>summary b{font-size:14px;line-height:1.2}
+.receipt-section-drop>summary small{font-size:11px;line-height:1.25;color:var(--muted);font-weight:750;letter-spacing:.02em}
+.receipt-needed-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px;margin:0;padding:0 10px 10px}
+.receipt-needed-list li{min-width:0;padding:7px 9px;border:1px solid var(--line);border-radius:11px;background:#fff8fa;color:#765762;font-size:12px;line-height:1.35;text-transform:none!important;letter-spacing:0!important;overflow-wrap:anywhere}
+.receipt-needed-list li:before{content:'•';color:var(--rose);font-weight:900;margin-right:6px}
+.receipt-section-drop>.receipt-good{display:block;margin:0 12px 10px;font-size:12px}
+.hub-cloud-sync.card{padding:0!important;margin:5px 0 9px!important;border-radius:16px!important;box-shadow:0 3px 10px rgba(126,73,91,.055)!important}
+.hub-cloud-sync>summary{min-height:0;padding:8px 12px!important;font-size:12px!important;letter-spacing:.04em}
+.hub-cloud-sync>summary small{font-size:9px!important}
+.hub-cloud-body{padding:0 12px 10px!important}
+.hub-cloud-body p{font-size:12px;line-height:1.4;margin:5px 0 8px}
+.hub-cloud-form{gap:6px}
+.hub-cloud-form label{font-size:11px}
+.hub-cloud-form input{min-height:38px;padding:8px 10px}
+.hub-cloud-actions{gap:6px}
+.hub-cloud-actions .btn{min-height:34px;padding:7px 10px;font-size:11px}
+.hub-cloud-status{font-size:11px!important}
+.goals-add-card{padding-bottom:15px!important}
+.goals-add-card input#goalText{display:block;width:100%;min-height:44px;margin:4px 0 0}
+.goal-add-actions{margin-top:14px!important;padding-top:11px;border-top:1px solid var(--line);gap:10px!important}
+.goal-add-actions .btn{min-width:112px}
+@media(max-width:420px){
+ .receipt-needed-list{grid-template-columns:minmax(0,1fr)}
+ .receipt-section-drop>summary{padding:9px 10px}
+ .hub-cloud-sync>summary{padding:8px 10px!important}
+ .goal-add-actions{align-items:stretch}
+ .goal-important-toggle{flex:1 1 auto;justify-content:center}
+ .goal-add-actions .btn{flex:0 0 auto}
+}
+</style>
+<style id="v213-compact-forms-audit">
+/* Compact responsive controls without changing Hub data or action behavior. */
+.app{padding-top:calc(12px + env(safe-area-inset-top))!important}
+input[type=text],input[type=email],input[type=password],input[type=number],
+input[type=url],input[type=date],input[type=time],select{
+ min-width:0;min-height:40px!important;padding:8px 10px!important;font-size:16px!important
+}
+textarea{min-width:0;min-height:82px!important;padding:9px 10px!important;font-size:16px!important}
+.formgrid,.sheet-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+.formgrid>.wide,.sheet-grid>.wide{grid-column:1/-1!important}
+.formgrid>label,.sheet-grid>label,.treadmill-grid>label,.run-entry-grid>label{min-width:0;font-size:11px!important;font-weight:850;line-height:1.25}
+.treadmill-grid,.run-entry-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;align-items:end!important;margin-top:10px}
+.treadmill-grid input,.run-entry-grid input{width:100%!important;margin-top:4px!important;text-align:center;min-height:42px!important;padding:7px 4px!important;font-size:16px!important}
+.treadmill-workout-v36{padding:12px!important}
+.treadmill-workout-v36 h2{font-size:18px!important}
+.treadmill-workout-v36>.row{gap:7px!important}
+.treadmill-complete{font-size:11px!important}
+.card>label:not(.checkrow):not(.treadmill-complete){display:grid;gap:5px;font-size:11px;font-weight:850}
+.card>label+label{margin-top:9px}
+#wishItem{grid-column:1/-1}
+#wishLink{min-width:0}
+.measurement-input input{min-height:40px!important}
+.macrobox input{min-height:38px!important;padding:7px!important}
+.hub-cloud-form{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.hub-cloud-actions{grid-column:1/-1}
+.goals-add-card .goal-add-actions{margin-top:12px!important}
+.goals-add-card .goal-add-actions .btn{margin-left:auto}
+@media(max-width:420px){
+ .app{padding-top:calc(9px + env(safe-area-inset-top))!important}
+ .card{padding:11px!important}
+ .treadmill-workout-v36{padding:10px!important}
+ .treadmill-grid,.run-entry-grid{gap:5px!important}
+ .treadmill-grid>label,.run-entry-grid>label{font-size:9px!important;letter-spacing:0!important}
+ .treadmill-grid input,.run-entry-grid input{padding:6px 3px!important}
+ .formgrid,.sheet-grid{gap:8px!important}
+ .hub-cloud-form{grid-template-columns:1fr!important}
+ .goal-add-actions .btn{min-width:104px}
+}
+</style>
+<script>
+document.body.dataset.build='2026-10-26-V214-USER-UPLOAD-MERGED';
+const v214Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v214Meta)v214Meta.content='2026-10-26-V214-USER-UPLOAD-MERGED';
 </script>
 </body>
 </html>
