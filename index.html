@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-26-V214-USER-UPLOAD-MERGED">
-<!-- EMMELLI UPLOAD PROOF: V214 • USER UPLOAD PRESERVED + MOBILE CLARITY FIXES • OCTOBER 26, 2026 -->
+<meta name="emmelli-current-build" content="2026-10-26-V217-RECEIPT-CARD-LAYOUT">
+<!-- EMMELLI BUILD: V217 • SPACED RECEIPT ITEMS + COMPACT SYNC + 3-SET AB CRUNCH • OCTOBER 26, 2026 -->
 <style>
 
 :root{--pink:#b86f83;--pink2:#d99bad;--soft:#f8e5ea;--cream:#fffaf4;--ink:#5f414a;--line:#ead2d8;--white:#fffefa;--shadow:0 7px 22px rgba(99,62,72,.08)}
@@ -919,7 +919,7 @@ body>nav.nav .navin{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media(max-width:520px){.hub-cloud-sync{border-radius:15px}.hub-cloud-sync>summary{padding:10px 12px}.hub-cloud-body{padding:0 12px 12px}.hub-cloud-actions .btn{flex:1 1 auto}}
 </style>
 </head>
-<body data-build="2026-10-26-V214-USER-UPLOAD-MERGED">
+<body data-build="2026-10-26-V217-RECEIPT-CARD-LAYOUT">
 <div id="app" class="app"><section id="hub-loading" style="display:block;background:#fff;color:#5f3e49;border:1px solid #ead7de;border-radius:20px;padding:18px;margin:14px"><h2 style="margin:0 0 8px">EMMELLI'S HUB</h2><p style="margin:0">Opening your current week…</p><p style="margin:8px 0 0;font-size:13px">Today • Gym • History • Wish List</p></section></div>
 <nav class="nav" aria-label="Main navigation"><div id="nav" class="navin"></div></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
@@ -4345,7 +4345,7 @@ GYM_PLAN.Monday.steps=[
 {name:"LEG EXTENSIONS",rest:"2 MINUTES",inc:15,loadType:"selectorized",mode:"third",sets:[["115",12],["130",10],["145",8]]},
 {name:"SEATED LEG-CURL MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["70",12],["85",10],["100",8]]},
 {name:"CALF RAISES",rest:"1 MINUTE 30 SECONDS",inc:15,loadType:"selectorized",mode:"third",sets:[["145",12],["160",10],["175",8]]},
-{name:"AB CRUNCH MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["70",12],["80",10]]}
+{name:"AB CRUNCH MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["70",12],["80",10],["90",8]]}
 ];
 GYM_PLAN.Wednesday.title="BACK, SHOULDERS & ARMS";
 GYM_PLAN.Wednesday.steps=[
@@ -4358,7 +4358,7 @@ GYM_PLAN.Wednesday.steps=[
 {name:"LATERAL RAISES",rest:"1 MINUTE 30 SECONDS",inc:5,loadType:"dumbbell-pair",mode:"auto",sets:[["5",12],["5",12]]},
 {name:"PREACHER CURL MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"auto",sets:[["20",12],["20",12]]},
 {name:"ASSISTED DIPS",rest:"1 MINUTE 30 SECONDS",inc:20,loadType:"assistance",mode:"third",assistance:true,sets:[["120",12],["120",10]]},
-{name:"AB CRUNCH MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["60",12],["70",10]]}
+{name:"AB CRUNCH MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["60",12],["70",10],["80",8]]}
 ];
 GYM_PLAN.Friday.title="GLUTES & HAMSTRINGS + QUADS & CALVES";
 GYM_PLAN.Friday.steps=[
@@ -4369,8 +4369,20 @@ GYM_PLAN.Friday.steps=[
 {name:"SEATED LEG-CURL MACHINE",rest:"2 MINUTES",inc:10,loadType:"selectorized",mode:"third",sets:[["70",12],["85",10],["100",8]]},
 {name:"SEATED ABDUCTOR MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["130",12],["140",10]]},
 {name:"CALF RAISES",rest:"1 MINUTE 30 SECONDS",inc:15,loadType:"selectorized",mode:"third",sets:[["145",12],["160",10],["175",8]]},
-{name:"AB CRUNCH MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["70",12],["80",10]]}
+{name:"AB CRUNCH MACHINE",rest:"1 MINUTE 30 SECONDS",inc:10,loadType:"selectorized",mode:"third",sets:[["70",12],["80",10],["90",8]]}
 ];
+function ensureAbCrunchThreeSetsV216(){
+ let changed=false;
+ const extend=(target,planned)=>{if(!Array.isArray(target)||target.length>=planned.length)return target;changed=true;return [...target.map(x=>Array.isArray(x)?x.slice():x),...planned.slice(target.length).map(x=>x.slice())]};
+ for(const day of ["Monday","Wednesday","Friday"]){
+  const ex=GYM_PLAN[day]?.steps?.find(x=>x.name==="AB CRUNCH MACHINE");if(!ex)continue;
+  const key=day+"|"+ex.name,targets=state.gymTargets||(state.gymTargets={});if(Array.isArray(targets[key]))targets[key]=extend(targets[key],ex.sets);
+  for(const move of Object.values(state.gymScheduleV94?.moves||{}))if(move?.sourceDay===day&&move.customSets&&Array.isArray(move.customSets[ex.name]))move.customSets[ex.name]=extend(move.customSets[ex.name],ex.sets);
+  for(const move of Object.values(state.gymItemMoves||{}))if(move?.type==="strength"&&move.sourceDay===day&&GYM_PLAN[day].steps[Number(move.itemId)]?.name===ex.name&&Array.isArray(move.sets))move.sets=extend(move.sets,ex.sets);
+ }
+ return changed;
+}
+if(ensureAbCrunchThreeSetsV216())save();
 function applyGymPlanRevisionV95(){
  const mark='migration|gymPlanOct11V95';state.checks=state.checks||{};if(state.checks[mark])return;
  state.gymTargets=state.gymTargets||{};state.gymMoveStageV50=state.gymMoveStageV50||{};
@@ -6535,7 +6547,7 @@ today = function(){
   } else if(state.day===6){
     contextual+=`<button class="tile" data-sub="reset"><b>SUNDAY RESET</b><span>HOME + WEEK RESET</span></button>`;
   }
-  const receipt=`<section class="card day-receipt receipt-top"><button class="btn primary" data-toggle-day-receipt><span><b>RECEIPT READINESS • ${s.done}/${s.total} SECTIONS COMPLETE</b><br><small>${s.done===s.total?'READY • COMPLETE DAY RECORD':`${s.total-s.done} SECTION${s.total-s.done===1?'':'S'} STILL INCOMPLETE`}</small></span><span class="receipt-chevron">${receiptOpen?'▲':'▼'}</span></button>${receiptOpen?`<div class="receipt-list">${s.sections.map(sec=>`<details class="receipt-missing receipt-section-drop"><summary><span><b>${esc(sec.name)}</b><small>${sec.missing.length?`${sec.missing.length} STILL NEEDED`:'COMPLETE'}</small></span><span class="category-count">${sec.done}/${sec.total}</span></summary>${sec.missing.length?`<ul class="receipt-needed-list">${sec.missing.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`:`<p class="receipt-good">Everything is filled in.</p>`}</details>`).join('')}</div>`:''}</section>`;
+  const receipt=`<section class="card day-receipt receipt-top"><button class="btn primary" data-toggle-day-receipt><span><b>RECEIPT READINESS • ${s.done}/${s.total} SECTIONS COMPLETE</b><br><small>${s.done===s.total?'READY • COMPLETE DAY RECORD':`${s.total-s.done} SECTION${s.total-s.done===1?'':'S'} STILL INCOMPLETE`}</small></span><span class="receipt-chevron">${receiptOpen?'▲':'▼'}</span></button>${receiptOpen?`<div class="receipt-list">${s.sections.map(sec=>`<section class="receipt-missing receipt-section-drop"><div class="receipt-section-heading"><span><b>${esc(sec.name)}</b><small>${sec.missing.length?`${sec.missing.length} TO DO`:'COMPLETE'}</small></span><span class="category-count">${sec.done}/${sec.total}</span></div>${sec.missing.length?`<div class="receipt-needed-list">${sec.missing.map(item=>`<div class="receipt-needed-item">${esc(item)}</div>`).join('')}</div>`:`<p class="receipt-good">Everything is filled in.</p>`}</section>`).join('')}</div>`:''}</section>`;
   const handoffCard='';
   return `<section class="hero"><div class="eyebrow">TODAY</div><h1>${esc(fullSelectedDate())}</h1>${week()}</section>${receipt}${tiamoFedCard(k)}<div class="grid today-destinations"><button class="tile" data-sub="routine"><b>ROUTINE</b><span>${done}/${total} COMPLETE</span></button><button class="tile" data-sub="faith"><b>BIBLE + FAITH</b><span>READING • PRAYER • DEVOTIONAL • REFLECTION</span></button><button class="tile" data-sub="goals"><b>GOALS</b><span>GOALS • WATER • DAILY HEALTH</span></button><button class="tile" data-sub="school"><b>STUDY TODAY</b><span>${esc(STUDY[d])} • 30 MIN</span></button><button class="tile" data-sub="weigh"><b>DAILY WEIGH-IN</b><span>FEEDS BODY PROGRESS + HISTORY</span></button><section class="tile today-commentary-tile" aria-label="Today Commentary"><b>TODAY COMMENTARY</b><span>${esc(commentary.join(' '))}</span></section>${contextual}</div>${handoffCard}`;
 };
@@ -6596,12 +6608,12 @@ function wishRootMatureRestore(){
   const items=WISHCATS.map(c=>({c,value:(state.wish[c]||[]).reduce((a,x)=>a+Math.max(0,Number(x.price)||0),0)}));
   const total=items.reduce((a,x)=>a+x.value,0);
   return hero('WISH LIST','DREAM BOARD')+
-  `<section class="card"><h2>ADD TO WISH LIST</h2><div class="formgrid">
+  `<section class="card wish-add-card"><h2>ADD TO WISH LIST</h2><div class="formgrid wish-root-form">
     <label>TITLE<input id="wishRootItem" placeholder="WHAT DO YOU WANT?"></label>
     <label>PRICE<input id="wishRootPrice" type="number" min="0" step=".01" placeholder="0.00"></label>
     <label>CATEGORY<select id="wishRootCategory">${WISHCATS.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select></label>
     <label class="wide">LINK<input id="wishRootLink" type="url" placeholder="OPTIONAL LINK"></label>
-  </div><button class="btn primary" data-wish-root-add>ADD ITEM</button></section>
+  </div><button class="btn primary wish-add-submit" data-wish-root-add>ADD ITEM</button></section>
   <section class="card"><h2>CATEGORIES</h2><div class="grid">${WISHCATS.map(c=>`<button class="tile" data-wish="${c}"><b>${c}</b><span>${(state.wish[c]||[]).length} ITEMS • ${money(items.find(x=>x.c===c)?.value||0)}</span></button>`).join('')}</div></section>
   <section class="card"><h2>ALL WISH LIST ITEMS</h2>${all.map(x=>`<div class="checkrow ${x.done?'done-item':''}"><input type="checkbox" data-wish-done="${x.c}|${x.i}" ${x.done?'checked':''}><span style="flex:1">${safeLink(x.link)?`<a href="${esc(safeLink(x.link))}" target="_blank" rel="noopener noreferrer"><b>${esc(x.item)}</b></a>`:`<b>${esc(x.item)}</b>`}<small> • ${esc(x.c)}</small></span><b>${money(x.price)}</b><button class="btn" data-wish-edit="${x.c}|${x.i}">EDIT</button><button class="tinybtn" data-wish-del="${x.c}|${x.i}">×</button></div>`).join('')||'<p class="muted">NOTHING SAVED YET.</p>'}</section>
   <section class="card"><h2>WISH LIST MIX BY DOLLARS</h2>${donutData(items,x=>x.c,x=>x.value)}</section>
@@ -9268,7 +9280,7 @@ function applyHubCloudState(remote){
  Object.entries(localChecks).forEach(([k,v])=>{if(isRetiredBudgetCheckKey(k))remoteChecks[k]=v});
  remoteState.checks=remoteChecks;
  state={...state,...remoteState,budget:localBudget};
- normalizeState();hubCloudApplying=true;HubRuntime.persist(state);hubCloudApplying=false;render();
+ normalizeState();ensureAbCrunchThreeSetsV216();hubCloudApplying=true;HubRuntime.persist(state);hubCloudApplying=false;render();
 }
 function scheduleHubCloudSave(){
  if(!HUB_CLOUD_CLIENT||!hubCloudSession||!hubCloudReady||hubCloudApplying)return;
@@ -9344,7 +9356,7 @@ document.addEventListener('click',async e=>{
 },true);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pollHubCloudState()});
 const todayBeforeV193CloudSync=today;
-today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;return html.replace(/(<section class="hero"[\s\S]*?<\/section>)/,`$1${hubCloudSyncCard()}`)};
+today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;return html+hubCloudSyncCard()};
 (function installV196SimpleRoutine(){
  const previousRday=rday,regularWashDays=new Set(['Monday','Wednesday','Friday']),brighteningDays=new Set(['Monday','Wednesday','Friday']),reptarDays=new Set(['Monday','Wednesday','Friday','Sunday']);
  rday=function(day){
@@ -9676,17 +9688,15 @@ body.routine-edit-mode-v205 #app [data-rsub-add]{display:inline-flex!important;a
 })();
 </script>
 <style id="v212-today-clarity">
-/* Keep the Today receipt readable at a glance; open only the section the user wants. */
-.receipt-section-drop{padding:0!important;overflow:hidden}
-.receipt-section-drop>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;cursor:pointer}
-.receipt-section-drop>summary::-webkit-details-marker{display:none}
-.receipt-section-drop>summary>span:first-child{display:grid;gap:2px;min-width:0}
-.receipt-section-drop>summary b{font-size:14px;line-height:1.2}
-.receipt-section-drop>summary small{font-size:11px;line-height:1.25;color:var(--muted);font-weight:750;letter-spacing:.02em}
-.receipt-needed-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px;margin:0;padding:0 10px 10px}
-.receipt-needed-list li{min-width:0;padding:7px 9px;border:1px solid var(--line);border-radius:11px;background:#fff8fa;color:#765762;font-size:12px;line-height:1.35;text-transform:none!important;letter-spacing:0!important;overflow-wrap:anywhere}
-.receipt-needed-list li:before{content:'•';color:var(--rose);font-weight:900;margin-right:6px}
-.receipt-section-drop>.receipt-good{display:block;margin:0 12px 10px;font-size:12px}
+/* Receipt sections are compact cards with individually spaced missing-item rows. */
+.receipt-section-drop{padding:10px 11px!important;overflow:hidden}
+.receipt-section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px}
+.receipt-section-heading>span:first-child{display:grid;gap:2px;min-width:0}
+.receipt-section-heading b{font-size:13px;line-height:1.2}
+.receipt-section-heading small{font-size:9px;line-height:1.2;color:var(--muted);font-weight:800;letter-spacing:.04em}
+.receipt-needed-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px;margin:8px 0 0;padding:0}
+.receipt-needed-item{min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:11px;background:#fff8fa;color:#765762;font-size:11px;line-height:1.3;text-transform:none!important;letter-spacing:0!important;overflow-wrap:anywhere}
+.receipt-section-drop>.receipt-good{display:block;margin:7px 0 0;font-size:11px}
 .hub-cloud-sync.card{padding:0!important;margin:5px 0 9px!important;border-radius:16px!important;box-shadow:0 3px 10px rgba(126,73,91,.055)!important}
 .hub-cloud-sync>summary{min-height:0;padding:8px 12px!important;font-size:12px!important;letter-spacing:.04em}
 .hub-cloud-sync>summary small{font-size:9px!important}
@@ -9703,8 +9713,7 @@ body.routine-edit-mode-v205 #app [data-rsub-add]{display:inline-flex!important;a
 .goal-add-actions{margin-top:14px!important;padding-top:11px;border-top:1px solid var(--line);gap:10px!important}
 .goal-add-actions .btn{min-width:112px}
 @media(max-width:420px){
- .receipt-needed-list{grid-template-columns:minmax(0,1fr)}
- .receipt-section-drop>summary{padding:9px 10px}
+ .receipt-section-drop{padding:9px 10px!important}
  .hub-cloud-sync>summary{padding:8px 10px!important}
  .goal-add-actions{align-items:stretch}
  .goal-important-toggle{flex:1 1 auto;justify-content:center}
@@ -9750,9 +9759,36 @@ textarea{min-width:0;min-height:82px!important;padding:9px 10px!important;font-s
  .goal-add-actions .btn{min-width:104px}
 }
 </style>
+<style id="v215-mobile-clarity">
+/* Keep the wish-list entry form compact, spaced, and easy to scan on a phone. */
+.wish-add-card{padding:15px!important}
+.wish-root-form{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px 12px!important;margin:10px 0 0!important}
+.wish-root-form>label{display:grid!important;grid-template-columns:minmax(0,1fr);gap:5px!important;min-width:0;font-size:11px!important;font-weight:850!important;line-height:1.2!important;letter-spacing:.04em}
+.wish-root-form>label:first-child,.wish-root-form>label:last-child{grid-column:1/-1!important}
+.wish-root-form input,.wish-root-form select{width:100%!important;height:44px!important;min-height:44px!important;padding:8px 11px!important;border-radius:13px!important;font-size:16px!important;box-sizing:border-box!important}
+.wish-add-submit{display:inline-flex!important;width:auto!important;min-width:118px!important;min-height:42px!important;margin:18px 0 4px!important;padding:9px 14px!important;justify-content:center;align-items:center;font-size:12px!important}
+/* Missing items remain visible as spaced rows; receipt categories are not dropdowns. */
+.receipt-list{gap:7px!important;margin-top:9px!important}
+.receipt-section-drop{padding:10px 11px!important}
+.receipt-needed-list{gap:7px!important;margin-top:8px!important}
+.receipt-needed-item{padding:8px 9px!important;font-size:11px!important;line-height:1.3!important;text-transform:none!important;letter-spacing:0!important}
+.hub-cloud-sync.card{margin:14px 0 calc(26px + env(safe-area-inset-bottom))!important;padding:0!important;border:1px solid #ead3db!important;border-radius:13px!important;background:rgba(255,250,252,.78)!important;box-shadow:none!important;opacity:.9}
+.hub-cloud-sync>summary{min-height:0!important;padding:7px 10px!important;font-size:10px!important;letter-spacing:.03em!important}
+.hub-cloud-sync>summary small{font-size:9px!important}
+.hub-cloud-sync>summary:after{font-size:14px!important}
+.hub-cloud-body{padding:0 10px 9px!important}
+@media(max-width:420px){
+ .wish-add-card{padding:13px!important}
+ .wish-root-form{gap:8px!important}
+ .wish-root-form>label{font-size:10px!important}
+ .wish-root-form input,.wish-root-form select{height:42px!important;min-height:42px!important;padding:7px 9px!important}
+ .receipt-needed-list{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))!important}
+}
+@media(max-width:340px){.wish-root-form{grid-template-columns:1fr!important}.wish-root-form>label{grid-column:1/-1!important}}
+</style>
 <script>
-document.body.dataset.build='2026-10-26-V214-USER-UPLOAD-MERGED';
-const v214Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v214Meta)v214Meta.content='2026-10-26-V214-USER-UPLOAD-MERGED';
+document.body.dataset.build='2026-10-26-V217-RECEIPT-CARD-LAYOUT';
+const v216Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v216Meta)v216Meta.content='2026-10-26-V217-RECEIPT-CARD-LAYOUT';
 </script>
 </body>
 </html>
