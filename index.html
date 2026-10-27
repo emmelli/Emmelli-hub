@@ -9848,7 +9848,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-10-27-V219-FINAL-CLEAN-ROUTINE-BRIDGED';
+ const BUILD='2026-10-27-V220-TUESDAY-WALKS-AFTER-WORK';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
  const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back}=bridge;
@@ -9896,8 +9896,10 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
   add('MORNING ROUTINE','MAKE & EAT BREAKFAST',['BREAKFAST','VITAMINS','CREATINE']);
   const laundry=['PUT MORNING LOAD IN DRYER'];if(reptarMorningDays.has(day))laundry.push('FEED REPTAR');laundry.push('FEED DOGS','WASH DOG BOWLS');
   add('MORNING ROUTINE','LAUNDRY & PET CARE',laundry);
-  add('MORNING ROUTINE','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...coatCare(day)]);
-  add('MORNING ROUTINE','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...coatCare(day)]);
+  if(day!=='Tuesday'){
+   add('MORNING ROUTINE','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...coatCare(day)]);
+   add('MORNING ROUTINE','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...coatCare(day)]);
+  }
   if(day==='Monday'){
    add('DAY PLAN','RED LIGHT FACE MASK',['SPRAY WITH ALCOHOL AFTERWARD']);
    add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);
