@@ -9431,6 +9431,16 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
   if(changed)save();return rd;
  };
 })();
+/* Safe bridge for the final routine authority. The Hub deliberately keeps its
+   runtime private; expose only the references needed by the final routine
+   layer, while keeping all existing state and event handlers on the same
+   canonical functions. */
+window.__EMMELLI_ROUTINE_BRIDGE__={
+ getRday:()=>rday,setRday:fn=>{rday=fn},
+ setRoutine:fn=>{routine=fn},setFlexBoard:fn=>{flex164Board=fn},
+ setCapture:fn=>{captureRoutineOpenDetails=fn},setRestore:fn=>{restoreRoutineOpenDetails=fn},
+ state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back
+};
 document.body.dataset.build='2026-10-24-V211-IOS-SAFE-BOOT';
 const v193Meta=document.querySelector('meta[name="emmelli-current-build"]');if(v193Meta)v193Meta.content='2026-10-24-V211-IOS-SAFE-BOOT';
 render();initializeHubCloudSync();
@@ -9838,8 +9848,11 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-10-27-V218-FINAL-CLEAN-ROUTINE';
- const priorRdayV218=rday;
+ const BUILD='2026-10-27-V219-FINAL-CLEAN-ROUTINE-BRIDGED';
+ const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
+ if(!bridge)throw new Error('Emmelli routine bridge unavailable');
+ const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back}=bridge;
+ const priorRdayV218=bridge.getRday();
  const wakeTimes={Monday:'7:30 AM',Tuesday:'5:00 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:50 AM',Saturday:'4:50 AM',Sunday:'4:50 AM'};
  const workTimes={Tuesday:'7:00 AM–7:00 PM',Wednesday:'3:00–11:00 PM',Thursday:'3:00–11:00 PM',Friday:'8:45 AM–5:15 PM',Saturday:'7:00 AM–3:00 PM',Sunday:'7:00 AM–3:00 PM'};
  const brighteningDays=new Set(['Monday','Wednesday','Friday']);
@@ -9945,30 +9958,34 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
   tasks.forEach(t=>{t.done=Object.prototype.hasOwnProperty.call(status,t.id)?!!status[t.id]:!!t.done;(t.subtasks||[]).forEach(q=>q.done=Object.prototype.hasOwnProperty.call(status,t.id+'|'+q.id)?!!status[t.id+'|'+q.id]:!!q.done)});
   return {day,start:0,open:'MORNING ROUTINE',tasks,actualRoutineV14:true,flexibleRoutineV154:true,v218Canonical:true};
  }
- rday=function(day){
+ const rday=function(day){
   const prior=priorRdayV218(day);if(selectedKey()<FLEX154_EFFECTIVE)return prior;
   const rd=buildRoutine(day,prior);state.routineDates=state.routineDates||{};state.routineDates[selectedKey()]=rd;return rd;
  };
+ bridge.setRday(rday);
  function taskMarkup(day,t,i){
   const edit=`<div class="routine-maintenance"><button class="tinybtn" data-rtask-edit="${day}|${i}">Edit</button><button class="tinybtn" data-rtask-del="${day}|${i}">Remove</button></div>`;
   if(!(t.subtasks||[]).length)return `<article class="v218-task"><label class="v218-task-simple"><input type="checkbox" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><span>${esc(t.name)}</span></label>${edit}</article>`;
   const subs=t.subtasks.map((q,j)=>`<div class="v218-subrow"><input type="checkbox" data-rsub-check="${day}|${i}|${j}" ${q.done?'checked':''}><span>${esc(q.name)}</span><span><button class="tinybtn icon-action" data-rsub-edit="${day}|${i}|${j}">Edit</button><button class="tinybtn icon-action" data-rsub-del="${day}|${i}|${j}" aria-label="Remove ${esc(q.name)}">×</button></span></div>`).join('');
   return `<article class="v218-task"><details class="v218-task-drop" data-v218-task-id="${esc(t.id)}"><summary><input type="checkbox" data-rtask-check="${day}|${i}" ${t.done?'checked':''}><span>${esc(t.name)}</span></summary><div class="v218-subtasks">${subs}<button class="tinybtn" data-rsub-add="${day}|${i}">+ Add Item</button></div></details>${edit}</article>`;
  }
- routine=function(){
+ const routineV218=function(){
   const day=DAYS[state.day],rd=rday(day),groups=sectionOrder.map(section=>({section,rows:(rd.tasks||[]).map((t,i)=>({t,i})).filter(x=>x.t.section===section)})).filter(g=>g.rows.length);
   const html=groups.map(g=>`<details class="v218-routine-group" data-v218-section="${esc(g.section)}" open><summary>${esc(g.section)}</summary><div class="v218-routine-items">${g.rows.map(x=>taskMarkup(day,x.t,x.i)).join('')}</div></details>`).join('');
   return hero('Routine',`${day.toUpperCase()} • DAILY CHECKLIST`)+back('Today')+`<section class="card soft v218-routine-intro"><h2>${esc(day.toUpperCase())} • TODAY’S ROUTINE</h2><p class="muted">Check off each block as you finish it. Open a block only when it has items underneath.</p></section><div class="v218-routine-groups">${html}</div>`;
  };
- captureRoutineOpenDetails=function(){return {v218Tasks:[...document.querySelectorAll('details.v218-task-drop[open]')].map(x=>x.dataset.v218TaskId).filter(Boolean),v218Sections:[...document.querySelectorAll('details.v218-routine-group[open]')].map(x=>x.dataset.v218Section).filter(Boolean)}};
- restoreRoutineOpenDetails=function(snapshot){if(!snapshot)return;const taskSet=new Set(snapshot.v218Tasks||[]),sectionSet=new Set(snapshot.v218Sections||[]);document.querySelectorAll('details.v218-task-drop').forEach(x=>x.open=taskSet.has(x.dataset.v218TaskId));document.querySelectorAll('details.v218-routine-group').forEach(x=>x.open=sectionSet.size?sectionSet.has(x.dataset.v218Section):true)};
- flex164Board=function(){
+ bridge.setRoutine(routineV218);
+ const captureV218=function(){return {v218Tasks:[...document.querySelectorAll('details.v218-task-drop[open]')].map(x=>x.dataset.v218TaskId).filter(Boolean),v218Sections:[...document.querySelectorAll('details.v218-routine-group[open]')].map(x=>x.dataset.v218Section).filter(Boolean)}};
+ const restoreV218=function(snapshot){if(!snapshot)return;const taskSet=new Set(snapshot.v218Tasks||[]),sectionSet=new Set(snapshot.v218Sections||[]);document.querySelectorAll('details.v218-task-drop').forEach(x=>x.open=taskSet.has(x.dataset.v218TaskId));document.querySelectorAll('details.v218-routine-group').forEach(x=>x.open=sectionSet.size?sectionSet.has(x.dataset.v218Section):true)};
+ bridge.setCapture(captureV218);bridge.setRestore(restoreV218);
+ const flex164BoardV218=function(){
   const wk=flex164WeekStart(selectedKey());state.weeklyRoutineChecks=state.weeklyRoutineChecks||{};state.weeklyRoutineChecks[wk]=state.weeklyRoutineChecks[wk]||{};state.weeklyRoutineCustom=state.weeklyRoutineCustom||{};state.weeklyRoutineCustom[wk]=Array.isArray(state.weeklyRoutineCustom[wk])?state.weeklyRoutineCustom[wk]:[];
   const checks=state.weeklyRoutineChecks[wk],fixed=[['school-practice','SCHOOL PRACTICE'],['piano','PIANO PRACTICE'],['reptar','REPTAR CAGE RESET'],['shoes','SHOE CLEANING'],['paper','RESTOCK PAPER PRODUCTS'],['supplies','CHECK SPONGES, SOAP, AND SCENT DISPENSERS']];
   const box=(id,label)=>`<label class="flex164-check"><input type="checkbox" data-flex164-check="${esc(wk)}|${esc(id)}" ${checks[id]?'checked':''}><span>${esc(label)}</span></label>`;
   const custom=state.weeklyRoutineCustom[wk].map((x,i)=>`<label class="flex164-check"><input type="checkbox" data-v218-weekly-custom="${esc(wk)}|${i}" ${x.done?'checked':''}><span>${esc(x.text)}</span><button type="button" class="v218-weekly-remove" data-v218-remove-weekly="${esc(wk)}|${i}" aria-label="Remove ${esc(x.text)}">×</button></label>`).join('');
   return `<section class="card flex164-weekly v218-weekly"><div class="v175-weekly-heading"><span aria-hidden="true">♡</span><div><h2>THINGS I STILL NEED TO DO THIS WEEK</h2><small>VISIBLE EVERY DAY • CHECK OFF WHEN DONE</small></div></div><p class="muted v218-weekly-copy">These stay available all week and reset on Monday.</p><div class="v218-weekly-list">${fixed.map(x=>box(...x)).join('')}${custom}</div><div class="v218-weekly-add"><input id="v218WeeklyText" type="text" placeholder="Add something for this week" aria-label="Add something for this week"><button class="btn primary" type="button" data-v218-add-weekly="${esc(wk)}" aria-label="Add weekly item">＋</button></div></section>`;
  };
+ bridge.setFlexBoard(flex164BoardV218);
  document.addEventListener('click',e=>{
   const add=e.target.closest?.('[data-v218-add-weekly]'),remove=e.target.closest?.('[data-v218-remove-weekly]');if(!add&&!remove)return;e.preventDefault();e.stopImmediatePropagation();
   state.weeklyRoutineCustom=state.weeklyRoutineCustom||{};
