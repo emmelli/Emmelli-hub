@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-26-V217-RECEIPT-CARD-LAYOUT">
+<meta name="emmelli-current-build" content="2026-10-29-V223-CLICKABLE-DAILY-FAITH">
 <!-- EMMELLI BUILD: V217 • SPACED RECEIPT ITEMS + COMPACT SYNC + 3-SET AB CRUNCH • OCTOBER 26, 2026 -->
 <style>
 
@@ -1010,7 +1010,7 @@ function budgetOccurrenceAmountV125(row){
   return Math.round(Number(row.a||row.amount||0)*100)/100;
 }
 const CURRENT_BUILD="2026-10-18-V168-FINAL-AUTHORITY";
-const CURRENT_PAGE_CONTRACT_V14={today:"receipt-readiness routine faith goals school weigh-in food contextual",food:"today-food meal-plan inventory monday-grocery cook-days",gym:"day-plan run body-progress",budget:"income autopays emergency week-by-week",history:"year month week day",wish:"categories items totals"};
+const CURRENT_PAGE_CONTRACT_V14={today:"receipt-readiness routine psalms affirmations faith goals weigh-in contextual",food:"today-food meal-plan inventory monday-grocery cook-days",gym:"day-plan run body-progress",budget:"income autopays emergency week-by-week",history:"year month week day",wish:"categories items totals"};
 const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const STUDY={Monday:"TEAS Science",Tuesday:"TEAS Math",Wednesday:"PERT Math",Thursday:"TEAS Reading",Friday:"TEAS Science / weak areas",Saturday:"PERT Reading",Sunday:"TEAS English"};
 
@@ -1585,7 +1585,7 @@ function sanitizeNestedState(){
  Object.keys(state.measure).forEach(k=>{if(!validDateKeyRaw(k)||!obj(state.measure[k])){delete state.measure[k];return}Object.keys(state.measure[k]).forEach(f=>{let v=state.measure[k][f];state.measure[k][f]=v===""?"":(num(v)?Math.max(0,Number(v)):"")})});
  Object.keys(state.studyNotes).forEach(k=>{if(!validDateKeyRaw(k)||typeof state.studyNotes[k]!=="string")delete state.studyNotes[k]});
  Object.keys(state.studyResources).forEach(k=>{if(!validDateKeyRaw(k)||typeof state.studyResources[k]!=="string")delete state.studyResources[k];else state.studyResources[k]=state.studyResources[k].trim();if(state.studyResources[k]==="")delete state.studyResources[k]});
- Object.keys(state.bible).forEach(k=>{let b=state.bible[k];if(!validDateKeyRaw(k)||!obj(b)){delete state.bible[k];return}b.entries=Array.isArray(b.entries)?b.entries.slice(0,4).map(x=>String(x||"")):[];b.done=Array.isArray(b.done)?b.done.slice(0,4).map(Boolean):[];b.psalms=obj(b.psalms)?b.psalms:{};let hasFaithText=b.entries.some(v=>v.trim()),hasFaithChecks=b.done.some(Boolean),hasPsalmChecks=Object.values(b.psalms).some(Boolean);if(!hasFaithText&&!hasFaithChecks&&!hasPsalmChecks)delete state.bible[k];});
+ Object.keys(state.bible).forEach(k=>{let b=state.bible[k];if(!validDateKeyRaw(k)||!obj(b)){delete state.bible[k];return}b.entries=Array.isArray(b.entries)?b.entries.slice(0,4).map(x=>String(x||"")):[];b.done=Array.isArray(b.done)?b.done.slice(0,4).map(Boolean):[];b.psalms=obj(b.psalms)?b.psalms:{};if(typeof b.affirmations==='string')b.affirmations=String(b.affirmations);b.affirmationDone=!!b.affirmationDone;b.dailyPrayerDone=!!b.dailyPrayerDone;let hasFaithText=b.entries.some(v=>v.trim()),hasFaithChecks=b.done.some(Boolean),hasPsalmChecks=Object.values(b.psalms).some(Boolean),hasAffirmationText=String(b.affirmations||'').trim(),hasAffirmationCheck=b.affirmationDone,hasDailyPrayer=b.dailyPrayerDone;if(!hasFaithText&&!hasFaithChecks&&!hasPsalmChecks&&!hasAffirmationText&&!hasAffirmationCheck&&!hasDailyPrayer)delete state.bible[k];});
  Object.keys(state.actualFood).forEach(k=>{let a=state.actualFood[k];if(!validDateKeyRaw(k)||!obj(a)){delete state.actualFood[k];return}Object.keys(a).forEach(f=>{let v=a[f];a[f]=v===""?"":(num(v)?Math.max(0,Number(v)):"")})});
  Object.keys(state.run).forEach(k=>{let r=state.run[k];if(!validDateKeyRaw(k)||!obj(r)){delete state.run[k];return}["incline","speed","duration"].forEach(f=>r[f]=num(r[f])?Math.max(0,Number(r[f])):0)});
  Object.keys(state.gymLog).forEach(k=>{let g=state.gymLog[k];if(!validDateKeyRaw(k)||!obj(g)){delete state.gymLog[k];return}Object.keys(g).forEach(n=>{if(!obj(g[n]))delete g[n]})});
@@ -2543,7 +2543,7 @@ if(t.hasAttribute("data-sheet-cancel")){uiSheet=null;render();return}if(t.hasAtt
  if(t.dataset.gymUpWeight!==undefined){let d=DAYS[state.day],[ei,si]=t.dataset.gymUpWeight.split("|").map(Number),ex=GYM_PLAN[d]?.steps[ei];if(!ex)return;let k=selectedKey(),log=state.gymLog[k]||(state.gymLog[k]={}),z=log[ex.name]||(log[ex.name]={}),custom=state.gymTargets[d+"|"+ex.name]||ex.sets,raw=String(z["w"+si]??custom[si][0]??"0").trim(),n=/^\d+(?:\.\d+)?$/.test(raw)?Number(raw):NaN;if(!Number.isFinite(n)){showToast("TYPE THE ACTUAL WEIGHT IN THE BOX FOR THIS SET.","MANUAL WEIGHT");return}z["w"+si]=String(ex.assistance?Math.max(0,n-ex.inc):n+ex.inc);z["p"+si]=false;z.done=false;save();render();return}
  if(t.hasAttribute("data-save-gym")){let k=selectedKey(),log=state.gymLog[k]||(state.gymLog[k]={});document.querySelectorAll("[data-gym-field]").forEach(el=>{let [name,f]=el.dataset.gymField.split("|");log[name]=log[name]||{};log[name][f]=f.startsWith("r")?String(Math.max(0,+el.value||0)):(()=>{let raw=el.value.trim();if(raw==="")return "";let n=Number(raw);return Number.isFinite(n)?String(Math.max(0,n)):raw})()});let d=DAYS[state.day],plan=GYM_PLAN[d];plan.steps.forEach(ex=>{let z=log[ex.name]||(log[ex.name]={}),sets=gymSetsForSession(d,k,ex);z.done=sets.every((_,i)=>z["p"+i]===true||(+z["r"+i]>0))});state.gymSaved=state.gymSaved||{};state.gymSaved[k]=new Date().toISOString();save();render();showToast("WORKOUT SAVED TO HISTORY.","GYM");return}
  if(t.dataset.faithDone!==undefined){let k=selectedKey(),x=state.bible[k]||(state.bible[k]={entries:[],done:[]});x.done=x.done||[];x.done[+t.dataset.faithDone]=t.checked;save();return}
- if(t.hasAttribute("data-save-faith")){let k=t.dataset.saveFaith,entries=[],done=[];document.querySelectorAll("[data-faith-field]").forEach(el=>entries[+el.dataset.faithField]=el.value.trim());document.querySelectorAll("[data-faith-done]").forEach(el=>done[+el.dataset.faithDone]=el.checked);if(entries.some(Boolean)||done.some(Boolean)||Object.values(state.bible[k]?.psalms||{}).some(Boolean))state.bible[k]={...(state.bible[k]||{}),entries,done,psalms:{...(state.bible[k]?.psalms||{})},updated:new Date().toISOString()};else delete state.bible[k];delete state.bibleDrafts[k];save();render();return}
+ if(t.hasAttribute("data-save-faith")){let k=t.dataset.saveFaith,entries=[],done=[];document.querySelectorAll("[data-faith-field]").forEach(el=>entries[+el.dataset.faithField]=el.value.trim());document.querySelectorAll("[data-faith-done]").forEach(el=>done[+el.dataset.faithDone]=el.checked);if(entries.some(Boolean)||done.some(Boolean)||Object.values(state.bible[k]?.psalms||{}).some(Boolean)||String(state.bible[k]?.affirmations||"").trim()||state.bible[k]?.affirmationDone||state.bible[k]?.dailyPrayerDone)state.bible[k]={...(state.bible[k]||{}),entries,done,psalms:{...(state.bible[k]?.psalms||{})},updated:new Date().toISOString()};else delete state.bible[k];delete state.bibleDrafts[k];save();render();return}
  if(t.dataset.histnav){let [type,level,...v]=t.dataset.histnav.split("|");state.sub=v.length&&v.some(x=>x!=="")?`hist:${type}:${level}:${v.join("|")}`:`hist:${type}:${level}`;save();render();appTop();return}
  
  if(t.hasAttribute("data-copy-routine")){let d=DAYS[state.day],tl=timeline(d),text=`${d.toUpperCase()} ROUTINE • ${selectedKey()}\n`+tl.map(x=>`${fmt(x.st)}–${fmt(x.en)} • ${x.t.name}${(x.t.subtasks||[]).length?"\n  "+x.t.subtasks.map(q=>"• "+q.name).join("\n  "):""}`).join("\n");if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>showToast("Routine copied to your clipboard.","Copied")).catch(()=>showToast("Copy is unavailable in this browser.","Couldn’t copy"));else showToast("Copy is unavailable in this browser.","Couldn’t copy");return}
@@ -9431,6 +9431,181 @@ today=function(){const html=todayBeforeV193CloudSync();if(state.sub)return html;
   if(changed)save();return rd;
  };
 })();
+/* V222 — ONE FAITH DESTINATION + EMMELLI'S DAILY AFFIRMATIONS + CLEAN TODAY/HISTORY
+   Preserve every existing saved record. Retired Study data stays in storage,
+   but no longer appears as a Today requirement or a History destination. */
+const DAILY_AFFIRMATIONS_IN_CHRIST_V222=`I am a daughter of the Most High God.
+
+I am fearfully and wonderfully made.
+
+I am beautiful, inside and out, created in God’s image.
+
+I am loved, chosen, valued, and worthy of love and respect.
+
+I am forgiven, redeemed, and made new through Jesus Christ.
+
+I am strong, courageous, confident, and capable through Christ who strengthens me.
+
+I have not been given a spirit of fear, but of power, love, and a sound mind.
+
+I am intelligent, disciplined, focused, and capable of learning and growing.
+
+I am not defined by my past, my mistakes, my fears, or the opinions of others.
+
+I am worthy of dignity, kindness, honesty, and healthy love.
+
+I am patient, resilient, determined, and growing in wisdom.
+
+I am not controlled by fear, comparison, insecurity, or self-doubt.
+
+I have purpose, and my life has meaning.
+
+I am equipped to face today’s responsibilities with faith, wisdom, and courage.
+
+I am becoming a woman of integrity, grace, humility, and strength.
+
+I am worthy of being treated with respect, and I will treat others with that same respect.
+
+I am never beyond God’s mercy, forgiveness, or transforming grace.
+
+I am not alone, for God is with me.
+
+I am a woman who walks by faith, not by fear.
+
+I am loved by God. I am strong. I am beautiful. I am worthy. I have a sound mind. I am His.
+
+In Jesus’ name, Amen.`;
+const DAILY_PRAYER_V223=`Heavenly Father, who art in Heaven, hallowed be Thy name.
+
+I come before You in the mighty name of Jesus Christ, my Lord and Savior. You are holy, merciful, faithful, and worthy of all praise. Thank You for another day of life, for salvation through Jesus, and for every blessing, provision, protection, and answered prayer, both seen and unseen.
+
+Father, Thy kingdom come, Thy will be done. I surrender my heart, plans, desires, relationships, and future to You. Guide my decisions, correct my mistakes, redirect me when I am wrong, and give me wisdom to recognize Your will above my own.
+
+Forgive my sins, known and unknown. Search my heart, reveal what needs to change, and lead me to genuine repentance. Help me forgive others as You have forgiven me. Holy Spirit, strengthen my faith, deepen my understanding of Scripture, and give me the desire to seek You daily, especially when I lack motivation.
+
+Father, give me discipline, focus, patience, consistency, and self-control. Remove procrastination, distractions, pride, fear, and discouragement. Help me honor You through my words, actions, habits, and responsibilities.
+
+Bless and guide my education, examinations, career, business ambitions, finances, and opportunities. Give me understanding, perseverance, integrity, and wisdom to manage everything You entrust to me.
+
+Father, protect my home, family, friends, coworkers, loved ones, animals, belongings, workplace, and travels. Guard our bodies, minds, relationships, and surroundings from danger, illness, accidents, deception, temptation, and evil. Provide for our needs, strengthen those who are struggling, heal those who are sick, and draw our hearts closer to You.
+
+Guide my relationships and future marriage. Give me discernment to recognize genuine love and godly character. Prepare me to be a faithful wife and, if marriage is Your will, guide me toward a husband and family life that honor You.
+
+Father, protect my health, renew my strength, give me peace, and help me use this day wisely. Teach me to love others, serve those in need, and remain faithful through every season.
+
+Above everything, let me seek Your kingdom first. Not my will, but Yours be done.
+
+For Thine is the kingdom, and the power, and the glory, forever.
+
+In the mighty and precious name of Jesus Christ, Amen.`;
+function affirmationTextV222(record){const saved=String(record?.affirmations||'').trim();return saved||DAILY_AFFIRMATIONS_IN_CHRIST_V222}
+function affirmationRecordV221(date=selectedKey()){
+ const bible=state.bible[date]||(state.bible[date]={entries:[],done:[],psalms:{}});
+ if(typeof bible.affirmations!=='string')bible.affirmations='';
+ bible.affirmationDone=!!bible.affirmationDone;
+ return bible;
+}
+function hasAffirmationV221(date){const b=state.bible?.[date];return !!(b?.affirmationDone&&affirmationTextV222(b))}
+function hasDailyPrayerV223(date){return !!state.bible?.[date]?.dailyPrayerDone}
+function faithReadingCardV223(title,status,paragraphs,checkLabel,checkAttr,done){
+ return `<details class="faith-reading-card-v223"><summary><span><b>${esc(title)}</b><small>${esc(status)}</small></span><span class="faith-reading-arrow-v223" aria-hidden="true">＋</span></summary><div class="faith-reading-body-v223">${paragraphs.split(/\n\n+/).map(p=>`<p>${esc(p)}</p>`).join('')}<label class="faith-reading-check-v223"><input type="checkbox" ${checkAttr} ${done?'checked':''}><span>${esc(checkLabel)}</span></label></div></details>`;
+}
+if((state.route==='today'&&state.sub==='school')||(state.route==='history'&&String(state.sub||'').startsWith('hist:school'))){state.sub=null;save()}
+
+faithCalendar=function(){
+ const rows=Object.keys(state.bible||{}).sort().reverse().slice(0,31);
+ return rows.length?rows.map(k=>{const b=state.bible[k]||{},faith=(b.entries||[]).filter(Boolean).length,affirmation=String(b.affirmations||'').trim()||b.affirmationDone,prayer=b.dailyPrayerDone;return `<div class="checkrow"><span style="flex:1"><b>${esc(k)}</b></span><span>${faith}/4 FAITH${affirmation?' • AFFIRMATIONS ✓':''}${prayer?' • PRAYER ✓':''}</span></div>`}).join(''):'<p class="muted">Your saved faith, affirmation, and prayer days will appear here.</p>';
+};
+
+faith=function(){
+ const k=selectedKey(),x=state.bible[k]||{},draft=state.bibleDrafts?.[k]||[],cats=['READING / PASSAGE','PRAYER','DEVOTIONAL','WHAT GOD IS TEACHING ME'],done=x.done||[],ps=x.psalms||{},psalms=[23,91,51];
+ const affirmation=DAILY_AFFIRMATIONS_IN_CHRIST_V222;
+ const affirmationCard=faithReadingCardV223('MY DAILY AFFIRMATIONS IN CHRIST 🤍',x.affirmationDone?'COMPLETED TODAY ✓':'TAP TO OPEN AND READ',affirmation,'I SAID MY DAILY AFFIRMATIONS','data-affirmation-done-v221',!!x.affirmationDone);
+ const prayerCard=faithReadingCardV223('DAILY PRAYER',x.dailyPrayerDone?'PRAYED TODAY ✓':'TAP TO OPEN AND PRAY',DAILY_PRAYER_V223,'I PRAYED MY DAILY PRAYER','data-daily-prayer-done-v223',!!x.dailyPrayerDone);
+ return hero('Daily Psalms + Affirmations',DAYS[state.day])+back('Today')+
+ `<section class="card faith-unified-card"><div class="row" style="align-items:center"><span class="theme-heart"></span><h2 style="margin:0">${esc(k)}</h2></div><p class="muted">OPEN EACH DAILY ITEM WHEN YOU ARE READY. YOUR CHECKS AND EVERYTHING YOU TYPE SAVE ON THIS DEVICE AND TO YOUR SYNCED ACCOUNT WHEN SIGNED IN.</p><h2 class="faith-section-title">DAILY PSALMS • NIV</h2><div class="psalm-grid">${psalms.map(n=>`<div class="psalm-card ${ps[n]?'done':''}"><label class="psalm-check"><input type="checkbox" data-faith-psalm="${n}" ${ps[n]?'checked':''}><span><b>PSALM ${n}</b><small>${ps[n]?'READ ✓':'CHECK OFF AFTER READING'}</small></span></label><a class="btn psalm-read" href="https://www.biblegateway.com/passage/?search=Psalm%20${n}&version=NIV" target="_blank" rel="noopener noreferrer">OPEN PSALM ${n} • NIV</a></div>`).join('')}</div><div class="faith-reading-stack-v223">${affirmationCard}${prayerCard}</div><h2 class="faith-section-title">TODAY’S FAITH ENTRY</h2><p class="muted faith-entry-help-v223">OPEN A SECTION, TYPE THROUGHOUT THE DAY, THEN SAVE YOUR ENTRY WHEN YOU ARE READY.</p>${cats.map((c,i)=>`<div class="info-accordion"><div class="checkrow" style="padding:12px 14px"><label style="display:flex;align-items:center;gap:10px;flex:1"><input type="checkbox" data-faith-done="${i}" ${done[i]?'checked':''}><b>${c}</b></label></div><div><textarea data-faith-field="${i}" placeholder="${i===0?'BOOK + CHAPTER / VERSES':i===1?'PRAYER NOTES':i===2?'DEVOTIONAL NOTES':'REFLECTION / LESSON'}">${esc((draft[i]??(x.entries||[])[i])||'')}</textarea></div></div>`).join('')}<div class="app-actions"><button class="btn primary" data-save-faith="${k}">SAVE FAITH ENTRY</button><button class="btn danger" data-clear-faith="${k}">REMOVE TODAY’S ENTRY</button></div></section><section class="card"><h2>FAITH HISTORY CALENDAR</h2>${faithCalendar()}</section>`;
+};
+
+const dayReceiptStatusBeforeV221=dayReceiptStatus;
+dayReceiptStatus=function(){
+ const receipt=dayReceiptStatusBeforeV221(),k=selectedKey();
+ receipt.sections=receipt.sections.filter(section=>section.name!=='Study');
+ const faithSection=receipt.sections.find(section=>section.name==='Bible + Faith');
+ if(faithSection){
+  faithSection.name='Psalms + Faith + Affirmations';
+  faithSection.total+=2;
+  if(hasAffirmationV221(k))faithSection.done+=1;else faithSection.missing.push('Daily affirmations');
+  if(hasDailyPrayerV223(k))faithSection.done+=1;else faithSection.missing.push('Daily prayer');
+ }
+ receipt.done=receipt.sections.filter(section=>section.done===section.total).length;
+ receipt.total=receipt.sections.length;
+ receipt.missing=receipt.sections.flatMap(section=>section.missing.map(item=>`${section.name} → ${item}`));
+ receipt.pct=receipt.total?Math.round(receipt.done/receipt.total*100):100;
+ return receipt;
+};
+
+const todayBeforeV221=today;
+today=function(){
+ let html=todayBeforeV221();
+ if(state.sub)return html;
+ html=html.replace(/<button class="tile daily-psalms-tile"[\s\S]*?<\/button>/i,'__V221_FAITH_TILE__');
+ html=html.replace(/<button class="tile" data-sub="faith"[\s\S]*?<\/button>/i,'');
+ html=html.replace('__V221_FAITH_TILE__','<button class="tile daily-psalms-tile" data-sub="faith"><b>DAILY PSALMS + FAITH</b><span>PSALMS 23, 91 & 51 • AFFIRMATIONS • DAILY PRAYER • ENTRY</span></button>');
+ html=html.replace(/<button class="tile" data-sub="school"[\s\S]*?<\/button>/i,'');
+ html=html.replace(/<button class="tile" data-route="gym" data-sub="run"[\s\S]*?<\/button>/i,'');
+ return html;
+};
+
+const historyLabelBeforeV221=historyLabelV60;
+historyLabelV60=function(type){
+ if(type==='bible')return 'DAILY FAITH HISTORY';
+ return historyLabelBeforeV221(type);
+};
+const histDatesBeforeV221=histDates;
+histDates=function(type){
+ if(type==='bible'){
+  const set=new Set(histDatesBeforeV221('bible'));
+  for(const [date,b] of Object.entries(state.bible||{}))if(validDateKey(date)&&(String(b?.affirmations||'').trim()||b?.affirmationDone||b?.dailyPrayerDone||Object.values(b?.psalms||{}).some(Boolean)))set.add(date);
+  return [...set].sort();
+ }
+ if(type==='complete'){
+  const set=new Set();
+  for(const t of ['routine','gym','body','goals','bible','water'])for(const d of histDates(t))set.add(d);
+  return [...set].filter(validDateKey).sort();
+ }
+ return histDatesBeforeV221(type);
+};
+const historyDayLinesBeforeV221=historyDayLinesV94;
+historyDayLinesV94=function(type,date){
+ let lines=historyDayLinesBeforeV221(type,date);
+ if(type==='complete')lines=lines.filter(line=>!/^Study:/i.test(line));
+ if(type==='complete'||type==='bible'){
+  const b=state.bible?.[date],text=String(b?.affirmations||'').trim();
+  if(text===DAILY_AFFIRMATIONS_IN_CHRIST_V222)lines.push(`Daily affirmations in Christ${b?.affirmationDone?' ✓':''}`);
+  else if(text)lines.push(`Affirmations${b?.affirmationDone?' ✓':''}: ${text.replace(/\n+/g,' • ')}`);
+  else if(b?.affirmationDone)lines.push('Affirmations: completed ✓');
+  if(b?.dailyPrayerDone)lines.push('Daily prayer ✓');
+ }
+ return lines;
+};
+history=function(){
+ if(state.sub?.startsWith('hist:'))return historyDrill();
+ const cats=[['complete','ALL HISTORY','SHORT COMPLETE DAILY RECEIPTS'],['routine','ROUTINE HISTORY','BLOCKS COMPLETED + CHANGES'],['gym','GYM / WORKOUT HISTORY','ORIGINAL • MOVED • SKIPPED • ACTUALS'],['body','BODY + GYM HISTORY','WORKOUTS • DAILY WEIGHT • MEASUREMENTS'],['goals','GOALS HISTORY','GOALS + COMPLETION'],['bible','DAILY FAITH HISTORY','PSALMS • AFFIRMATIONS • DAILY PRAYER • ENTRY'],['water','DAILY HEALTH HISTORY','WATER • VITAMINS • CREATINE • ACTIVITY']];
+ return hero('HISTORY','PICK A RECEIPT, THEN A WEEK')+`<section class="card history-options-card"><div class="history-option-grid">${cats.map(([t,l,s])=>`<button class="history-option" data-hist="${t}"><span><b>${l}</b><small>${s}</small></span><strong>›</strong></button>`).join('')}</div></section>`;
+};
+document.addEventListener('input',e=>{
+ const field=e.target.closest?.('[data-affirmations-v221]');if(!field)return;
+ const b=affirmationRecordV221();b.affirmations=field.value;b.updated=new Date().toISOString();save();
+},true);
+document.addEventListener('change',e=>{
+ const box=e.target.closest?.('[data-affirmation-done-v221]');if(!box)return;
+ const b=affirmationRecordV221();if(box.checked&&!String(b.affirmations||'').trim())b.affirmations=DAILY_AFFIRMATIONS_IN_CHRIST_V222;b.affirmationDone=!!box.checked;b.updated=new Date().toISOString();save();const small=box.closest('.faith-reading-card-v223')?.querySelector('summary small');if(small)small.textContent=box.checked?'COMPLETED TODAY ✓':'TAP TO OPEN AND READ';
+},true);
+document.addEventListener('change',e=>{
+ const box=e.target.closest?.('[data-daily-prayer-done-v223]');if(!box)return;
+ const b=affirmationRecordV221();b.dailyPrayerDone=!!box.checked;b.updated=new Date().toISOString();save();const small=box.closest('.faith-reading-card-v223')?.querySelector('summary small');if(small)small.textContent=box.checked?'PRAYED TODAY ✓':'TAP TO OPEN AND PRAY';
+},true);
+
 /* Safe bridge for the final routine authority. The Hub deliberately keeps its
    runtime private; expose only the references needed by the final routine
    layer, while keeping all existing state and event handlers on the same
@@ -9451,6 +9626,7 @@ render();initializeHubCloudSync();
 <style id="final-daily-polish-css">
 .today-greeting{margin:10px 0 12px;padding:13px 16px;text-align:center;border:1px solid var(--cuteLine);border-radius:18px;background:linear-gradient(145deg,#f8dfe7,#fff7fa);box-shadow:var(--cuteShadow);color:#684651;font:900 16px/1.25 Georgia,'Times New Roman',serif;letter-spacing:.07em}
 .daily-psalms-tile{background:linear-gradient(145deg,#fff9fb,#f6e2e9)!important}
+.faith-section-title{margin:18px 0 8px!important;font-size:14px!important;letter-spacing:.08em}.faith-unified-card>.row:first-child{margin-bottom:6px}.faith-reading-stack-v223{display:grid;gap:10px;margin:16px 0 20px}.faith-reading-card-v223{overflow:hidden;border:1px solid #e7cbd5;border-radius:17px;background:linear-gradient(145deg,#fffafd,#f8e7ed);box-shadow:0 5px 14px rgba(125,72,91,.06)}.faith-reading-card-v223>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:70px;padding:14px 16px;cursor:pointer;list-style:none}.faith-reading-card-v223>summary::-webkit-details-marker{display:none}.faith-reading-card-v223>summary span:first-child{display:grid;gap:4px;min-width:0}.faith-reading-card-v223>summary b{font-size:14px;line-height:1.3;color:var(--ink)}.faith-reading-card-v223>summary small{font-size:10px;font-weight:800;letter-spacing:.07em;color:var(--muted)}.faith-reading-arrow-v223{display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border:1px solid #e5c8d2;border-radius:50%;background:#fff9fb;color:var(--pink);font-size:19px;font-weight:900}.faith-reading-card-v223[open] .faith-reading-arrow-v223{font-size:0}.faith-reading-card-v223[open] .faith-reading-arrow-v223:after{content:'−';font-size:20px}.faith-reading-body-v223{padding:4px 16px 16px;border-top:1px solid #edd7df}.faith-reading-body-v223 p{margin:13px 0;color:var(--ink);font:500 15px/1.62 Georgia,'Times New Roman',serif}.faith-reading-check-v223{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px;border:1px solid #e4c4d0;border-radius:13px;background:#fff;font-size:12px;font-weight:900;letter-spacing:.04em}.faith-reading-check-v223 input{width:24px;height:24px;margin:0;accent-color:var(--pink)}.faith-entry-help-v223{margin-top:-2px!important;margin-bottom:10px!important}.affirmation-card-v221{display:none!important}
 .moved-gym-today{background:linear-gradient(145deg,#f6d9e4,#fff8fb)!important;border-color:#dca1b7!important}.gym-day-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gym-day-status{text-align:center}.gym-day-status .paid-tag{display:inline-block;margin-bottom:8px}.gym-move-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.gym-move-choice{display:flex;justify-content:space-between;gap:8px}.moved-divider{display:flex;align-items:center;gap:10px;margin:18px 0 10px;color:var(--pink);font-weight:900;letter-spacing:.08em}.moved-divider:before,.moved-divider:after{content:"";height:1px;background:var(--line);flex:1}.moved-workout-card{border:2px solid #e4abc0!important;background:linear-gradient(145deg,#fff,#fff5f9)!important}.history-week-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.history-week-head h2,.history-week-day h2{margin:3px 0}.history-week-day{padding:14px!important}.history-simple-lines{display:grid;gap:7px}.history-simple-lines p{margin:0;padding:9px 11px;border-radius:12px;background:#fff7fa;border:1px solid var(--line);line-height:1.4}.history-week-day.no-entry{opacity:.72}.history-copy-day{min-width:58px!important;width:auto!important;padding:7px 9px!important}.history-week-buttons .tile b{font-size:13px}.sheet .wide{display:block;margin-top:10px}.sheet .wide input{width:100%;margin-top:6px}
 @media(max-width:520px){.gym-day-action-grid{grid-template-columns:1fr}.history-week-head{align-items:flex-start;flex-direction:column}.history-week-head .btn{width:100%}.gym-move-grid{grid-template-columns:1fr 1fr}.moved-workout-card{padding:11px!important}}
 </style>
@@ -9848,7 +10024,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-10-27-V220-TUESDAY-WALKS-AFTER-WORK';
+ const BUILD='2026-10-29-V223-CLICKABLE-DAILY-FAITH';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
  const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back}=bridge;
