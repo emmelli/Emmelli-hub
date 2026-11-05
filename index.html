@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-10-29-V223-CLICKABLE-DAILY-FAITH">
+<meta name="emmelli-current-build" content="2026-11-04-V226-PRESUBMIT-QA">
 <!-- EMMELLI BUILD: V217 • SPACED RECEIPT ITEMS + COMPACT SYNC + 3-SET AB CRUNCH • OCTOBER 26, 2026 -->
 <style>
 
@@ -983,9 +983,12 @@ window.__EMMELLI_CLOUD_SYNC__=window.__EMMELLI_CLOUD_SYNC__||{status:"LOCAL ONLY
  * The Hub has several older delegated click layers. A routine checkbox click
  * must not reach those pre-toggle handlers because one of them can re-render
  * the page before the browser applies the checkbox's new value. Handle the
- * activation first, preserve the browser's already-updated checked value, and
- * send one canonical change event to the routine state synchronizer before an
- * older layer can re-render it. This leaves every routine
+ * activation first and derive the requested value from the rendered checked
+ * attribute. Safari and Chromium disagree about whether input.checked has
+ * already changed during a capture-phase click, so relying on that live
+ * property can make Safari taps appear to do nothing. Set the intended value
+ * explicitly, then send one canonical change event to the routine state
+ * synchronizer before an older layer can re-render it. This leaves every routine
  * block and subtask intact; it only controls the event order.
  */
 document.addEventListener('click',event=>{
@@ -993,6 +996,7 @@ document.addEventListener('click',event=>{
   if(!input)return;
   event.preventDefault();
   event.stopImmediatePropagation();
+  input.checked=!input.hasAttribute('checked');
   input.dispatchEvent(new Event('change',{bubbles:true}));
 },true);
 /* V41 LOCKED COOKING UX: TODAY'S COOKING always visible; only workflow dropdowns are GET EVERYTHING OUT / PREP + MEASURE / COOK EVERYTHING TOGETHER / CONTAINERS. Recipe source links are optional references; Hub instructions are self-contained. CONTAINERS owns component ingredient confirmation (including added ingredient source + nutrition identity + amount/unit + DURING COOKING/WHILE PORTIONING/AFTER COOKING), actual finished component weights, actual component grams per container, suggested containers, labels/storage, and save-to-Inventory. */
@@ -9613,6 +9617,8 @@ document.addEventListener('change',e=>{
 window.__EMMELLI_ROUTINE_BRIDGE__={
  getRday:()=>rday,setRday:fn=>{rday=fn},
  setRoutine:fn=>{routine=fn},setFlexBoard:fn=>{flex164Board=fn},
+ getGym:()=>gym,setGym:fn=>{gym=fn},
+ getHistory:()=>history,setHistory:fn=>{history=fn},
  setCapture:fn=>{captureRoutineOpenDetails=fn},setRestore:fn=>{restoreRoutineOpenDetails=fn},
  state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back
 };
@@ -10024,12 +10030,12 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-10-29-V223-CLICKABLE-DAILY-FAITH';
+ const BUILD='2026-11-04-V226-PRESUBMIT-QA';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
- const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back}=bridge;
+ const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back,getGym,setGym,getHistory,setHistory}=bridge;
  const priorRdayV218=bridge.getRday();
- const wakeTimes={Monday:'7:30 AM',Tuesday:'5:00 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:50 AM',Saturday:'4:50 AM',Sunday:'4:50 AM'};
+ const wakeTimes={Monday:'7:30 AM',Tuesday:'4:20 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:10 AM',Saturday:'4:10 AM',Sunday:'4:10 AM'};
  const workTimes={Tuesday:'7:00 AM–7:00 PM',Wednesday:'3:00–11:00 PM',Thursday:'3:00–11:00 PM',Friday:'8:45 AM–5:15 PM',Saturday:'7:00 AM–3:00 PM',Sunday:'7:00 AM–3:00 PM'};
  const brighteningDays=new Set(['Monday','Wednesday','Friday']);
  const reptarMorningDays=new Set(['Wednesday','Friday','Sunday']);
@@ -10058,7 +10064,8 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
  }
  const pawCare=['CHECK PAWS','WIPE DIRT IF NEEDED','DRY COMPLETELY','APPLY A THIN LAYER OF PAW BALM TO THE PADS'];
  function buildRoutine(day,oldRd){
-  const specs=[];const add=(section,name,subs=[])=>specs.push({section,name,subs});
+  const specs=[],isDrive=item=>/^(?:DRIVE\b|RETURN HOME$)/i.test(String(item||'').trim());
+  const add=(section,name,subs=[])=>{if(isDrive(name))return;specs.push({section,name,subs:(subs||[]).filter(item=>!isDrive(item))})};
   if(day==='Monday'){
    add('MORNING ROUTINE',`WAKE UP AT • ${wakeTimes[day]}`);
    add('MORNING ROUTINE','UNIFORM DROP-OFF',['GRAB UNIFORMS','DRIVE TO VALYOU CLEANERS','DROP OFF UNIFORMS','RETURN HOME']);
@@ -10068,18 +10075,16 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
   add('MORNING ROUTINE','MORNING START',['THANK GOD','TEXT GRANDMA','TEXT MOMMA','OPEN BLINDS','PLAY PODCAST','STRETCH','PUT ON APPLE WATCH']);
   add('MORNING ROUTINE','MORNING START #2',['FILL UP WATER','MAKE BED','SPRAY AND DISINFECT BED AND CLOSET','START MORNING LOAD']);
   add('MORNING ROUTINE','MORNING CARE',morningCare(day));
-  add('MORNING ROUTINE','WHERE ARE YOU EMMELLI?',['PRAYER','DEVOTIONAL','READ PSALMS 23, 91, AND 51:10–12']);
-  add('MORNING ROUTINE','MAKE & EAT BREAKFAST',['BREAKFAST','VITAMINS','CREATINE']);
   const laundry=['PUT MORNING LOAD IN DRYER'];if(reptarMorningDays.has(day))laundry.push('FEED REPTAR');laundry.push('FEED DOGS','WASH DOG BOWLS');
   add('MORNING ROUTINE','LAUNDRY & PET CARE',laundry);
-  if(day!=='Tuesday'){
-   add('MORNING ROUTINE','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...coatCare(day)]);
-   add('MORNING ROUTINE','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...coatCare(day)]);
-  }
+  add('MORNING ROUTINE','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...coatCare(day)]);
+  add('MORNING ROUTINE','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...coatCare(day)]);
+  add('MORNING ROUTINE','WHERE ARE YOU EMMELLI?',['PRAYER','DEVOTIONAL','READ PSALMS 23, 91, AND 51:10–12']);
+  add('MORNING ROUTINE','MAKE & EAT BREAKFAST',['BREAKFAST','VITAMINS','CREATINE']);
   if(day==='Monday'){
    add('DAY PLAN','RED LIGHT FACE MASK',['SPRAY WITH ALCOHOL AFTERWARD']);
    add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);
-   add('DAY PLAN','GET READY FOR GYM');add('DAY PLAN','TREADMILL + ABS');add('DAY PLAN','DRIVE TO GYM');add('DAY PLAN','GYM');add('DAY PLAN','DRIVE HOME FROM GYM');add('DAY PLAN','SHOWER & GET READY');
+   add('DAY PLAN','GET READY FOR GYM');add('DAY PLAN','GYM');add('DAY PLAN','PIANO PRACTICE');add('DAY PLAN','SHOWER & GET READY');
    add('MONDAY ERRANDS','DRIVE TO LOCKWOOD RIDGE');
    add('MONDAY ERRANDS','GROCERY SHOPPING',['WALMART: GET JUGS','WALMART: PAY FOR SUMMIT','WALMART: GET THE REST OF THE GROCERIES','DETWILER’S: GET PRODUCE','DETWILER’S: GET CHEESE','DETWILER’S: GET MEAT','REPTILE STORE: GET TWO 12-PACKS OF MEDIUM ROACHES OR 10 BIG FLYING ROACHES']);
    add('MONDAY ERRANDS','DRIVE HOME');
@@ -10092,29 +10097,29 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
    add('AFTER WORK','BIBLE STUDY');add('AFTER WORK','DRIVE HOME');
   }
   if(day==='Tuesday'){
-   add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','SHOWER & GET READY');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
+   add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','GET READY FOR GYM');add('DAY PLAN','GYM');add('DAY PLAN','PIANO PRACTICE');add('DAY PLAN','SHOWER & GET READY');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
    addWork(day,['READ','WRITE PRAYERS']);
-   add('AFTER WORK','DRIVE HOME FROM WORK');add('AFTER WORK','WALK / RUN + ABS',['GET READY','WALK / RUN','2 AB CIRCUITS']);addLaterWalks();
+   add('AFTER WORK','DRIVE HOME FROM WORK');addLaterWalks();
   }
   if(day==='Wednesday'){
-   add('DAY PLAN','PREP + COOK + CLEAN');add('DAY PLAN','GET READY FOR GYM');add('DAY PLAN','TREADMILL + ABS');add('DAY PLAN','DRIVE TO GYM');add('DAY PLAN','GYM');add('DAY PLAN','DRIVE HOME FROM GYM');add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','RED LIGHT FACE MASK',['SPRAY WITH ALCOHOL AFTERWARD']);add('DAY PLAN','SHOWER & GET READY FOR WORK');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
+   add('DAY PLAN','PREP + COOK + CLEAN');add('DAY PLAN','GET READY FOR GYM');add('DAY PLAN','GYM');add('DAY PLAN','PIANO PRACTICE');add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','RED LIGHT FACE MASK',['SPRAY WITH ALCOHOL AFTERWARD']);add('DAY PLAN','SHOWER & GET READY FOR WORK');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
    addWork(day,['READ','WRITE PRAYERS']);add('AFTER WORK','DRIVE HOME FROM WORK');addLaterWalks();
   }
   if(day==='Thursday'){
-   add('DAY PLAN','PREP + COOK + CLEAN');add('DAY PLAN','HOUSE RESET',['QUICK CLEAN SINK','COUNTERS','COUCH','TOILET','SWEEP']);add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','WALK / RUN + ABS',['GET READY','WALK / RUN','2 AB CIRCUITS']);add('DAY PLAN','SHOWER & GET READY');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
+   add('DAY PLAN','PREP + COOK + CLEAN');add('DAY PLAN','HOUSE RESET',['QUICK CLEAN SINK','COUNTERS','COUCH','TOILET','SWEEP']);add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','GET READY FOR GYM');add('DAY PLAN','GYM');add('DAY PLAN','PIANO PRACTICE');add('DAY PLAN','SHOWER & GET READY');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
    addWork(day,['READ','WRITE PRAYERS']);add('AFTER WORK','DRIVE HOME FROM WORK');addLaterWalks();
   }
   if(day==='Friday'){
    add('DAY PLAN','HOUSE RESET',['QUICK CLEAN SINK','COUNTERS','COUCH','TOILET']);add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','RED LIGHT FACE MASK',['SPRAY WITH ALCOHOL AFTERWARD']);add('DAY PLAN','SHOWER & GET READY');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
-   addWork(day,['READ','WRITE PRAYERS','PLAN NEXT WEEK’S MEALS']);add('AFTER WORK','DRIVE TO GYM');add('AFTER WORK','GYM');add('AFTER WORK','DRIVE HOME FROM GYM');add('AFTER WORK','TREADMILL + ABS');addLaterWalks();
+   addWork(day,['READ','WRITE PRAYERS','PLAN NEXT WEEK’S MEALS']);add('AFTER WORK','GET READY FOR GYM');add('AFTER WORK','GYM');add('AFTER WORK','PIANO PRACTICE');addLaterWalks();
   }
   if(day==='Saturday'){
    add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','SHOWER & GET READY');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
-   addWork(day,['READ','WRITE PRAYERS','PLAN NEXT WEEK’S SCHEDULE']);add('AFTER WORK','DRIVE HOME FROM WORK');addLaterWalks();add('AFTER WORK','RECOVERY NAP');add('AFTER WORK','HOME RESET • FLOOR CARE #2',['CLEAN KITCHEN FROM TOP TO BOTTOM','CLEAN LIVING ROOM FROM TOP TO BOTTOM','CLEAN PATIO FROM TOP TO BOTTOM','CLEAN LANAI FROM TOP TO BOTTOM','COMPLETE FLOOR CARE THROUGHOUT ROOM BLOCKS']);
+   addWork(day,['READ','WRITE PRAYERS','PLAN NEXT WEEK’S SCHEDULE']);add('AFTER WORK','DRIVE HOME FROM WORK');addLaterWalks();add('AFTER WORK','PIANO PRACTICE');add('AFTER WORK','RECOVERY NAP');add('AFTER WORK','HOME RESET • FLOOR CARE #2',['CLEAN KITCHEN FROM TOP TO BOTTOM','CLEAN LIVING ROOM FROM TOP TO BOTTOM','CLEAN PATIO FROM TOP TO BOTTOM','CLEAN LANAI FROM TOP TO BOTTOM','COMPLETE FLOOR CARE THROUGHOUT ROOM BLOCKS']);
   }
   if(day==='Sunday'){
    add('DAY PLAN','FOLD LAUNDRY',['FOLD','PUT AWAY MORNING LOAD']);add('DAY PLAN','SHOWER & GET READY');add('DAY PLAN','LEAVE FOR WORK');add('DAY PLAN','DRIVE TO WORK');
-   addWork(day,['READ','WRITE PRAYERS','WATCH CHURCH']);add('AFTER WORK','DRIVE HOME FROM WORK');add('AFTER WORK','START SUNDAY LOAD',['BRING SUNDAY LOAD IN FROM CAR','WASH HEADBANDS','WASH HAND / DISH TOWELS']);addLaterWalks();add('AFTER WORK','PRAYER • LAUNDRY',['PRAY OVER HOUSE','PUT SUNDAY LOAD IN DRYER']);
+   addWork(day,['READ','WRITE PRAYERS','WATCH CHURCH']);add('AFTER WORK','DRIVE HOME FROM WORK');add('AFTER WORK','START SUNDAY LOAD',['BRING SUNDAY LOAD IN FROM CAR','WASH HEADBANDS','WASH HAND / DISH TOWELS']);addLaterWalks();add('AFTER WORK','PIANO PRACTICE');add('AFTER WORK','PRAYER • LAUNDRY',['PRAY OVER HOUSE','PUT SUNDAY LOAD IN DRYER']);
    add('SUNDAY RESET','HOME RESET',['CLEAN BEDROOM FROM TOP TO BOTTOM','CLEAN BATHROOM FROM TOP TO BOTTOM','CLEAN LAUNDRY ROOM FROM TOP TO BOTTOM','CLEAN STAIRS FROM TOP TO BOTTOM','DECLUTTER']);
    add('SUNDAY RESET','SELF-CARE RESET PT #1',['SOAK RETAINER + BRUSH','WHITENING STRIPS','BRUSH DOGS’ TEETH','CLEAN DOGS’ EARS','REMOVE WHITENING STRIPS','BRUSH WITH BAKING SODA & HYDROGEN PEROXIDE','RETAINER']);
    add('SUNDAY RESET','SELF-CARE RESET PT #2',['APPLY PLAIN 100% COCONUT OIL TO MID-LENGTHS + ENDS','CLAY FACE MASK','LIP STAIN','RINSE']);
@@ -10158,7 +10163,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
  bridge.setCapture(captureV218);bridge.setRestore(restoreV218);
  const flex164BoardV218=function(){
   const wk=flex164WeekStart(selectedKey());state.weeklyRoutineChecks=state.weeklyRoutineChecks||{};state.weeklyRoutineChecks[wk]=state.weeklyRoutineChecks[wk]||{};state.weeklyRoutineCustom=state.weeklyRoutineCustom||{};state.weeklyRoutineCustom[wk]=Array.isArray(state.weeklyRoutineCustom[wk])?state.weeklyRoutineCustom[wk]:[];
-  const checks=state.weeklyRoutineChecks[wk],fixed=[['school-practice','SCHOOL PRACTICE'],['piano','PIANO PRACTICE'],['reptar','REPTAR CAGE RESET'],['shoes','SHOE CLEANING'],['paper','RESTOCK PAPER PRODUCTS'],['supplies','CHECK SPONGES, SOAP, AND SCENT DISPENSERS']];
+  const checks=state.weeklyRoutineChecks[wk],fixed=[['school-practice','SCHOOL PRACTICE'],['reptar','REPTAR CAGE RESET'],['shoes','SHOE CLEANING'],['paper','RESTOCK PAPER PRODUCTS'],['supplies','CHECK SPONGES, SOAP, AND SCENT DISPENSERS']];
   const box=(id,label)=>`<label class="flex164-check"><input type="checkbox" data-flex164-check="${esc(wk)}|${esc(id)}" ${checks[id]?'checked':''}><span>${esc(label)}</span></label>`;
   const custom=state.weeklyRoutineCustom[wk].map((x,i)=>`<label class="flex164-check"><input type="checkbox" data-v218-weekly-custom="${esc(wk)}|${i}" ${x.done?'checked':''}><span>${esc(x.text)}</span><button type="button" class="v218-weekly-remove" data-v218-remove-weekly="${esc(wk)}|${i}" aria-label="Remove ${esc(x.text)}">×</button></label>`).join('');
   return `<section class="card flex164-weekly v218-weekly"><div class="v175-weekly-heading"><span aria-hidden="true">♡</span><div><h2>THINGS I STILL NEED TO DO THIS WEEK</h2><small>VISIBLE EVERY DAY • CHECK OFF WHEN DONE</small></div></div><p class="muted v218-weekly-copy">These stay available all week and reset on Monday.</p><div class="v218-weekly-list">${fixed.map(x=>box(...x)).join('')}${custom}</div><div class="v218-weekly-add"><input id="v218WeeklyText" type="text" placeholder="Add something for this week" aria-label="Add something for this week"><button class="btn primary" type="button" data-v218-add-weekly="${esc(wk)}" aria-label="Add weekly item">＋</button></div></section>`;
@@ -10173,6 +10178,37 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
  document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.target?.id!=='v218WeeklyText')return;e.preventDefault();document.querySelector('[data-v218-add-weekly]')?.click()},true);
  document.addEventListener('change',e=>{const input=e.target.closest?.('[data-v218-weekly-custom]');if(!input)return;e.preventDefault();e.stopImmediatePropagation();const [wk,raw]=input.dataset.v218WeeklyCustom.split('|'),i=Number(raw);if(state.weeklyRoutineCustom?.[wk]?.[i]){state.weeklyRoutineCustom[wk][i].done=!!input.checked;save();render()}},true);
  document.addEventListener('click',e=>{if(e.target.matches?.('.v218-task-drop>summary input'))e.stopPropagation()},true);
+
+ /* V225 — quieter Gym and History screens. Keep every saved editor and receipt,
+    while removing duplicate explanation rows and aligning the main actions. */
+ document.head.insertAdjacentHTML('beforeend',`<style>
+  .v225-gym-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+  .v225-gym-actions>.btn,.v225-gym-actions>.tile{width:100%;min-height:52px;margin:0!important;display:flex;align-items:center;justify-content:center;text-align:center}
+  .v225-gym-actions>.tile span{display:none}
+  .workout-progress-content>.receipt-list{display:none!important}
+  .workout-progress-summary small,.workout-section-drop>summary small{display:none!important}
+  .gym-day-actions h2{display:none}
+  .gym-day-actions{padding:12px!important}
+  .history-option-grid.v225-history-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .v225-history-grid .history-option{min-height:58px;padding:12px 13px;margin:0!important}
+  .v225-history-grid .history-option span{display:grid;gap:3px;text-align:left}
+  .v225-history-grid .history-option small{display:block;font-size:9px;letter-spacing:.06em}
+  @media(max-width:420px){.v225-gym-actions,.history-option-grid.v225-history-grid{grid-template-columns:1fr 1fr}.v225-history-grid .history-option b{font-size:12px}}
+ </style>`);
+ const gymBeforeV225=getGym();
+ setGym(function(){
+  const template=document.createElement('template');template.innerHTML=gymBeforeV225();
+  const direct=[...template.content.children],saveButton=direct.find(x=>x.matches?.('button.workout-save')),bodyButton=direct.find(x=>x.matches?.('button.tile[data-sub="body"]'));
+  if(saveButton&&bodyButton){const actions=document.createElement('div');actions.className='v225-gym-actions';saveButton.before(actions);actions.append(saveButton,bodyButton)}
+  template.content.querySelectorAll('button.tile[data-sub="body"] span').forEach(x=>x.remove());
+  return template.innerHTML;
+ });
+ const historyBeforeV225=getHistory();
+ setHistory(function(){
+  if(state.sub?.startsWith('hist:'))return historyBeforeV225();
+  const cats=[['complete','ALL HISTORY','EVERYTHING TOGETHER'],['routine','ROUTINE','COMPLETED BLOCKS'],['gym','GYM / WORKOUT','WORKOUT DETAILS'],['body','BODY','WEIGHT + MEASUREMENTS'],['goals','GOALS','COMPLETION'],['bible','FAITH','PSALMS + PRAYER'],['water','DAILY HEALTH','WATER + VITAMINS']];
+  return hero('HISTORY','CHOOSE WHAT YOU WANT TO VIEW')+`<section class="card history-options-card"><div class="history-option-grid v225-history-grid">${cats.map(([type,label,detail])=>`<button class="history-option" data-hist="${type}"><span><b>${label}</b><small>${detail}</small></span><strong>›</strong></button>`).join('')}</div></section>`;
+ });
  document.body.dataset.build=BUILD;const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=BUILD;
  render();
 })();
