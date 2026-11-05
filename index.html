@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-11-05-V230-PRESUBMIT-PERFECT">
+<meta name="emmelli-current-build" content="2026-11-05-V231-LIVE-PERSISTENCE-FIX">
 <!-- EMMELLI BUILD: V217 • SPACED RECEIPT ITEMS + COMPACT SYNC + 3-SET AB CRUNCH • OCTOBER 26, 2026 -->
 <style>
 
@@ -4216,9 +4216,9 @@ captureRoutineOpenDetails=function(){const care=[...document.querySelectorAll('d
 restoreRoutineOpenDetails=function(snap){if(!snap)return;(snap.parent||[]).forEach(id=>{let el=[...document.querySelectorAll('details.care-parent[data-care-parent]')].find(x=>x.dataset.careParent===id);if(el)el.open=true});(snap.cats||[]).forEach(z=>{let p=[...document.querySelectorAll('details.care-parent[data-care-parent]')].find(x=>x.dataset.careParent===z.parent);if(p){p.open=true;let c=[...p.querySelectorAll('details.care-category[data-care-category]')].find(x=>x.dataset.careCategory===z.cat);if(c)c.open=true}});(snap.general||[]).forEach(name=>{let el=[...document.querySelectorAll('details.taskcard:not(.care-parent)')].find(x=>(x.querySelector('summary b')?.textContent||'')===name);if(el)el.open=true})};
 const ROUTINE_STATUS_SHADOW_KEY_V229='emmelliHubRoutineStatusV229';
 window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__=function(){try{localStorage.setItem(ROUTINE_STATUS_SHADOW_KEY_V229,JSON.stringify(state.routineStatus||{}))}catch(error){console.error('Routine status backup failed',error)}};
-function ar14SyncParent(d,i,checked,includeChildren){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;if(includeChildren&&(x.subtasks||[]).length)(x.subtasks||[]).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=checked;saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
-function ar14SyncChild(d,i,j,checked){let x=rday(d).tasks[+i],q=x?.subtasks?.[+j],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x||!q)return;st[x.id+'|'+q.id]=checked;st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
-function ar14SyncGroup(d,i,gkey,checked){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;(x.subtasks||[]).filter(q=>(q.groupKey||'general')===gkey).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
+function ar14SyncParent(d,i,checked,includeChildren){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;if(includeChildren&&(x.subtasks||[]).length)(x.subtasks||[]).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=checked;window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__();saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
+function ar14SyncChild(d,i,j,checked){let x=rday(d).tasks[+i],q=x?.subtasks?.[+j],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x||!q)return;st[x.id+'|'+q.id]=checked;st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__();saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
+function ar14SyncGroup(d,i,gkey,checked){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;(x.subtasks||[]).filter(q=>(q.groupKey||'general')===gkey).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__();saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
 document.addEventListener('change',e=>{let t=e.target;if(!(t instanceof HTMLInputElement)||t.type!=='checkbox')return;if(t.dataset.careGroupCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,g]=t.dataset.careGroupCheck.split('|');ar14SyncGroup(d,+i,g,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rtaskCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i]=t.dataset.rtaskCheck.split('|');ar14SyncParent(d,+i,!!t.checked,true);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rsubCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,j]=t.dataset.rsubCheck.split('|');ar14SyncChild(d,+i,+j,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}},true);
 // Migrate selected-date routine now and force a clean render with the authoritative schedule.
 DAYS.forEach(d=>{let fresh=ar14Build(d);state.routineV2[d]=cloneRoutineDay(fresh);state.routineV2[d].actualRoutineV14=true;state.checks['routineCanonical|2026-10-02|actualV14|'+d]=true});
@@ -10048,14 +10048,22 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-11-05-V230-PRESUBMIT-PERFECT';
+ const BUILD='2026-11-05-V231-LIVE-PERSISTENCE-FIX';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
  const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back,getGym,setGym,getHistory,setHistory}=bridge;
- try{
-  const shadow=JSON.parse(localStorage.getItem('emmelliHubRoutineStatusV229')||'null');
-  if(shadow&&typeof shadow==='object')for(const [date,checks] of Object.entries(shadow))if(checks&&typeof checks==='object'&&!Array.isArray(checks))state.routineStatus[date]={...(state.routineStatus[date]||{}),...checks};
- }catch(error){console.error('Routine status backup restore failed',error)}
+ function restoreRoutineStatusShadowV231(date){
+  try{
+   const shadow=JSON.parse(localStorage.getItem('emmelliHubRoutineStatusV229')||'null');
+   if(!shadow||typeof shadow!=='object')return;
+   const dates=date?[date]:Object.keys(shadow);
+   for(const key of dates){
+    const checks=shadow[key];
+    if(checks&&typeof checks==='object'&&!Array.isArray(checks))state.routineStatus[key]={...(state.routineStatus[key]||{}),...checks};
+   }
+  }catch(error){console.error('Routine status backup restore failed',error)}
+ }
+ restoreRoutineStatusShadowV231();
  const priorRdayV218=bridge.getRday();
  const wakeTimes={Monday:'7:30 AM',Tuesday:'4:20 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:10 AM',Saturday:'4:10 AM',Sunday:'4:10 AM'};
  const brighteningDays=new Set(['Monday','Wednesday','Friday']);
@@ -10098,8 +10106,8 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
   add('MORNING ROUTINE','MORNING CARE',morningCare(day));
   const laundry=['PUT MORNING LOAD IN DRYER'];if(reptarMorningDays.has(day))laundry.push('FEED REPTAR');laundry.push('FEED DOGS','WASH DOG BOWLS');
   add('MORNING ROUTINE','LAUNDRY & PET CARE',laundry);
-  add('MORNING ROUTINE','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...coatCare(day)]);
-  add('MORNING ROUTINE','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...coatCare(day)]);
+  add('MORNING ROUTINE','WALK TIAMO',['SPANISH LESSON',...coatCare(day)]);
+  add('MORNING ROUTINE','WALK HERCULES',['SPANISH LESSON',...coatCare(day)]);
   add('MORNING ROUTINE','WHERE ARE YOU EMMELLI?',['PRAYER','DEVOTIONAL','READ PSALMS 23, 91, AND 51:10–12']);
   add('MORNING ROUTINE','MAKE & EAT BREAKFAST',['BREAKFAST','VITAMINS','CREATINE']);
   if(day==='Monday'){
@@ -10111,8 +10119,8 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
    add('MONDAY ERRANDS','DRIVE HOME');
    add('MONDAY ERRANDS','PUT AWAY GROCERIES & PORTION MEAT',['PUT AWAY GROCERIES','FEED REPTAR','PORTION MEAT']);
    add('MONDAY ERRANDS','PREP + COOK + CLEAN');
-   add('AFTER WORK','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...pawCare]);
-   add('AFTER WORK','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...pawCare]);
+   add('AFTER WORK','WALK TIAMO',['SPANISH LESSON',...pawCare]);
+   add('AFTER WORK','WALK HERCULES',['SPANISH LESSON',...pawCare]);
    add('AFTER WORK','SHOWER & GET READY');
    add('AFTER WORK','BIBLE STUDY & UNIFORM PICKUP',['PICK UP UNIFORMS AT VALYOU CLEANERS','DRIVE TO BIBLE STUDY']);
    add('AFTER WORK','BIBLE STUDY');add('AFTER WORK','DRIVE HOME');
@@ -10149,7 +10157,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
   }
   add('NIGHT ROUTINE','NIGHT RESET',['PUT AWAY ANY DISHES']);add('NIGHT ROUTINE','NIGHT CARE',nightCare(day));add('NIGHT ROUTINE','FINAL',['WATCH SOMETHING IN SPANISH','DEVOTIONAL','PRAYER FROM PRAYER BOARD']);add('NIGHT ROUTINE','GO TO SLEEP');
   function addWork(workDay,personal){add('AT WORK','START OF SHIFT',['CLOCK IN','BAGS','RETAINER CASE','CHAPSTICK / LOTION','CHARGER','AIRPODS / PORTABLE','LUNCHBOX','WATER','SHIFT LOG']);add('AT WORK','PERSONAL TIME',personal);add('AT WORK','BAG RESET',['CLEAN','ORGANIZE']);add('AT WORK','WORK')}
-  function addLaterWalks(){add('AFTER WORK','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...pawCare]);add('AFTER WORK','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...pawCare])}
+  function addLaterWalks(){add('AFTER WORK','WALK TIAMO',['SPANISH LESSON',...pawCare]);add('AFTER WORK','WALK HERCULES',['SPANISH LESSON',...pawCare])}
   const oldTasks=oldRd?.tasks||[],status=(state.routineStatus&&state.routineStatus[selectedKey()])||{},usedOld=new Set(),counts={};
   const tasks=specs.map(spec=>{
    const base=slug(spec.section+'-'+spec.name),n=(counts[base]=(counts[base]||0)+1),id=`v218_${slug(day)}_${base}_${n}`;
@@ -10163,7 +10171,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
   return {day,start:0,open:'MORNING ROUTINE',tasks,actualRoutineV14:true,flexibleRoutineV154:true,v218Canonical:true};
  }
  const rday=function(day){
-  const prior=priorRdayV218(day);if(selectedKey()<FLEX154_EFFECTIVE)return prior;
+  const prior=priorRdayV218(day);restoreRoutineStatusShadowV231(selectedKey());if(selectedKey()<FLEX154_EFFECTIVE)return prior;
   const rd=buildRoutine(day,prior);state.routineDates=state.routineDates||{};state.routineDates[selectedKey()]=rd;return rd;
  };
  bridge.setRday(rday);
