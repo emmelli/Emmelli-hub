@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-11-04-V226-PRESUBMIT-QA">
+<meta name="emmelli-current-build" content="2026-11-05-V227-SAFARI-DURABLE-CHECKBOXES">
 <!-- EMMELLI BUILD: V217 • SPACED RECEIPT ITEMS + COMPACT SYNC + 3-SET AB CRUNCH • OCTOBER 26, 2026 -->
 <style>
 
@@ -964,7 +964,22 @@ window.__EMMELLI_CLOUD_SYNC__=window.__EMMELLI_CLOUD_SYNC__||{status:"LOCAL ONLY
       const current=nextState||window.__EMMELLI_STATE__||runtime.state;
       if(!current) return;
       window.__EMMELLI_STATE__=current;
-      localStorage.setItem(runtime.storageKey,JSON.stringify(current));
+      /* routineDates is a rendered per-day cache. The real completion history
+         lives in routineStatus/routineSnapshots, so letting this cache grow for
+         years only risks Safari filling localStorage and silently breaking new
+         checkmarks. Keep recent/future date caches and discard only old derived
+         copies before every save. */
+      if(current.routineDates&&typeof current.routineDates==='object'){
+        const cutoff=new Date();cutoff.setHours(0,0,0,0);cutoff.setDate(cutoff.getDate()-45);
+        for(const key of Object.keys(current.routineDates)){
+          if(/^\d{4}-\d{2}-\d{2}$/.test(key)&&new Date(key+'T12:00:00')<cutoff)delete current.routineDates[key];
+        }
+      }
+      try{localStorage.setItem(runtime.storageKey,JSON.stringify(current));}
+      catch(error){
+        try{window.dispatchEvent(new CustomEvent('emmelli-hub-save-error',{detail:{name:error?.name||'StorageError'}}))}catch(_){ }
+        throw error;
+      }
       try{window.dispatchEvent(new Event("emmelli-hub-state-persisted"))}catch(_){}
     },
     migrate(name,step){
@@ -10030,7 +10045,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-11-04-V226-PRESUBMIT-QA';
+ const BUILD='2026-11-05-V227-SAFARI-DURABLE-CHECKBOXES';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
  const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back,getGym,setGym,getHistory,setHistory}=bridge;
@@ -10161,6 +10176,11 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
  const captureV218=function(){return {v218Tasks:[...document.querySelectorAll('details.v218-task-drop[open]')].map(x=>x.dataset.v218TaskId).filter(Boolean),v218Sections:[...document.querySelectorAll('details.v218-routine-group[open]')].map(x=>x.dataset.v218Section).filter(Boolean)}};
  const restoreV218=function(snapshot){if(!snapshot)return;const taskSet=new Set(snapshot.v218Tasks||[]),sectionSet=new Set(snapshot.v218Sections||[]);document.querySelectorAll('details.v218-task-drop').forEach(x=>x.open=taskSet.has(x.dataset.v218TaskId));document.querySelectorAll('details.v218-routine-group').forEach(x=>x.open=sectionSet.size?sectionSet.has(x.dataset.v218Section):true)};
  bridge.setCapture(captureV218);bridge.setRestore(restoreV218);
+ /* Safari may freeze a tab for days and later restore it from its back/forward
+    cache. Re-render from the canonical saved state when that happens so the
+    restored DOM never keeps stale checkbox listeners or stale dates. */
+ window.addEventListener('pageshow',event=>{if(event.persisted){state.route='today';state.sub=null;render()}},true);
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&document.body?.dataset?.build!==BUILD){state.route='today';state.sub=null;render()}},true);
  const flex164BoardV218=function(){
   const wk=flex164WeekStart(selectedKey());state.weeklyRoutineChecks=state.weeklyRoutineChecks||{};state.weeklyRoutineChecks[wk]=state.weeklyRoutineChecks[wk]||{};state.weeklyRoutineCustom=state.weeklyRoutineCustom||{};state.weeklyRoutineCustom[wk]=Array.isArray(state.weeklyRoutineCustom[wk])?state.weeklyRoutineCustom[wk]:[];
   const checks=state.weeklyRoutineChecks[wk],fixed=[['school-practice','SCHOOL PRACTICE'],['reptar','REPTAR CAGE RESET'],['shoes','SHOE CLEANING'],['paper','RESTOCK PAPER PRODUCTS'],['supplies','CHECK SPONGES, SOAP, AND SCENT DISPENSERS']];
