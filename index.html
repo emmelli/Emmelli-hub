@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Emmelli Hub</title>
-<meta name="emmelli-current-build" content="2026-11-05-V227-SAFARI-DURABLE-CHECKBOXES">
+<meta name="emmelli-current-build" content="2026-11-05-V230-PRESUBMIT-PERFECT">
 <!-- EMMELLI BUILD: V217 • SPACED RECEIPT ITEMS + COMPACT SYNC + 3-SET AB CRUNCH • OCTOBER 26, 2026 -->
 <style>
 
@@ -4214,9 +4214,11 @@ careCategoryMarkup=function(t,d,i){return ar14GroupMarkup(t,d,i)};
 // Preserve open parent/category cards when any child is checked; checking a subtask must never collapse its block.
 captureRoutineOpenDetails=function(){const care=[...document.querySelectorAll('details.care-parent[open][data-care-parent]')].map(x=>x.dataset.careParent);const cats=[...document.querySelectorAll('details.care-parent[open] details.care-category[open][data-care-category]')].map(x=>({parent:x.closest('details.care-parent')?.dataset.careParent,cat:x.dataset.careCategory}));const general=[...document.querySelectorAll('details.taskcard[open]:not(.care-parent)')].map(x=>x.querySelector('summary b')?.textContent||'').filter(Boolean);return {parent:care,cats,general}};
 restoreRoutineOpenDetails=function(snap){if(!snap)return;(snap.parent||[]).forEach(id=>{let el=[...document.querySelectorAll('details.care-parent[data-care-parent]')].find(x=>x.dataset.careParent===id);if(el)el.open=true});(snap.cats||[]).forEach(z=>{let p=[...document.querySelectorAll('details.care-parent[data-care-parent]')].find(x=>x.dataset.careParent===z.parent);if(p){p.open=true;let c=[...p.querySelectorAll('details.care-category[data-care-category]')].find(x=>x.dataset.careCategory===z.cat);if(c)c.open=true}});(snap.general||[]).forEach(name=>{let el=[...document.querySelectorAll('details.taskcard:not(.care-parent)')].find(x=>(x.querySelector('summary b')?.textContent||'')===name);if(el)el.open=true})};
-function ar14SyncParent(d,i,checked,includeChildren){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;if(includeChildren&&(x.subtasks||[]).length)(x.subtasks||[]).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=checked;saveRoutineSnapshot(d);save()}
-function ar14SyncChild(d,i,j,checked){let x=rday(d).tasks[+i],q=x?.subtasks?.[+j],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x||!q)return;st[x.id+'|'+q.id]=checked;st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);saveRoutineSnapshot(d);save()}
-function ar14SyncGroup(d,i,gkey,checked){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;(x.subtasks||[]).filter(q=>(q.groupKey||'general')===gkey).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);saveRoutineSnapshot(d);save()}
+const ROUTINE_STATUS_SHADOW_KEY_V229='emmelliHubRoutineStatusV229';
+window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__=function(){try{localStorage.setItem(ROUTINE_STATUS_SHADOW_KEY_V229,JSON.stringify(state.routineStatus||{}))}catch(error){console.error('Routine status backup failed',error)}};
+function ar14SyncParent(d,i,checked,includeChildren){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;if(includeChildren&&(x.subtasks||[]).length)(x.subtasks||[]).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=checked;saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
+function ar14SyncChild(d,i,j,checked){let x=rday(d).tasks[+i],q=x?.subtasks?.[+j],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x||!q)return;st[x.id+'|'+q.id]=checked;st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
+function ar14SyncGroup(d,i,gkey,checked){let x=rday(d).tasks[+i],k=selectedKey(),st=state.routineStatus[k]||(state.routineStatus[k]={});if(!x)return;(x.subtasks||[]).filter(q=>(q.groupKey||'general')===gkey).forEach(q=>st[x.id+'|'+q.id]=checked);st[x.id]=(x.subtasks||[]).length>0&&(x.subtasks||[]).every(z=>!!st[x.id+'|'+z.id]);saveRoutineSnapshot(d);save();window.__EMMELLI_SAVE_ROUTINE_STATUS_V229__()}
 document.addEventListener('change',e=>{let t=e.target;if(!(t instanceof HTMLInputElement)||t.type!=='checkbox')return;if(t.dataset.careGroupCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,g]=t.dataset.careGroupCheck.split('|');ar14SyncGroup(d,+i,g,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rtaskCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i]=t.dataset.rtaskCheck.split('|');ar14SyncParent(d,+i,!!t.checked,true);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}if(t.dataset.rsubCheck){e.stopImmediatePropagation();let snap=typeof captureRoutineOpenDetails==='function'?captureRoutineOpenDetails():null,[d,i,j]=t.dataset.rsubCheck.split('|');ar14SyncChild(d,+i,+j,!!t.checked);render();if(typeof restoreRoutineOpenDetails==='function')restoreRoutineOpenDetails(snap);return}},true);
 // Migrate selected-date routine now and force a clean render with the authoritative schedule.
 DAYS.forEach(d=>{let fresh=ar14Build(d);state.routineV2[d]=cloneRoutineDay(fresh);state.routineV2[d].actualRoutineV14=true;state.checks['routineCanonical|2026-10-02|actualV14|'+d]=true});
@@ -9180,6 +9182,7 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
  const V191_BUILD='2026-10-23-V192-MOBILE-ROUTINE-LAYOUT';
  const disclosureV191=(()=>{try{return JSON.parse(localStorage.getItem('emmelliHubDisclosureV191')||'{}')}catch(_){return {}}})();
  const saveDisclosureV191=()=>{try{localStorage.setItem('emmelliHubDisclosureV191',JSON.stringify(disclosureV191))}catch(_){}};
+ try{if(!localStorage.getItem('emmelliHubGymCompactV230')){Object.keys(disclosureV191).filter(key=>/\|GYM-(?:PROGRESS|SECTION)\|/.test(key)).forEach(key=>delete disclosureV191[key]);saveDisclosureV191();localStorage.setItem('emmelliHubGymCompactV230','1')}}catch(_){}
  document.addEventListener('toggle',e=>{
   const d=e.target;if(!(d instanceof HTMLDetailsElement))return;
   const key=d.dataset.routineDisclosureV191||d.dataset.gymDisclosureV191;if(!key)return;
@@ -9241,12 +9244,12 @@ try{render()}catch(error){console.error('Final daily-use polish',error)}
   template.content.querySelectorAll('details.workout-progress-dropdown').forEach((d,i)=>{
    const label=(d.querySelector(':scope > summary > span:first-child')?.textContent||'WORKOUT PROGRESS').trim().toUpperCase();
    const key=keyBase+'|GYM-PROGRESS|'+label+'|'+i;d.dataset.gymDisclosureV191=key;
-   d.open=Object.prototype.hasOwnProperty.call(disclosureV191,key)?!!disclosureV191[key]:true;
+   d.open=Object.prototype.hasOwnProperty.call(disclosureV191,key)?!!disclosureV191[key]:false;
   });
   template.content.querySelectorAll('details.workout-section-drop').forEach((d,i)=>{
    const label=(d.querySelector(':scope > summary')?.textContent||'WORKOUT SECTION').trim().toUpperCase();
    const key=keyBase+'|GYM-SECTION|'+label+'|'+i;d.dataset.gymDisclosureV191=key;
-   d.open=Object.prototype.hasOwnProperty.call(disclosureV191,key)?!!disclosureV191[key]:true;
+   d.open=Object.prototype.hasOwnProperty.call(disclosureV191,key)?!!disclosureV191[key]:false;
   });
   return template.innerHTML;
  };
@@ -10045,13 +10048,16 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-11-05-V227-SAFARI-DURABLE-CHECKBOXES';
+ const BUILD='2026-11-05-V230-PRESUBMIT-PERFECT';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
  const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back,getGym,setGym,getHistory,setHistory}=bridge;
+ try{
+  const shadow=JSON.parse(localStorage.getItem('emmelliHubRoutineStatusV229')||'null');
+  if(shadow&&typeof shadow==='object')for(const [date,checks] of Object.entries(shadow))if(checks&&typeof checks==='object'&&!Array.isArray(checks))state.routineStatus[date]={...(state.routineStatus[date]||{}),...checks};
+ }catch(error){console.error('Routine status backup restore failed',error)}
  const priorRdayV218=bridge.getRday();
  const wakeTimes={Monday:'7:30 AM',Tuesday:'4:20 AM',Wednesday:'8:00 AM',Thursday:'10:00 AM',Friday:'6:10 AM',Saturday:'4:10 AM',Sunday:'4:10 AM'};
- const workTimes={Tuesday:'7:00 AM–7:00 PM',Wednesday:'3:00–11:00 PM',Thursday:'3:00–11:00 PM',Friday:'8:45 AM–5:15 PM',Saturday:'7:00 AM–3:00 PM',Sunday:'7:00 AM–3:00 PM'};
  const brighteningDays=new Set(['Monday','Wednesday','Friday']);
  const reptarMorningDays=new Set(['Wednesday','Friday','Sunday']);
  const washDays=new Set(['Monday','Wednesday','Friday']);
@@ -10142,7 +10148,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
    add('SUNDAY RESET','FINISH SUNDAY LAUNDRY',['FOLD','PUT AWAY SUNDAY LOAD','SWITCH OUT HAND TOWELS FOR BATHROOM AND KITCHEN','REPLACE PAPER TOWELS','REFILL ALCOHOL FOR PHONE DISINFECTING']);
   }
   add('NIGHT ROUTINE','NIGHT RESET',['PUT AWAY ANY DISHES']);add('NIGHT ROUTINE','NIGHT CARE',nightCare(day));add('NIGHT ROUTINE','FINAL',['WATCH SOMETHING IN SPANISH','DEVOTIONAL','PRAYER FROM PRAYER BOARD']);add('NIGHT ROUTINE','GO TO SLEEP');
-  function addWork(workDay,personal){add('AT WORK','START OF SHIFT',['CLOCK IN','BAGS','RETAINER CASE','CHAPSTICK / LOTION','CHARGER','AIRPODS / PORTABLE','LUNCHBOX','WATER','SHIFT LOG']);add('AT WORK','PERSONAL TIME',personal);add('AT WORK','BAG RESET',['CLEAN','ORGANIZE']);add('AT WORK',`WORK • ${workTimes[workDay]}`)}
+  function addWork(workDay,personal){add('AT WORK','START OF SHIFT',['CLOCK IN','BAGS','RETAINER CASE','CHAPSTICK / LOTION','CHARGER','AIRPODS / PORTABLE','LUNCHBOX','WATER','SHIFT LOG']);add('AT WORK','PERSONAL TIME',personal);add('AT WORK','BAG RESET',['CLEAN','ORGANIZE']);add('AT WORK','WORK')}
   function addLaterWalks(){add('AFTER WORK','WALK THING 1',['WALK TIAMO','SPANISH LESSON',...pawCare]);add('AFTER WORK','WALK THING 2',['WALK HERCULES','SPANISH LESSON',...pawCare])}
   const oldTasks=oldRd?.tasks||[],status=(state.routineStatus&&state.routineStatus[selectedKey()])||{},usedOld=new Set(),counts={};
   const tasks=specs.map(spec=>{
