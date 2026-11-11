@@ -10044,7 +10044,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-11-05-V233-THREE-MINUTE-PRAYER';
+ const BUILD='2026-11-10-V234-HOMESCREEN-ROUTINE-REFRESH';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
  const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back,getGym,setGym,getHistory,setHistory}=bridge;
@@ -10239,6 +10239,30 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
   const cats=[['complete','ALL HISTORY','EVERYTHING TOGETHER'],['routine','ROUTINE','COMPLETED BLOCKS'],['gym','GYM / WORKOUT','WORKOUT DETAILS'],['body','BODY','WEIGHT + MEASUREMENTS'],['goals','GOALS','COMPLETION'],['bible','FAITH','PSALMS + PRAYER'],['water','DAILY HEALTH','WATER + VITAMINS']];
   return hero('HISTORY','CHOOSE WHAT YOU WANT TO VIEW')+`<section class="card history-options-card"><div class="history-option-grid v225-history-grid">${cats.map(([type,label,detail])=>`<button class="history-option" data-hist="${type}"><span><b>${label}</b><small>${detail}</small></span><strong>›</strong></button>`).join('')}</div></section>`;
  });
+ /* V234: Home Screen web apps can resume a suspended Routine view with a
+    refreshed day/date bar and stale routine content. Re-render only when the
+    visible Routine labels disagree with the selected weekday. This preserves
+    all saved state and also repairs the view after switching weekdays. */
+ function routineViewDayMismatchV234(){
+  if(state.route!=="today"||state.sub!=="routine")return false;
+  const expected=String(DAYS[state.day]||"").toUpperCase(),app=document.getElementById("app");
+  if(!expected||!app)return false;
+  const labels=[];
+  const subtitle=app.querySelector(".hero .muted")?.textContent?.trim().toUpperCase()||"";
+  if(subtitle)labels.push(subtitle);
+  const routineHeading=[...app.querySelectorAll("h1,h2,h3")].map(x=>x.textContent.trim().toUpperCase()).find(x=>/TODAY[’']S ROUTINE/.test(x));
+  if(routineHeading)labels.push(routineHeading);
+  return labels.length>0&&labels.some(x=>!x.includes(expected));
+ }
+ function syncRoutineViewV234(){
+  if(document.visibilityState==="hidden"||!routineViewDayMismatchV234())return;
+  render();appTop();
+ }
+ function queueRoutineViewSyncV234(){requestAnimationFrame(()=>requestAnimationFrame(syncRoutineViewV234))}
+ document.addEventListener("click",e=>{if(e.target.closest?.("[data-day]"))queueRoutineViewSyncV234()},true);
+ document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")queueRoutineViewSyncV234()},true);
+ window.addEventListener("pageshow",queueRoutineViewSyncV234,true);
+ window.addEventListener("focus",queueRoutineViewSyncV234,true);
  document.body.dataset.build=BUILD;const meta=document.querySelector('meta[name="emmelli-current-build"]');if(meta)meta.content=BUILD;
  render();
 })();
