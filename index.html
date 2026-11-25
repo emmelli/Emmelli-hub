@@ -9602,7 +9602,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
 </style>
 <script>
 (function installV218FinalRoutineSystem(){
- const BUILD='2026-11-22-NIGHT-STRETCH';
+ const BUILD='2026-11-25-PODCAST-OPTIONS';
  const bridge=window.__EMMELLI_ROUTINE_BRIDGE__;
  if(!bridge)throw new Error('Emmelli routine bridge unavailable');
  const {state,selectedKey,save,render,DAYS,FLEX154_EFFECTIVE,flex164WeekStart,esc,hero,back,getGym,setGym,getHistory,setHistory}=bridge;
@@ -9655,7 +9655,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
    add('MORNING ROUTINE','RETURN TO SLEEP AFTER UNIFORM DROP-OFF');
    add('MORNING ROUTINE','WAKE UP AT • 10:00 AM');
   }else add('MORNING ROUTINE',`WAKE UP AT • ${wakeTimes[day]}`);
-  add('MORNING ROUTINE','MORNING START',['THANK GOD','TEXT GRANDMA','TEXT MOMMA','OPEN BLINDS','PLAY PODCAST','STRETCH']);
+  add('MORNING ROUTINE','MORNING START',['THANK GOD','TEXT GRANDMA','TEXT MOMMA','OPEN BLINDS','PLAY PODCAST / PLAY DOG DAYS ARE OVER / WORSHIP','STRETCH']);
   add('MORNING ROUTINE','MORNING START #2',['FILL UP WATER','MAKE BED','SPRAY AND DISINFECT BED AND CLOSET','START MORNING LOAD',...(reptarMorningDays.has(day)?['FEED REPTAR']:[]),'FEED DOGS','WASH DOG BOWLS']);
   add('MORNING ROUTINE','MORNING CARE',morningCare(day));
   add('MORNING ROUTINE','LAUNDRY',['PUT MORNING LOAD IN DRYER']);
@@ -9717,7 +9717,7 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
    const target=strip(identityName),old=oldTasks.find((t,i)=>!usedOld.has(i)&&strip(t.name)===target);if(old)usedOld.add(oldTasks.indexOf(old));
    const taskDone=Object.prototype.hasOwnProperty.call(status,id)?!!status[id]:(old?(Object.prototype.hasOwnProperty.call(status,old.id)?!!status[old.id]:!!old.done):false);
    const subCounts={};const subtasks=(spec.subs||[]).map(name=>{
-    const aliases={'PREMIER SPRAY':(day==='Wednesday'?'LIGHTLY MIST PREMIER SPRAY':day==='Saturday'?'LIGHTLY MIST PREMIER SPRAY AFTER BRUSHING':'LIGHTLY MIST COAT WITH PREMIER SPRAY'),'CURRY BRUSH • WITH HAIR GROWTH':'CURRY BRUSH GENTLY IN THE DIRECTION OF HAIR GROWTH','DRY MICROFIBER WIPE':(day==='Saturday'?'SMOOTH WITH A DRY MICROFIBER CLOTH':'WIPE LOOSE HAIR WITH A DRY MICROFIBER CLOTH'),'CHECK SKIN':'CHECK SKIN FOR IRRITATION, BUMPS, SORES, OR BALD SPOTS','DAMP MICROFIBER WIPE + LET DRY':'WIPE COAT WITH A SLIGHTLY DAMP MICROFIBER CLOTH','SLEEKEZ IF SHEDDING • DRY COAT + GENTLE PASSES':'IF SHEDDING: USE SLEEKEZ ON A COMPLETELY DRY COAT','GUA SHA W OIL CLEANSER':'GUA SHA','LA ROCHE CLEANSER':'CLEANSER','GRAB PAJAMAS + TOWEL + EYE MASK + EAR PLUGS':'GRAB PAJAMAS / TOWEL / EYE MASK / EAR PLUGS','PAW BALM':'APPLY A THIN LAYER OF PAW BALM TO THE PADS','PLUG IN CHARGERS':'CHARGER','PLUG IN AIRPODS + PORTABLE':'AIRPODS / PORTABLE','PUT LUNCHBOX AWAY':'LUNCHBOX','READ SHIFT LOG':'SHIFT LOG','WIPE COAT WITH A SLIGHTLY DAMP MICROFIBER CLOTH + LET IT DRY':'WIPE COAT WITH A SLIGHTLY DAMP MICROFIBER CLOTH'};
+    const aliases={'PLAY PODCAST / PLAY DOG DAYS ARE OVER / WORSHIP':'PLAY PODCAST','PREMIER SPRAY':(day==='Wednesday'?'LIGHTLY MIST PREMIER SPRAY':day==='Saturday'?'LIGHTLY MIST PREMIER SPRAY AFTER BRUSHING':'LIGHTLY MIST COAT WITH PREMIER SPRAY'),'CURRY BRUSH • WITH HAIR GROWTH':'CURRY BRUSH GENTLY IN THE DIRECTION OF HAIR GROWTH','DRY MICROFIBER WIPE':(day==='Saturday'?'SMOOTH WITH A DRY MICROFIBER CLOTH':'WIPE LOOSE HAIR WITH A DRY MICROFIBER CLOTH'),'CHECK SKIN':'CHECK SKIN FOR IRRITATION, BUMPS, SORES, OR BALD SPOTS','DAMP MICROFIBER WIPE + LET DRY':'WIPE COAT WITH A SLIGHTLY DAMP MICROFIBER CLOTH','SLEEKEZ IF SHEDDING • DRY COAT + GENTLE PASSES':'IF SHEDDING: USE SLEEKEZ ON A COMPLETELY DRY COAT','GUA SHA W OIL CLEANSER':'GUA SHA','LA ROCHE CLEANSER':'CLEANSER','GRAB PAJAMAS + TOWEL + EYE MASK + EAR PLUGS':'GRAB PAJAMAS / TOWEL / EYE MASK / EAR PLUGS','PAW BALM':'APPLY A THIN LAYER OF PAW BALM TO THE PADS','PLUG IN CHARGERS':'CHARGER','PLUG IN AIRPODS + PORTABLE':'AIRPODS / PORTABLE','PUT LUNCHBOX AWAY':'LUNCHBOX','READ SHIFT LOG':'SHIFT LOG','WIPE COAT WITH A SLIGHTLY DAMP MICROFIBER CLOTH + LET IT DRY':'WIPE COAT WITH A SLIGHTLY DAMP MICROFIBER CLOTH'};
     const identity=aliases[name]||name,b=slug(identity),sn=(subCounts[b]=(subCounts[b]||0)+1),sid=`s_${b}_${sn}`;
     let done=Object.prototype.hasOwnProperty.call(status,id+'|'+sid)?!!status[id+'|'+sid]:null;
     const sourceParents=name==='PUT ON APPLE WATCH'?['MORNING START']:['FEED REPTAR','FEED DOGS','WASH DOG BOWLS'].includes(name)?['LAUNDRY & PET CARE']:[];
@@ -9746,6 +9746,14 @@ body.routine-edit-mode-v205 .v218-task>.routine-maintenance{display:flex!importa
     rd.tasks.splice(finalIndex>=0?finalIndex:sleepIndex>=0?sleepIndex:rd.tasks.length,0,{id,name:'STRETCH • 10 MIN',section:'NIGHT ROUTINE',duration:10,done:false,customFixed:null,subtasks:[],flexibleRoutineV154:true});
    }
    rd.stretchRevision='2026-11-22-1';
+  }
+  // Rename the saved Morning Start option in place so its stable id,
+  // completion state, and any other routine edits remain untouched.
+  if(rd.podcastOptionsRevision!=='2026-11-25-1'){
+   const morningStart=rd.tasks.find(t=>t.section==='MORNING ROUTINE'&&t.name==='MORNING START');
+   const podcast=morningStart?.subtasks?.find(q=>q.name==='PLAY PODCAST');
+   if(podcast)podcast.name='PLAY PODCAST / PLAY DOG DAYS ARE OVER / WORSHIP';
+   rd.podcastOptionsRevision='2026-11-25-1';
   }
 
   const status=state.routineStatus[key]||(state.routineStatus[key]={});
